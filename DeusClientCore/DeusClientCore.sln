@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2042
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeusClientCore", "DeusClientCore\DeusClientCore.csproj", "{37380F36-0090-4934-BEBB-E410AE7D3F0D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DeusClientConsole", "DeusClientConsole\DeusClientConsole.csproj", "{0E4A4477-E966-4A55-94CB-0A46D1BDB2DF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37380F36-0090-4934-BEBB-E410AE7D3F0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37380F36-0090-4934-BEBB-E410AE7D3F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37380F36-0090-4934-BEBB-E410AE7D3F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37380F36-0090-4934-BEBB-E410AE7D3F0D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E4A4477-E966-4A55-94CB-0A46D1BDB2DF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E4A4477-E966-4A55-94CB-0A46D1BDB2DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E4A4477-E966-4A55-94CB-0A46D1BDB2DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E4A4477-E966-4A55-94CB-0A46D1BDB2DF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C0BA083C-F087-4045-924E-36B4D5EA8F03}
+	EndGlobalSection
+EndGlobal
