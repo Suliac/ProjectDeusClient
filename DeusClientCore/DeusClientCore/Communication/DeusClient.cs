@@ -21,6 +21,7 @@ namespace DeusClientCore
             EventManager.Get().AddListener(EPacketType.CreateGameRequest, SendTcpMessage); 
             EventManager.Get().AddListener(EPacketType.JoinGameRequest  , SendTcpMessage); 
             EventManager.Get().AddListener(EPacketType.LeaveGameRequest , SendTcpMessage); 
+            EventManager.Get().AddListener(EPacketType.Text             , SendTcpMessage); 
 
             m_tcpConnection = new DeusTcpConnection(tcpClient); // launch the SendAndReceive() Task
         }

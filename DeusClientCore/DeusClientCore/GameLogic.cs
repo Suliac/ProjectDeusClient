@@ -84,13 +84,14 @@ namespace DeusClientCore
 
         private void ManageHandleUIPacket(PacketHandleClickUI packet)
         {
+            Console.WriteLine("Handle Game Input : ");
             // TODO : check state du jeu -> le joueur peut avoir cliqué sur le bouton?
             switch (packet.UIClicked)
             {
                 case PacketHandleClickUI.UIButton.JoinGameButton:
-                    PacketJoinGameRequest newPacket = new PacketJoinGameRequest();
-                    newPacket.GameJoinedId = packet.GameIdToJoin;
-                    EventManager.Get().EnqueuePacket(0, newPacket);
+                    PacketJoinGameRequest newPacketJoin = new PacketJoinGameRequest();
+                    newPacketJoin.GameJoinedId = packet.GameIdToJoin;
+                    EventManager.Get().EnqueuePacket(0, newPacketJoin);
                     break;
                 case PacketHandleClickUI.UIButton.CreateGameButton:
                     EventManager.Get().EnqueuePacket(0, new PacketCreateGameRequest());
@@ -101,9 +102,15 @@ namespace DeusClientCore
                 case PacketHandleClickUI.UIButton.GetGameButton:
                     EventManager.Get().EnqueuePacket(0, new PacketGetGameRequest());
                     break;
+                case PacketHandleClickUI.UIButton.SendTextButton:
+                    PacketTextMessage newPacketText = new PacketTextMessage();
+                    newPacketText.MessageText = packet.TextMessage;
+                    EventManager.Get().EnqueuePacket(0, newPacketText);
+                    break;
                 default:
                     break;
             }
         }
+
     }
 }

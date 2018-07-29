@@ -35,8 +35,8 @@ namespace DeusClientCore.Packets
         {
             List<byte> result = new List<byte>();
 
-            byte dataSize = (byte)(MessageText.Length + 1); // +1 to add the \0 of string
-            result.Add(dataSize);
+            //uint dataSize = (uint)(MessageText.Length + 1); // +1 to add the \0 of string
+            result.AddRange(Serializer.SerializeData((uint)(MessageText.Length + 1)));
 
             //  then we add the string 
             result.AddRange(Serializer.SerializeData(MessageText));

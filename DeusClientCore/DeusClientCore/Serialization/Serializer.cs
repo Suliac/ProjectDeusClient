@@ -12,37 +12,51 @@ namespace DeusClientCore.Packets
         #region Serialize
         public static byte[] SerializeData(bool value)
         {
-            return BitConverter.GetBytes(value);
+            byte[] result = BitConverter.GetBytes(value);
+            Array.Reverse(result);
+            return result;
         }
 
         public static byte[] SerializeData(ushort value)
         {
-            return BitConverter.GetBytes(value);
+            byte[] result = BitConverter.GetBytes(value);
+            Array.Reverse(result);
+            return result;
         }
 
         public static byte[] SerializeData(uint value)
         {
-            return BitConverter.GetBytes(value);
+            byte[] result = BitConverter.GetBytes(value);
+            Array.Reverse(result);
+            return result;
         }
 
         public static byte[] SerializeData(ulong value)
         {
-            return BitConverter.GetBytes(value);
+            byte[] result = BitConverter.GetBytes(value);
+            Array.Reverse(result);
+            return result;
         }
 
         public static byte[] SerializeData(short value)
         {
-            return BitConverter.GetBytes(value);
+            byte[] result = BitConverter.GetBytes(value);
+            Array.Reverse(result);
+            return result;
         }
 
         public static byte[] SerializeData(int value)
         {
-            return BitConverter.GetBytes(value);
+            byte[] result = BitConverter.GetBytes(value);
+            Array.Reverse(result);
+            return result;
         }
 
         public static byte[] SerializeData(long value)
         {
-            return BitConverter.GetBytes(value);
+            byte[] result = BitConverter.GetBytes(value);
+            Array.Reverse(result);
+            return result;
         }
 
         public static byte[] SerializeData(string value)

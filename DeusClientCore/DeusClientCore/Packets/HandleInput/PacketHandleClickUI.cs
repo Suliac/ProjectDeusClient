@@ -14,10 +14,14 @@ namespace DeusClientCore.Packets
             CreateGameButton,
             LeaveGameButton,
             GetGameButton,
+            SendTextButton,
         }
 
         public UIButton UIClicked { get; set; }
+
         public uint GameIdToJoin { get; set; }
+
+        public string TextMessage { get; set; }
 
         public PacketHandleClickUI() : base(EPacketType.HandleClickUI)
         {

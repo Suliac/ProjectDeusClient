@@ -20,6 +20,11 @@ namespace DeusClientCore
 
         private bool m_wantToStop = false;
 
+        public Game()
+        {
+            m_gameLogic = new GameLogic();
+        }
+
         /// <summary>
         /// Start the game, connect to the server
         /// </summary>
@@ -32,6 +37,9 @@ namespace DeusClientCore
 
             // Init connections
             m_deusClient = new DeusClient(new TcpClient(addr, port));
+
+            // Init game logic
+            m_gameLogic.Start();
         }
 
         /// <summary>
@@ -55,7 +63,10 @@ namespace DeusClientCore
         public void Stop()
         {
             m_deusClient.Dispose();
-            
+
+            // Stop game logic
+            m_gameLogic.Stop();
+
             EventManager.Get().Stop();
         }
     }
