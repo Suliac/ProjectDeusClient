@@ -105,7 +105,8 @@ namespace DeusClientCore.Packets
 
         public static void DeserializeData(byte[] buffer, ref int index, out string value, int sizeStr)
         {
-            value = Encoding.ASCII.GetString(buffer, index, sizeStr - 1);
+            value = "";
+            value = Encoding.ASCII.GetString(buffer, index, Math.Max(0, sizeStr - 1));
             index += sizeStr;
         }
 

@@ -3,6 +3,7 @@ using DeusClientCore.Packets;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Sockets;
 using System.Text;
@@ -24,9 +25,9 @@ namespace DeusClientCore
         protected Task m_sendAndReceiveTask;
 
         /// <summary>
-        /// The list of message to send
+        /// The list of packets to send with the time it was enqued
         /// </summary>
-        protected BlockingCollection<Packet> m_messagesToSend;
+        protected BlockingCollection<Tuple<double, Packet>> m_packetsToSend;
 
         /// <summary>
         /// Do we want to stop our task ?
@@ -48,7 +49,7 @@ namespace DeusClientCore
         /// </summary>
         public DeusConnection()
         {
-            m_messagesToSend = new BlockingCollection<Packet>();
+            m_packetsToSend = new BlockingCollection<Tuple<double, Packet>>();
             m_cancellationTokenSource = new CancellationTokenSource();
             m_cancellationToken = m_cancellationTokenSource.Token;
 
@@ -61,8 +62,8 @@ namespace DeusClientCore
         /// then try to read some data on the network
         protected void SendAndReceive()
         {
-            try
-            {
+            //try
+            //{
                 // Init our TCP or UDP connection
                 OnInit();
                 
@@ -70,20 +71,19 @@ namespace DeusClientCore
                 while (!m_cancellationToken.IsCancellationRequested)
                 {
                     Thread.Sleep(5); // Give some sleep time to that poor thread, damn !
-                    Packet packetToSend;
+                    Tuple<double, Packet> packetToSend;
 
                     ///////////////////////////////////////
                     //                SEND               //
                     ///////////////////////////////////////
                     // Try to take and send packet until we don't have one left
-                    while (m_messagesToSend.TryTake(out packetToSend))
-                    {
-                        // Serialize our packet into a byte[]
-                        byte[] sendBuffer = Packet.Serialize(packetToSend);
-
+                    while (OnTryTakePacket(out packetToSend))
+                    {                       
                         // Write with our connection method
-                        OnSending(sendBuffer);
+                        OnSending(packetToSend.Item2);
                     }
+
+                    OnAfterSend();
 
                     ///////////////////////////////////////
                     //             RECEIVE               //
@@ -98,7 +98,7 @@ namespace DeusClientCore
 
                             // We read the 'DEFAULT_BUFFER_SIZE' first bytes into our tmp buffer
                             //readedByteCount = networkStream.Read(tempBuffer, 0, tempBuffer.Length);
-                            readedByteCount = OnReceiving(tempBuffer);
+                            readedByteCount = OnReceiving(ref tempBuffer);
 
                             // then we add our buffer to our packetBuffer
                             packetsBuffer = packetsBuffer.Concat(tempBuffer.Take(readedByteCount)).ToArray();
@@ -118,19 +118,19 @@ namespace DeusClientCore
                             packetsBuffer = packetsBuffer.Skip((int)packet.SerializedSize).ToArray();
 
                             // Enqueue our packet received
-                            EventManager.Get().EnqueuePacket(0, packet);
+                            OnPacketDeserialized(packet);
                         }
                     } // endif DataAvailable
                 } // end while cancellation requested ?
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("error : " + ex.Message);
-            }
-            finally
-            {
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("Error : " + ex.Message);
+            //}
+            //finally
+            //{
                 OnEnd();
-            }
+            //}
         }
 
         /// <summary>
@@ -144,7 +144,9 @@ namespace DeusClientCore
         /// The child has to implement the way to sending data on the network for its connection type
         /// </summary>
         /// <param name="sendBuffer">The buffer of bytes we want to send</param>
-        protected abstract void OnSending(byte[] sendBuffer);
+        protected abstract void OnSending(Packet packetToSend);
+
+        protected abstract void OnAfterSend();
 
         /// <summary>
         /// Function to override, called during SendAndReceive()
@@ -152,7 +154,7 @@ namespace DeusClientCore
         /// </summary>
         /// <param name="receiveBuffer">The buffer we fill we received datas</param>
         /// <returns>The number of bytes received</returns>
-        protected abstract int OnReceiving(byte[] receiveBuffer);
+        protected abstract int OnReceiving(ref byte[] receiveBuffer);
 
         /// <summary>
         /// Function to override, called during SendAndReceive()
@@ -162,14 +164,27 @@ namespace DeusClientCore
         protected abstract bool AreThereAnyPendingDatas();
 
         /// <summary>
-        /// 
+        /// What are we doing with our packet just deserialized ?
+        /// </summary>
+        /// <param name="packet">The packet we get</param>
+        protected abstract void OnPacketDeserialized(Packet packet);
+
+        /// <summary>
+        /// Cleanup on dispose
         /// </summary>
         protected abstract void OnEnd();
 
         /// <summary>
+        /// Take a <see cref="Packet"/> from our <see cref="System.Collections.Concurrent.BlockingCollection{Packet}"/>
+        /// </summary>
+        /// <param name="packet">The packet we took with the enqueued timestamp in MS</param>
+        /// <returns><see cref="true"/> if we successfully took a packet from the <see cref="System.Collections.Concurrent.BlockingCollection{Packet}"/>, return <see cref="false"/> otherwise</returns>
+        protected abstract bool OnTryTakePacket(out Tuple<double, Packet> packet);
+
+        /// <summary>
         /// Stop the connection
         /// </summary>
-        public void Dispose()
+        public virtual void Dispose()
         {
             if (m_sendAndReceiveTask != null)
             {
@@ -190,10 +205,10 @@ namespace DeusClientCore
             }
 
             // clean our message queue
-            if (m_messagesToSend != null)
+            if (m_packetsToSend != null)
             {
-                m_messagesToSend.Dispose();
-                m_messagesToSend = null;
+                m_packetsToSend.Dispose();
+                m_packetsToSend = null;
             }
 
             // clean our cancellation token
@@ -210,7 +225,7 @@ namespace DeusClientCore
         /// <param name="packet">The packet to send</param>
         public void SendPacket(Packet packet)
         {
-            m_messagesToSend.Add(packet);
+            m_packetsToSend.Add(new Tuple<double, Packet>(0, packet));
         }
     }
 }

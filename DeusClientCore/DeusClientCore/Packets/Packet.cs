@@ -94,7 +94,7 @@ namespace DeusClientCore.Packets
                     packetDeserialize = new PacketTextMessage();
                     break;
                 case EPacketType.Ack:
-                    packetDeserialize = new PacketTextMessage();
+                    packetDeserialize = new PacketAck();
                     break;
                 case EPacketType.Connected:
                     packetDeserialize = new PacketClientConnected();
