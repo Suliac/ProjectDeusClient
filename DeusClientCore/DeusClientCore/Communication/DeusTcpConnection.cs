@@ -15,6 +15,11 @@ namespace DeusClientCore
         private TcpClient m_tcpClient;
 
         /// <summary>
+        /// The stream we use to communicate
+        /// </summary>
+        private NetworkStream m_networkStream;
+
+        /// <summary>
         /// Default constructor for <see cref="DeusTcpConnection"/>
         /// </summary>
         /// <param name="client">The <see cref="TcpClient"/> we use to communicate</param>
@@ -22,6 +27,64 @@ namespace DeusClientCore
             : base()
         {
             m_tcpClient = client;
+            m_networkStream = null;
+        }
+
+        /// <summary>
+        /// Return if there are any pending datas on the <see cref="NetworkStream"/>
+        /// </summary>
+        /// <returns><see cref="true"/> if there are pending datas or <see cref="false"/> otherwise</returns>
+        protected override bool AreThereAnyPendingDatas()
+        {
+            return m_networkStream.DataAvailable;
+        }
+
+        /// <summary>
+        /// We dispose our stream and socket
+        /// </summary>
+        protected override void OnEnd()
+        {
+            // dispose our stream
+            if (m_networkStream != null)
+            {
+                m_networkStream.Close();
+                m_networkStream.Dispose();
+            }
+
+            // dispose our socket
+            if (m_tcpClient != null)
+            {
+                m_tcpClient.Close();
+                m_tcpClient.Dispose();
+            }
+        }
+
+        /// <summary>
+        /// We use the NetworkStream object, so we init it from our TcpClient
+        /// </summary>
+        protected override void OnInit()
+        {
+            m_networkStream = null;
+            m_networkStream = m_tcpClient.GetStream();
+        }
+
+        /// <summary>
+        /// Read from the <see cref="NetworkStream"/>
+        /// </summary>
+        /// <param name="receiveBuffer">The buffer we fill with received datas</param>
+        /// <returns>The number of bytes read</returns>
+        protected override int OnReceiving(byte[] receiveBuffer)
+        {
+            return m_networkStream.Read(receiveBuffer, 0, receiveBuffer.Length);
+        }
+
+        /// <summary>
+        /// Write to the <see cref="NetworkStream"/>
+        /// </summary>
+        /// <param name="sendBuffer">The bytes we want to send</param>
+        protected override void OnSending(byte[] sendBuffer)
+        {
+            m_networkStream.Write(sendBuffer, 0, sendBuffer.Length);
         }
 
         /// <summary>
@@ -30,7 +93,7 @@ namespace DeusClientCore
         /// Try to take packets from m_messageToSend to send them on the network
         /// then try to read some data on the network
         /// </summary>
-        protected override void SendAndReceive()
+        /*protected override void SendAndReceive()
         {
             NetworkStream networkStream = null;
 
@@ -113,7 +176,7 @@ namespace DeusClientCore
                     m_tcpClient.Dispose();
                 }
             //}
-        }
-                
+        }*/
+
     }
 }
