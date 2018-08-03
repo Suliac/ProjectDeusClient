@@ -40,16 +40,25 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchitectureCode\DataTimed.cs" />
+    <Compile Include="ArchitectureCode\Exceptions\DeusException.cs" />
+    <Compile Include="ArchitectureCode\Exceptions\TimeLineException.cs" />
     <Compile Include="Communication\DeusClient.cs" />
     <Compile Include="Communication\DeusConnection.cs" />
     <Compile Include="Communication\DeusTcpConnection.cs" />
     <Compile Include="Communication\DeusUdpConnection.cs" />
+    <Compile Include="Components\HealthTimeLineComponent.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\SocketEventArgs.cs" />
     <Compile Include="Events\SocketPacketEventArgs.cs" />
-    <Compile Include="Game.cs" />
-    <Compile Include="GameLogic.cs" />
-    <Compile Include="IUpdatable.cs" />
+    <Compile Include="Components\Component.cs" />
+    <Compile Include="Components\TimeLineBase.cs" />
+    <Compile Include="Game\Game.cs" />
+    <Compile Include="Game\GameLogic.cs" />
+    <Compile Include="Game\GameObject.cs" />
+    <Compile Include="ArchitectureCode\IExecutable.cs" />
+    <Compile Include="ArchitectureCode\IUpdatable.cs" />
+    <Compile Include="Game\GameObjectFactory.cs" />
     <Compile Include="Packets\Game\PacketGetGameAnswer.cs" />
     <Compile Include="Packets\HandleInput\PacketHandleClickUI.cs" />
     <Compile Include="Packets\Game\PacketJoinGameAnswer.cs" />
@@ -64,6 +73,11 @@
     <Compile Include="Packets\Game\PacketCreateGameAnswer.cs" />
     <Compile Include="Packets\General\PacketAck.cs" />
     <Compile Include="Packets\General\PacketTextMessage.cs" />
+    <Compile Include="Packets\PacketFactory.cs" />
+    <Compile Include="Packets\View\PacketUpdateViewObject.cs" />
+    <Compile Include="Packets\View\PacketDeleteViewObject.cs" />
+    <Compile Include="Packets\View\PacketView.cs" />
+    <Compile Include="Packets\View\PacketCreateViewObject.cs" />
     <Compile Include="Serialization\Serializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

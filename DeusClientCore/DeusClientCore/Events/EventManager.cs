@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Events
 {
-    public class EventManager : IUpdatable
+    public class EventManager : IExecutable
     {
         #region Singleton
         private static EventManager m_instance = null;

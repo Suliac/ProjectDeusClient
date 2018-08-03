@@ -30,6 +30,9 @@ namespace DeusClientCore.Packets
 
         // Game view : Handle inputs
         HandleClickUI = 100,
+        CreateViewObject = 101,
+        UpdateViewObject = 102,
+        DeleteViewObject = 103,
     };
 
     public abstract class Packet
@@ -88,44 +91,7 @@ namespace DeusClientCore.Packets
             ushort serializedSize;
             Serializer.DeserializeData(packetsBuffer, ref index, out serializedSize);
 
-            switch (type)
-            {
-                case EPacketType.Text:
-                    packetDeserialize = new PacketTextMessage();
-                    break;
-                case EPacketType.Ack:
-                    packetDeserialize = new PacketAck();
-                    break;
-                case EPacketType.Connected:
-                    packetDeserialize = new PacketClientConnected();
-                    break;
-                case EPacketType.CreateGameRequest:
-                    packetDeserialize = new PacketCreateGameRequest();
-                    break;
-                case EPacketType.CreateGameAnswer:
-                    packetDeserialize = new PacketCreateGameAnswer();
-                    break;
-                case EPacketType.JoinGameRequest:
-                    packetDeserialize = new PacketJoinGameRequest();
-                    break;
-                case EPacketType.JoinGameAnswer:
-                    packetDeserialize = new PacketJoinGameAnswer();
-                    break;
-                case EPacketType.GetGameRequest:
-                    packetDeserialize = new PacketGetGameRequest();
-                    break;
-                case EPacketType.GetGameAnswer:
-                    packetDeserialize = new PacketGetGameAnswer();
-                    break;
-                case EPacketType.LeaveGameRequest:
-                    packetDeserialize = new PacketLeaveGameRequest();
-                    break;
-                case EPacketType.LeaveGameAnswer:
-                    packetDeserialize = new PacketLeaveGameRequest();
-                    break;
-                default:
-                    throw new Exception("Impossible to instantiate the packet");
-            }
+            packetDeserialize = PacketFactory.CreatePacket(type);
 
             packetDeserialize.Id = uniqueId;
             packetDeserialize.Type = type;
