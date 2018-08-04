@@ -30,19 +30,24 @@ namespace DeusClientCore
 
         public GameObject CreateGameObject(GameObjectCreateArgs args)
         {
-            GameObject gameObject = new GameObject(m_nextId);
+            // get id
+            uint gameObjectId = m_nextId;
             m_nextId++;
 
-            // fill our gameobject with components
+            // Create all the components
+            List<DeusComponent> components = new List<DeusComponent>();
             switch (args.Type)
             {
                 case EObjectType.Player:
                     var healthComponent = new HealthTimeLineComponent();
-                    gameObject.AddComponent(healthComponent);
+                    components.Add(healthComponent);
                     break;
                 default:
                     break;
             }
+
+            // Create the gameobject
+            GameObject gameObject = new GameObject(gameObjectId, args.Type, components);
 
             // notify the view that there is a new object to display
             PacketCreateViewObject packet = new PacketCreateViewObject();

@@ -17,8 +17,11 @@ namespace DeusClientConsole
 
         static void Main(string[] args)
         {
+            ConsoleGameView view = new ConsoleGameView();
             Game game = new Game();
             game.Start("127.0.0.1", 27015);
+
+            view.Start();
 
             Thread myThread = new Thread(new ThreadStart(HandleInput));
             myThread.Start();
@@ -30,9 +33,13 @@ namespace DeusClientConsole
             {
                 long dt = chrono.ElapsedMilliseconds;
                 game.Update(dt);
+
+                view.Update(dt);
+
                 Thread.Sleep(1);
             }
 
+            view.Stop();
             game.Stop();
             myThread.Join();
         }

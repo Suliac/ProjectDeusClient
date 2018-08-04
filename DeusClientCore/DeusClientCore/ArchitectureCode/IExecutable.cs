@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore
 {
-    interface IExecutable : IUpdatable
+    public interface IExecutable : IUpdatable
     {
         void Stop();
         void Start();
