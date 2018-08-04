@@ -67,7 +67,7 @@ namespace DeusClientCore
 
         private void ManageViewObjectDeletion(PacketDeleteViewObject packet)
         {
-            // TODO
+            RemoveObject(packet.ObjectId);
         }
 
         private void ManageViewObjectUpdate(PacketUpdateViewObject packet)

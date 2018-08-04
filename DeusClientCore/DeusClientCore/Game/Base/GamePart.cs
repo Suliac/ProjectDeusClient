@@ -37,7 +37,7 @@ namespace DeusClientCore
         {
             if (m_deusObjects.Any(d => d.UniqueIdentifier == objectToDeleteId))
             {
-                DeusObject toDelete = m_deusObjects.FirstOrDefault(d => d.UniqueIdentifier == objectToDelete.UniqueIdentifier);
+                DeusObject toDelete = m_deusObjects.FirstOrDefault(d => d.UniqueIdentifier == objectToDeleteId);
                 m_deusObjects.Remove(toDelete);
                 return true;
             }
