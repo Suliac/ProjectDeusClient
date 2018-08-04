@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Components
 {
-    public abstract class TimeLineBase<T> : Component
+    public abstract class TimeLineComponent<T> : DeusComponent
     {
         /// <summary>
         /// The data we want with a timestamp

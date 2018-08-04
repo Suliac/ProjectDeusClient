@@ -8,41 +8,47 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore
 {
-    public class GameLogic : IExecutable, IDisposable
+    public class GameLogic : GamePart
     {
-        private List<GameObject> m_gameObjects;
-
         private GameObjectFactory m_objectFactory;
 
-        public void Dispose()
+        public GameLogic() : base()
         {
-            EventManager.Get().RemoveListener(Packets.EPacketType.CreateGameAnswer, ManagePacket);
-            EventManager.Get().RemoveListener(Packets.EPacketType.GetGameAnswer, ManagePacket);
-            EventManager.Get().RemoveListener(Packets.EPacketType.JoinGameAnswer, ManagePacket);
-            EventManager.Get().RemoveListener(Packets.EPacketType.LeaveGameAnswer, ManagePacket);
-            EventManager.Get().RemoveListener(Packets.EPacketType.HandleClickUI, ManagePacket);
         }
 
-        public void Start()
+        public override void Start()
         {
-            EventManager.Get().AddListener(Packets.EPacketType.CreateGameAnswer, ManagePacket);
-            EventManager.Get().AddListener(Packets.EPacketType.GetGameAnswer, ManagePacket);
-            EventManager.Get().AddListener(Packets.EPacketType.JoinGameAnswer, ManagePacket);
-            EventManager.Get().AddListener(Packets.EPacketType.LeaveGameAnswer, ManagePacket);
-            EventManager.Get().AddListener(Packets.EPacketType.HandleClickUI, ManagePacket);
+            // Games lobby management
+            EventManager.Get().AddListener(Packets.EPacketType.CreateGameAnswer     , ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.GetGameAnswer        , ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.JoinGameAnswer       , ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.LeaveGameAnswer      , ManagePacket);
+
+            // Game view
+            EventManager.Get().AddListener(Packets.EPacketType.HandleClickUI        , ManagePacket);
+
+            // Game logic
+            EventManager.Get().AddListener(Packets.EPacketType.ObjectEnter          , ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.ObjectLeave          , ManagePacket);
         }
 
-        public void Stop()
+        public override void  Stop()
         {
-            Dispose();
-        }
+            // Games lobby management
+            EventManager.Get().RemoveListener(Packets.EPacketType.CreateGameAnswer  , ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.GetGameAnswer     , ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.JoinGameAnswer    , ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.LeaveGameAnswer   , ManagePacket);
 
-        public void Update(decimal deltatimeMs)
-        {
-            // TODO : call update for each GameObject ?
-        }
+            // Game view
+            EventManager.Get().RemoveListener(Packets.EPacketType.HandleClickUI     , ManagePacket);
 
-        private void ManagePacket(object sender, SocketPacketEventArgs e)
+            // Game logic
+            EventManager.Get().RemoveListener(Packets.EPacketType.ObjectEnter       , ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.ObjectLeave       , ManagePacket);
+        }
+        
+        protected override void ManagePacket(object sender, SocketPacketEventArgs e)
         {
             if (e.Packet is PacketCreateGameAnswer)
             {
@@ -63,6 +69,14 @@ namespace DeusClientCore
             else if (e.Packet is PacketHandleClickUI)
             {
                 ManageHandleUIPacket((PacketHandleClickUI)e.Packet);
+            }
+            else if (e.Packet is PacketObjectEnter)
+            {
+                ManageObjectEnter((PacketObjectEnter)e.Packet);
+            }
+            else if (e.Packet is PacketObjectLeave)
+            {
+                ManageObjectLeave((PacketObjectLeave)e.Packet);
             }
         }
 
@@ -116,5 +130,20 @@ namespace DeusClientCore
             }
         }
 
+        private void ManageObjectEnter(PacketObjectEnter packet)
+        {
+            m_objectFactory.CreateGameObject(new GameObjectCreateArgs(packet.ObjectType));
+        }
+
+        private void ManageObjectLeave(PacketObjectLeave packet)
+        {
+            // delete from our
+            RemoveObject(packet.GameObjectId);
+
+            // notify the view that there is a new object to display
+            PacketDeleteViewObject deleteViewObjectRequest = new PacketDeleteViewObject();
+            deleteViewObjectRequest.ObjectId = packet.GameObjectId;
+            EventManager.Get().EnqueuePacket(0, deleteViewObjectRequest);
+        }
     }
 }

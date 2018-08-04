@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Components
 {
-    public abstract class Component : IExecutable
+    public abstract class DeusComponent : IExecutable
     {
-        private List<Component> m_childrenComponents = new List<Component>();
+        private List<DeusComponent> m_childrenComponents = new List<DeusComponent>();
 
-        public void AddComponent(Component component)
+        public void AddComponent(DeusComponent component)
         {
             m_childrenComponents.Add(component);
         }

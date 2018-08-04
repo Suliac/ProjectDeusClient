@@ -16,13 +16,15 @@ namespace DeusClientCore
         /// </summary>
         private DeusClient m_deusClient;
 
-        private GameLogic m_gameLogic;
+        private List<GamePart> m_gameParts;
 
         private bool m_wantToStop = false;
 
         public Game()
         {
-            m_gameLogic = new GameLogic();
+            m_gameParts = new List<GamePart>();
+            m_gameParts.Add(new GameLogic());
+            m_gameParts.Add(new GameView());
         }
 
         /// <summary>
@@ -38,23 +40,23 @@ namespace DeusClientCore
             // Init connections
             m_deusClient = new DeusClient(new TcpClient(addr, port));
 
-            // Init game logic
-            m_gameLogic.Start();
+            // Init game parts : logic and view
+            foreach (var gamePart in m_gameParts)
+                gamePart.Start();
         }
 
         /// <summary>
         /// Called at each frame, update the state of the game
         /// </summary>
         /// <param name="deltatime">The time elapsed from the last call</param>
-        public void Update(decimal deltatime)
+        public void Update(decimal deltatimeMs)
         {
-            // update our objects and manage gamelogic
-            m_gameLogic.Update(deltatime);
-
-            // TODO : update the game view ?
+            // update our objects and manage gamelogic & game view
+            foreach (var gamePart in m_gameParts)
+                gamePart.Update(deltatimeMs);
 
             // update the event manager
-            EventManager.Get().Update(deltatime);
+            EventManager.Get().Update(deltatimeMs);
         }
 
         /// <summary>
@@ -65,7 +67,8 @@ namespace DeusClientCore
             m_deusClient.Dispose();
 
             // Stop game logic
-            m_gameLogic.Stop();
+            foreach (var gamePart in m_gameParts)
+                gamePart.Stop();
 
             EventManager.Get().Stop();
         }

@@ -16,7 +16,7 @@ namespace DeusClientCore.Packets
         Ack = 3,
         Connected = 4,
 
-        // Game management
+        // Lobby : Games management
         CreateGameRequest = 10,
         CreateGameAnswer = 11,
         JoinGameRequest = 12,
@@ -27,8 +27,12 @@ namespace DeusClientCore.Packets
         LeaveGameAnswer = 17,
         DeleteGameRequest = 18,
         NewPlayer = 19,
+        
+        // Game Logic
+        ObjectEnter = 50,
+        ObjectLeave = 51,
 
-        // Game view : Handle inputs
+        // Game view
         HandleClickUI = 100,
         CreateViewObject = 101,
         UpdateViewObject = 102,
@@ -56,7 +60,6 @@ namespace DeusClientCore.Packets
         public static byte[] Serialize(Packet packetToSend)
         {
             List<byte> result = new List<byte>();
-            byte[] tmpByte = new byte[0];
 
             // serialize id
             result.AddRange(Serializer.SerializeData(packetToSend.Id));

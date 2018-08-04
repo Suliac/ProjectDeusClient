@@ -9,6 +9,8 @@ namespace DeusClientCore.Packets
 {
     public class PacketCreateViewObject : PacketView
     {
+        public EObjectType ObjectType { get; set; }
+
         public PacketCreateViewObject() : base(EPacketType.CreateViewObject)
         {
 

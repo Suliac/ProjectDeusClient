@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Components
 {
-    public class HealthTimeLineComponent : TimeLineBase<int>
+    public class HealthTimeLineComponent : TimeLineComponent<int>
     {
         /// <summary>
         /// Extrapolate the health the object has, at time given
