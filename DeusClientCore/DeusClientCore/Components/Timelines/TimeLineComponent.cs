@@ -17,11 +17,18 @@ namespace DeusClientCore.Components
         /// The number of datas we save in time
         /// </summary>
         private const uint MAX_DATAS_SAVED = 10000;
-        
+
+        public bool RealtimeViewUpdate { get; protected set; }
+
+        public TimeLineComponent(bool needRealtimeUpdateView)
+        {
+            RealtimeViewUpdate = needRealtimeUpdateView;
+        }
+
         protected override void OnUpdate(decimal deltatimeMs)
         {
             // We clean our old datas
-            while(m_dataWithTime.Count > Math.Max(0, MAX_DATAS_SAVED))
+            while (m_dataWithTime.Count > Math.Max(0, MAX_DATAS_SAVED))
                 m_dataWithTime.RemoveAt(0);
         }
 
@@ -30,9 +37,15 @@ namespace DeusClientCore.Components
             m_dataWithTime.Clear();
         }
 
+        public void InsertData(T data)
+        {
+            double timeStampMs = new TimeSpan(DateTime.UtcNow.Ticks).TotalMilliseconds;
+            InsertData(new DataTimed<T>(data, timeStampMs));
+        }
+
         public void InsertData(T data, double timeStampMs)
         {
-            m_dataWithTime.Add(new DataTimed<T>(data, timeStampMs));
+            InsertData(new DataTimed<T>(data, timeStampMs));
         }
 
         public void InsertData(DataTimed<T> dataTimed)

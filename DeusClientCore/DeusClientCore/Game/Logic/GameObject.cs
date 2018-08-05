@@ -30,5 +30,10 @@ namespace DeusClientCore
         {
             return m_holdedObjects.Where(obj => obj is IViewableComponent).Select(obj => obj as IViewableComponent);
         }
+
+        public DeusComponent GetComponent(uint id)
+        {
+            return m_holdedObjects.FirstOrDefault(compo => compo.UniqueIdentifier == id);
+        }
     }
 }

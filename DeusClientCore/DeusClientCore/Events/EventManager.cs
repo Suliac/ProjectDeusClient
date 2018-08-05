@@ -51,8 +51,11 @@ namespace DeusClientCore.Events
         /// </summary>
         BlockingCollection<Tuple<int, Packet>>[] m_packetQueue = new BlockingCollection<Tuple<int, Packet>>[NUMBER_QUEUES];
 
+        public bool Stopped { get; private set; }
+
         private EventManager()
         {
+            Stopped = false;
             m_onMessageReceived = new Dictionary<EPacketType, EventHandler<SocketPacketEventArgs>>();
             m_packetQueue[0] = new BlockingCollection<Tuple<int, Packet>>();
             m_packetQueue[1] = new BlockingCollection<Tuple<int, Packet>>();
@@ -60,6 +63,8 @@ namespace DeusClientCore.Events
 
         public void Start()
         {
+            Stopped = false;
+
             if (m_onMessageReceived != null)
                 m_onMessageReceived.Clear();
 
@@ -85,10 +90,15 @@ namespace DeusClientCore.Events
                     }
                 } 
             }
+
+            Stopped = true;
         }
 
         public void Update(decimal deltatimeMs)
         {
+            if (Stopped)
+                return;
+
             Stopwatch stopWatch = Stopwatch.StartNew(); // start timer
             int queueToProcess = m_activeQueue;
 

@@ -10,6 +10,8 @@ namespace DeusClientCore
     {
         protected List<T> m_holdedObjects;
 
+        public bool Stopped { get; private set; } 
+
         public ExecutableObjectsHolder(ICollection<T> objects = null)
         {
             m_holdedObjects = new List<T>();
@@ -44,6 +46,9 @@ namespace DeusClientCore
 
         public void Update(decimal deltatimeMs)
         {
+            if (Stopped)
+                return;
+
             // we execute children specific behavior
             OnUpdate(deltatimeMs);
 
@@ -58,12 +63,20 @@ namespace DeusClientCore
             OnStop();
 
             // then we call the methods for the objects holded
-            foreach (var holdedObject in m_holdedObjects)
-                holdedObject.Stop();
+            for (int i = 0; i < m_holdedObjects.Count; i++)
+            {
+                m_holdedObjects[i].Stop();
+            }
+
+            m_holdedObjects.Clear();
+
+            Stopped = true;
         }
 
         public void Start()
         {
+            Stopped = false;
+
             // we execute children specific behavior
             OnStart();
 

@@ -8,6 +8,8 @@ namespace DeusClientCore
 {
     public interface IExecutable : IUpdatable
     {
+        bool Stopped { get; }
+
         void Stop();
         void Start();
 

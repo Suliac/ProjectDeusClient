@@ -26,7 +26,9 @@ namespace DeusClientConsole
             foreach (var component in components)
             {
                 if (component is HealthTimeLineComponent)
-                    viewObj.AddComponent(new HealthViewComponent(component));
+                {
+                    viewObj.AddComponent(new HealthViewComponent(component, component.UniqueIdentifier));
+                }
             }
             
             if (components.Count != 1)

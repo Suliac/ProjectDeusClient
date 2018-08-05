@@ -10,8 +10,12 @@ namespace DeusClientCore.Components
     /// This interface has to be extended by a <see cref="DeusComponent"/> and force the <see cref="DeusComponent"/> to implement a method to give the current informations of component to the game view
     /// This permit to have readonly informations for the specific renderer
     /// </summary>
-    public interface IViewableComponent
+    public interface IViewableComponent : IIdentifiable
     {
+        bool RealtimeViewUpdate { get; }
+
+        bool Stopped { get; }
+
         object GetViewValue();
     }
 }

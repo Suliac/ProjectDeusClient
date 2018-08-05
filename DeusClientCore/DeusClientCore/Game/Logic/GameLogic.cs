@@ -1,4 +1,5 @@
-﻿using DeusClientCore.Events;
+﻿using DeusClientCore.Components;
+using DeusClientCore.Events;
 using DeusClientCore.Packets;
 using System;
 using System.Collections.Generic;
@@ -15,39 +16,41 @@ namespace DeusClientCore
     public class GameLogic : GamePart<GameObject>
     {
         private GameObjectFactory m_objectFactory;
-        
+
         protected override void OnStart()
         {
             m_objectFactory = new GameObjectFactory();
 
             // Games lobby management
-            EventManager.Get().AddListener(Packets.EPacketType.CreateGameAnswer     , ManagePacket);
-            EventManager.Get().AddListener(Packets.EPacketType.GetGameAnswer        , ManagePacket);
-            EventManager.Get().AddListener(Packets.EPacketType.JoinGameAnswer       , ManagePacket);
-            EventManager.Get().AddListener(Packets.EPacketType.LeaveGameAnswer      , ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.CreateGameAnswer, ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.GetGameAnswer, ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.JoinGameAnswer, ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.LeaveGameAnswer, ManagePacket);
 
             // Game view
-            EventManager.Get().AddListener(Packets.EPacketType.HandleClickUI        , ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.HandleClickUI, ManagePacket);
 
             // Game logic
-            EventManager.Get().AddListener(Packets.EPacketType.ObjectEnter          , ManagePacket);
-            EventManager.Get().AddListener(Packets.EPacketType.ObjectLeave          , ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.ObjectEnter, ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.ObjectLeave, ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.UpdateHealth, ManagePacket);
         }
 
         protected override void OnStop()
         {
             // Games lobby management
-            EventManager.Get().RemoveListener(Packets.EPacketType.CreateGameAnswer  , ManagePacket);
-            EventManager.Get().RemoveListener(Packets.EPacketType.GetGameAnswer     , ManagePacket);
-            EventManager.Get().RemoveListener(Packets.EPacketType.JoinGameAnswer    , ManagePacket);
-            EventManager.Get().RemoveListener(Packets.EPacketType.LeaveGameAnswer   , ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.CreateGameAnswer, ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.GetGameAnswer, ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.JoinGameAnswer, ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.LeaveGameAnswer, ManagePacket);
 
             // Game view
-            EventManager.Get().RemoveListener(Packets.EPacketType.HandleClickUI     , ManagePacket);
-            
+            EventManager.Get().RemoveListener(Packets.EPacketType.HandleClickUI, ManagePacket);
+
             // Game logic
-            EventManager.Get().RemoveListener(Packets.EPacketType.ObjectEnter       , ManagePacket);
-            EventManager.Get().RemoveListener(Packets.EPacketType.ObjectLeave       , ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.ObjectEnter, ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.ObjectLeave, ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.UpdateHealth, ManagePacket);
         }
 
         #region Events managements
@@ -80,6 +83,30 @@ namespace DeusClientCore
             else if (e.Packet is PacketObjectLeave)
             {
                 ManageObjectLeave((PacketObjectLeave)e.Packet);
+            }
+            else if (e.Packet is PacketHealthUpdate)
+            {
+                ManageUpdateHealth((PacketHealthUpdate)e.Packet);
+            }
+        }
+
+        private void ManageUpdateHealth(PacketHealthUpdate packet)
+        {
+            GameObject gameObj = m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == packet.ObjectId);
+            if(gameObj != null)
+            {
+                DeusComponent component = gameObj.GetComponent(packet.ObjectId);
+                if(component != null && component is HealthTimeLineComponent)
+                {
+                    (component as HealthTimeLineComponent).InsertData(packet.NewHealthAmount);
+
+                    // Notify the view, that component value has just changed : use this only if your component isn't getting directly informations
+                    PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();
+                    feedBackPacket.ObjectId     = packet.ObjectId;
+                    feedBackPacket.ComponentId  = packet.ComponentId;
+                    feedBackPacket.NewValue     = packet.NewHealthAmount;
+                    EventManager.Get().EnqueuePacket(0, feedBackPacket);
+                }
             }
         }
 
@@ -148,7 +175,7 @@ namespace DeusClientCore
             PacketDeleteViewObject deleteViewObjectRequest = new PacketDeleteViewObject();
             deleteViewObjectRequest.ObjectId = packet.GameObjectId;
             EventManager.Get().EnqueuePacket(0, deleteViewObjectRequest);
-        } 
+        }
         #endregion
     }
 }

@@ -31,6 +31,7 @@ namespace DeusClientCore.Packets
         // Game Logic
         ObjectEnter = 50,
         ObjectLeave = 51,
+        UpdateHealth = 52,
 
         // Game view
         HandleClickUI = 100,

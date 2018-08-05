@@ -56,6 +56,11 @@ namespace DeusClientCore
         {
             return RemoveComponent(toDelete);
         }
-        
+
+        public DeusViewComponent Get(uint id)
+        {
+            return m_holdedObjects.FirstOrDefault(comp => comp.UniqueIdentifier == id);
+        }
+
     }
 }

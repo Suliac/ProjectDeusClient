@@ -1,4 +1,5 @@
 ﻿using DeusClientCore;
+using DeusClientCore.Components;
 using DeusClientCore.Events;
 using DeusClientCore.Packets;
 using System;
@@ -60,7 +61,15 @@ namespace DeusClientConsole
 
         private void ManageViewObjectUpdate(PacketUpdateViewObject packet)
         {
-            // TODO
+            ViewObject viewObject = m_holdedObjects.FirstOrDefault(vo => vo.UniqueIdentifier == packet.ObjectId);
+            if(viewObject != null)
+            {
+               DeusViewComponent component = viewObject.Get(packet.ComponentId);
+                if(component != null)
+                {
+                    component.UpdateViewValue(packet.NewValue);
+                }
+            }
         }
     }
 }

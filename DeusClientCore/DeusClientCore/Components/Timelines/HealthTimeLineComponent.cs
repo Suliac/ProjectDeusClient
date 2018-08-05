@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 namespace DeusClientCore.Components
 {
     public class HealthTimeLineComponent : TimeLineComponent<int>
-    {       
+    {
+        public HealthTimeLineComponent() : base(true) // This component doesn't have its view updated in at each update loop
+        {
+        }
 
         /// <summary>
         /// Extrapolate the health the object has, at current time

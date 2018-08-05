@@ -9,6 +9,9 @@ namespace DeusClientCore.Packets
 {
     public class PacketUpdateViewObject : PacketView
     {
+        public uint ComponentId;
+        public object NewValue;
+
         public PacketUpdateViewObject() : base(EPacketType.UpdateViewObject)
         {
 

@@ -11,6 +11,8 @@ namespace DeusClientCore.Components
         protected uint m_uniqueIdentifier;
         public uint UniqueIdentifier { get => m_uniqueIdentifier; protected set => m_uniqueIdentifier = value; }
 
+        public bool Stopped { get; protected set; }
+        
         private static uint m_nextId = 1;
 
         public DeusComponent()
@@ -19,18 +21,27 @@ namespace DeusClientCore.Components
             m_nextId++;
         }
 
+        public DeusComponent(uint identifier)
+        {
+            m_uniqueIdentifier = identifier;
+            m_nextId = identifier + 1;
+        }
+
         public void Update(decimal deltatimeMs)
         {
-            OnUpdate(deltatimeMs);
+            if (!Stopped)
+                OnUpdate(deltatimeMs);
         }
 
         public void Stop()
         {
             OnStop();
+            Stopped = true;
         }
 
         public void Start()
         {
+            Stopped = false;
             OnStart();
         }
 

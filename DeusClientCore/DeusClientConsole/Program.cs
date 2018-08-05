@@ -51,7 +51,7 @@ namespace DeusClientConsole
         {
             while (!wantToCancel)
             {
-                Console.WriteLine("0 : Message | 1 : Get games | 2 : Create games | 3 : Join game | 4 : Leave game | 5 : Create player view | 6 : Delete player view |||||| Your choice : ");
+                Console.WriteLine("0 : Message | 1 : Get games | 2 : Create games | 3 : Join game | 4 : Leave game | 5 : Create player view | 6 : Delete player view | 6 : Update player health |||||| Your choice : ");
                 string choice = Console.ReadLine();
 
                 if (choice == "stop")
@@ -113,9 +113,34 @@ namespace DeusClientConsole
                 else if (choice == "6")
                 {
                     PacketObjectLeave packet = new PacketObjectLeave();
-                    packet.GameObjectId = nextId;
-                    nextId++;
-                    EventManager.Get().EnqueuePacket(0, packet);
+                    Console.WriteLine("Id to delete : ");
+                    string idToDelete = Console.ReadLine();
+
+                    uint id = 0;
+                    if (uint.TryParse(idToDelete, out id))
+                    {
+                        packet.GameObjectId = id;
+                        EventManager.Get().EnqueuePacket(0, packet);
+                    }
+                }
+                else if (choice == "7")
+                {
+                    Console.WriteLine("Id game obj : ");
+                    string idToDelete = Console.ReadLine();
+
+                    uint id = 0;
+                    if (uint.TryParse(idToDelete, out id))
+                    {
+                        Console.WriteLine("Id game compo : ");
+                        string idComp = Console.ReadLine();
+
+                        uint idCompo = 0;
+                        if (uint.TryParse(idComp, out idCompo))
+                        {
+                            PacketHealthUpdate packet = new PacketHealthUpdate(id, idCompo, 50);
+                            EventManager.Get().EnqueuePacket(0, packet);
+                        }
+                    }
                 }
             }
         }
