@@ -7,34 +7,31 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Components
 {
-    public class HealthTimeLineComponent : TimeLineComponent<int>, IViewableComponent
-    {
+    public class HealthTimeLineComponent : TimeLineComponent<int>
+    {       
+
         /// <summary>
-        /// Extrapolate the health the object has, at time given
+        /// Extrapolate the health the object has, at current time
         /// </summary>
-        /// <param name="timeStamp">The timestamp en MS at chich we want datas</param>
-        /// <returns>The interpolated value</returns>
-        public override int ExtrapolateValue(double timeStamp)
+        /// <returns>An <see cref="int"/> -> the interpolated health value</returns>
+        public override object GetViewValue()
         {
             int interpolateValue = 0;
+            double timeStamp = new TimeSpan(DateTime.UtcNow.Ticks).TotalMilliseconds;
+
 
             if (!m_dataWithTime.Any())
                 throw new TimeLineException("Impossible to interpolate health without at least 1 entry");
 
             // Interpolate the health of an object is very simple : 
             // just take the last amount we got for any datas saved before the timestamp
-            if (!m_dataWithTime.Any(d => d.TimeStampMs <= timeStamp))
+            if (m_dataWithTime.Any(d => d.TimeStampMs <= timeStamp))
                 interpolateValue = m_dataWithTime.LastOrDefault(d => d.TimeStampMs <= timeStamp).Data;
             else
                 throw new TimeLineException("Impossible to interpolate health without at least 1 entry before the timestamp");
 
 
             return interpolateValue;
-        }
-
-        public DeusViewComponent GetViewComponent()
-        {
-            return new HealthViewComponent(this);
         }
 
         protected override void OnStart()

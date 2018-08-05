@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Components
 {
-    public class DeusComponent : IExecutable, IIdentifiable
+    public abstract class DeusComponent : IExecutable, IIdentifiable
     {
         protected uint m_uniqueIdentifier;
         public uint UniqueIdentifier { get => m_uniqueIdentifier; protected set => m_uniqueIdentifier = value; }
@@ -48,5 +48,6 @@ namespace DeusClientCore.Components
         {
 
         }
+
     }
 }

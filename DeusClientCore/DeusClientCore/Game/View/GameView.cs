@@ -11,7 +11,7 @@ namespace DeusClientCore
     //public class GameView : GamePart<ViewObject>
     //{
     //    private ViewObjectFactory m_objectFactory;
-        
+
     //    protected override void OnStart()
     //    {
     //        m_objectFactory = new ViewObjectFactory();
@@ -62,5 +62,8 @@ namespace DeusClientCore
     //    }
     //}
 
+    public abstract class GameView : GamePart<ViewObject>
+    {
 
+    }
 }

@@ -12,7 +12,7 @@ namespace DeusClientConsole
     {
         private int m_currentHealth;
 
-        public HealthViewComponent(DeusComponent linkedComponent) : base(linkedComponent)
+        public HealthViewComponent(IViewableComponent linkedComponent) : base(linkedComponent)
         {
         }
 
@@ -23,7 +23,7 @@ namespace DeusClientConsole
         {
             if (value is int)
                 m_currentHealth = (int)value;
-
+            
             // specific behavior for console
             Console.WriteLine($"My Health is : {m_currentHealth}");
         }
@@ -31,7 +31,7 @@ namespace DeusClientConsole
         /**********************************************************/
         /* Use this if you want to update the value at each loop  */
         /**********************************************************/
-        /*
+        
         /// <summary>
         /// On update of <see cref="DeusViewComponent"/> we just get the current state of health from our health Timeline
         /// </summary>
@@ -39,12 +39,9 @@ namespace DeusClientConsole
         protected override void OnUpdate(decimal deltatimeMs)
         {
             if(m_linkedComponent is HealthTimeLineComponent)
-            {
-                TimeSpan currentTimeSpan = new TimeSpan(DateTime.UtcNow.Ticks);
-                UpdateViewValue((m_linkedComponent as HealthTimeLineComponent).ExtrapolateValue(currentTimeSpan.TotalMilliseconds));
-            }
+                UpdateViewValue(m_linkedComponent.GetViewValue());
         }
-        */
+        
 
     }
 }

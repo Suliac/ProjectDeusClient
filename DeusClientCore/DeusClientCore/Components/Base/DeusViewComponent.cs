@@ -8,9 +8,9 @@ namespace DeusClientCore.Components
 {
     public abstract class DeusViewComponent : DeusComponent
     {
-        protected DeusComponent m_linkedComponent;
+        protected IViewableComponent m_linkedComponent;
 
-        public DeusViewComponent(DeusComponent linkedComponent)
+        public DeusViewComponent(IViewableComponent linkedComponent)
         {
             m_linkedComponent = linkedComponent;
         }

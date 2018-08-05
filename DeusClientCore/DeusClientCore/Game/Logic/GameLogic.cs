@@ -44,7 +44,7 @@ namespace DeusClientCore
 
             // Game view
             EventManager.Get().RemoveListener(Packets.EPacketType.HandleClickUI     , ManagePacket);
-
+            
             // Game logic
             EventManager.Get().RemoveListener(Packets.EPacketType.ObjectEnter       , ManagePacket);
             EventManager.Get().RemoveListener(Packets.EPacketType.ObjectLeave       , ManagePacket);

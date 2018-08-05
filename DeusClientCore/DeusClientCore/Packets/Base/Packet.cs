@@ -37,6 +37,8 @@ namespace DeusClientCore.Packets
         CreateViewObject = 101,
         UpdateViewObject = 102,
         DeleteViewObject = 103,
+        TestViewObject = 104,
+        TestDeleteViewObject = 105,
     };
 
     public abstract class Packet

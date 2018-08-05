@@ -22,6 +22,7 @@ namespace DeusClientCore
         {
             if (!m_holdedObjects.Any(obj => obj.UniqueIdentifier == newObject.UniqueIdentifier))
             {
+                newObject.Start();
                 m_holdedObjects.Add(newObject);
                 return true;
             }
@@ -33,7 +34,8 @@ namespace DeusClientCore
         {
             if (m_holdedObjects.Any(d => d.UniqueIdentifier == objectToDeleteId))
             {
-                m_holdedObjects.Remove(m_holdedObjects.FirstOrDefault(d => d.UniqueIdentifier == objectToDeleteId));
+                m_holdedObjects.FirstOrDefault(d => d.UniqueIdentifier == objectToDeleteId).Stop(); // stop gameobject
+                m_holdedObjects.Remove(m_holdedObjects.FirstOrDefault(d => d.UniqueIdentifier == objectToDeleteId)); // delete
                 return true;
             }
 

@@ -87,6 +87,8 @@
     <Compile Include="Packets\General\PacketAck.cs" />
     <Compile Include="Packets\General\PacketTextMessage.cs" />
     <Compile Include="Packets\Base\PacketFactory.cs" />
+    <Compile Include="Packets\View\PacketTestDeleteViewObject.cs" />
+    <Compile Include="Packets\View\PacketTestViewObject.cs" />
     <Compile Include="Packets\View\PacketUpdateViewObject.cs" />
     <Compile Include="Packets\View\PacketDeleteViewObject.cs" />
     <Compile Include="Packets\View\PacketView.cs" />

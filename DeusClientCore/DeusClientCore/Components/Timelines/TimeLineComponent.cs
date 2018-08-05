@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Components
 {
-    public abstract class TimeLineComponent<T> : DeusComponent
+    public abstract class TimeLineComponent<T> : DeusComponent, IViewableComponent
     {
         /// <summary>
         /// The data we want with a timestamp
@@ -17,14 +17,7 @@ namespace DeusClientCore.Components
         /// The number of datas we save in time
         /// </summary>
         private const uint MAX_DATAS_SAVED = 10000;
-
-        /// <summary>
-        /// Extrapolate the value for a timestamp
-        /// </summary>
-        /// <param name="timeStampMs">The time (in ms) at which we want to have our value</param>
-        /// <returns>The value extrapolate</returns>
-        public abstract T ExtrapolateValue(double timeStampMs);
-
+        
         protected override void OnUpdate(decimal deltatimeMs)
         {
             // We clean our old datas
@@ -46,5 +39,7 @@ namespace DeusClientCore.Components
         {
             m_dataWithTime.Add(dataTimed);
         }
+
+        public abstract object GetViewValue();
     }
 }

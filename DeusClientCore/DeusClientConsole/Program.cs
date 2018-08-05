@@ -19,8 +19,8 @@ namespace DeusClientConsole
         {
             ConsoleGameView view = new ConsoleGameView();
             Game game = new Game();
-            game.Start("127.0.0.1", 27015);
 
+            game.Start("127.0.0.1", 27015);
             view.Start();
 
             Thread myThread = new Thread(new ThreadStart(HandleInput));
@@ -32,8 +32,8 @@ namespace DeusClientConsole
             while (!wantToCancel)
             {
                 long dt = chrono.ElapsedMilliseconds;
-                game.Update(dt);
 
+                game.Update(dt);
                 view.Update(dt);
 
                 Thread.Sleep(1);
@@ -41,15 +41,17 @@ namespace DeusClientConsole
 
             view.Stop();
             game.Stop();
+
             myThread.Join();
         }
+
+        static uint nextId = 1;
 
         static void HandleInput()
         {
             while (!wantToCancel)
             {
-                Console.WriteLine("0 : Message | 1 : Get games | 2 : Create games | 3 : Join game | 4 : Leave game");
-                Console.WriteLine("Your choice : ");
+                Console.WriteLine("0 : Message | 1 : Get games | 2 : Create games | 3 : Join game | 4 : Leave game | 5 : Create player view | 6 : Delete player view |||||| Your choice : ");
                 string choice = Console.ReadLine();
 
                 if (choice == "stop")
@@ -100,9 +102,22 @@ namespace DeusClientConsole
                     packet.UIClicked = PacketHandleClickUI.UIButton.LeaveGameButton;
                     EventManager.Get().EnqueuePacket(0, packet);
                 }
+                else if (choice == "5")
+                {
+                    PacketObjectEnter packet = new PacketObjectEnter();
+                    packet.GameObjectId = nextId;
+                    nextId++;
+                    packet.ObjectType = EObjectType.Player;
+                    EventManager.Get().EnqueuePacket(0, packet);
+                }
+                else if (choice == "6")
+                {
+                    PacketObjectLeave packet = new PacketObjectLeave();
+                    packet.GameObjectId = nextId;
+                    nextId++;
+                    EventManager.Get().EnqueuePacket(0, packet);
+                }
             }
         }
-
-
     }
 }

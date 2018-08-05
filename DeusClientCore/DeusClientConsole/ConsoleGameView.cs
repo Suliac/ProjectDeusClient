@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DeusClientConsole
 {
-    public class ConsoleGameView : GamePart<ViewObject>
+    public class ConsoleGameView : GameView
     {
         private ViewObjectFactory m_objectFactory;
 
@@ -47,6 +47,7 @@ namespace DeusClientConsole
 
         private void ManageViewObjectCreation(PacketCreateViewObject packet)
         {
+            Console.WriteLine("create view object");
             // Create our view object
             ViewObject viewObject = m_objectFactory.CreateViewObject(new ViewObjectCreateArgs(packet.ObjectType, packet.LinkedGameObject));
             AddObject(viewObject);
