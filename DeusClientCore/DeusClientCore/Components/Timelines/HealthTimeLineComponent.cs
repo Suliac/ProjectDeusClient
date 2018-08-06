@@ -9,6 +9,11 @@ namespace DeusClientCore.Components
 {
     public class HealthTimeLineComponent : TimeLineComponent<int>
     {
+        /// <summary>
+        /// Create <see cref="HealthTimeLineComponent"/>
+        /// We specify with the 'base(false)' that we don't want our ViewComponent to bypass the event queue, 
+        /// and the view component will only be updated by handling <see cref="Packets.PacketUpdateViewObject"/> packets
+        /// </summary>
         public HealthTimeLineComponent() : base(true) // This component doesn't have its view updated in at each update loop
         {
         }
@@ -20,7 +25,7 @@ namespace DeusClientCore.Components
         public override object GetViewValue()
         {
             int interpolateValue = 0;
-            double timeStamp = new TimeSpan(DateTime.UtcNow.Ticks).TotalMilliseconds;
+            long timeStamp = TimeHelper.GetUnixMsTimeStamp();
 
 
             if (!m_dataWithTime.Any())
@@ -37,6 +42,9 @@ namespace DeusClientCore.Components
             return interpolateValue;
         }
 
+        /// <summary>
+        /// On <see cref="HealthTimeLineComponent"/> start, we just insert by default 0 life
+        /// </summary>
         protected override void OnStart()
         {
             // On start, init datas with 0 life at time 0

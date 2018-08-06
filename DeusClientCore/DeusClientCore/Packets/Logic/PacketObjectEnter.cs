@@ -8,7 +8,7 @@ namespace DeusClientCore.Packets
 {
     public class PacketObjectEnter : Packet
     {
-        // TODO : add cell hash
+        // TODO : add cell hash ?
 
         public uint GameObjectId { get; set; }
         public EObjectType ObjectType { get; set; }

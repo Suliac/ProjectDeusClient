@@ -18,6 +18,11 @@ namespace DeusClientCore.Components
         /// </summary>
         private const uint MAX_DATAS_SAVED = 10000;
 
+        /// <summary>
+        /// We want to know if the linked <see cref="DeusViewComponent"/> will have to be updated in realtime :
+        /// That means that if realtime update is needed, the <see cref="DeusViewComponent"/> will call directly our GetViewValue() function
+        /// without passing bu event queue
+        /// </summary>
         public bool RealtimeViewUpdate { get; protected set; }
 
         public TimeLineComponent(bool needRealtimeUpdateView)
@@ -39,11 +44,10 @@ namespace DeusClientCore.Components
 
         public void InsertData(T data)
         {
-            double timeStampMs = new TimeSpan(DateTime.UtcNow.Ticks).TotalMilliseconds;
-            InsertData(new DataTimed<T>(data, timeStampMs));
+            InsertData(new DataTimed<T>(data, TimeHelper.GetUnixMsTimeStamp()));
         }
 
-        public void InsertData(T data, double timeStampMs)
+        public void InsertData(T data, long timeStampMs)
         {
             InsertData(new DataTimed<T>(data, timeStampMs));
         }
