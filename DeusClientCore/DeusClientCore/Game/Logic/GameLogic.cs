@@ -165,6 +165,7 @@ namespace DeusClientCore
         private void ManageObjectEnter(PacketObjectEnter packet)
         {
             GameObject gameObject = m_objectFactory.CreateGameObject(new GameObjectCreateArgs(packet.GameObjectId, packet.ObjectType, packet.IsLocalPlayer));
+            Console.WriteLine($"Create Game Object | Id obj : {packet.GameObjectId} | Is local player : {packet.IsLocalPlayer}");
             AddObject(gameObject);
         }
 

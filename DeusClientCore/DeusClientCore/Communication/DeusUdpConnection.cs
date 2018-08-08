@@ -117,7 +117,7 @@ namespace DeusClientCore
                 // check if packet isn't already acked
                 if (!m_ackedPackets.Any(idAcked => idAcked == (packet as PacketAck).PacketIdToAck))
                 {
-                    Console.WriteLine($"Received ACK for packet id : {(packet as PacketAck).PacketIdToAck.ToString()}");
+                    //Console.WriteLine($"Received ACK for packet id : {(packet as PacketAck).PacketIdToAck.ToString()}");
                     m_ackedPackets[m_ackedPacketsIndex] = (packet as PacketAck).PacketIdToAck;
                     m_ackedPacketsIndex++;
 
@@ -160,7 +160,7 @@ namespace DeusClientCore
         /// <param name="sendBuffer">The datas to send</param>
         protected override void OnSending(Packet packetToSend)
         {
-            Console.WriteLine($"Send packet with id : {packetToSend.Id.ToString()}");
+            //Console.WriteLine($"Send packet with id : {packetToSend.Id.ToString()}");
 
             // Serialize our packet into a byte[]
             byte[] sendBuffer = Packet.Serialize(packetToSend);

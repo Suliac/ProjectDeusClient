@@ -18,17 +18,17 @@ namespace DeusClientCore.Packets
         public override ushort EstimateCurrentSerializedSize()
         {
             // 1 PacketClientConnected uses :
-            // - 4 byte						: to save an unsigned int for the length of the next string
+            // - 1 byte						: to save an uint8 for the length of the next string
             // - m_message.size()+1 bytes	: to save the string ip address ('+1' is for the \0)
             // - 4 bytes					: to save the udp port
-            return (ushort)(sizeof(uint) + (AddrUdp.Length + 1) + sizeof(uint));
+            return (ushort)(sizeof(byte) + (AddrUdp.Length + 1) + sizeof(uint));
         }
 
         public override void OnDeserialize(byte[] buffer, int index)
         {
             // get the size of the string
-            uint dataSize = 0;
-            Serializer.DeserializeData(buffer, ref index, out dataSize);
+            byte dataSize = buffer[index];
+            index++;
 
             string tmpAddrUdp;
             Serializer.DeserializeData(buffer, ref index, out tmpAddrUdp, (int)dataSize);

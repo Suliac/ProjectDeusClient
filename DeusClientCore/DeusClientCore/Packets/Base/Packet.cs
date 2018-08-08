@@ -15,6 +15,7 @@ namespace DeusClientCore.Packets
         Disconnect                  = 2,
         Ack                         = 3,
         Connected                   = 4,
+        ConnectedUdpAnswer          = 5,
 
         // Lobby : Games management
         CreateGameRequest           = 10,

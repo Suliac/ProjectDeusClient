@@ -48,7 +48,7 @@ namespace DeusClientConsole
 
         private void ManageViewObjectCreation(PacketCreateViewObject packet)
         {
-            Console.WriteLine("create view object");
+            Console.WriteLine($"Create View Object | Id obj : {packet.LinkedGameObject.UniqueIdentifier} | Is local player : {packet.LinkedGameObject.IsLocalPlayer}");
             // Create our view object
             ViewObject viewObject = m_objectFactory.CreateViewObject(new ViewObjectCreateArgs(packet.LinkedGameObject));
             AddObject(viewObject);

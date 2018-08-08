@@ -18,7 +18,7 @@ namespace DeusClientCore
         public DeusClient(TcpClient tcpClient)
         {
             EventManager.Get().AddListener(EPacketType.Connected, InitUdp); // subscribe to event 'Connected'
-            EventManager.Get().AddListener(EPacketType.GetGameRequest, SendUdpMessage);
+            EventManager.Get().AddListener(EPacketType.GetGameRequest, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.CreateGameRequest, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.JoinGameRequest, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.LeaveGameRequest, SendTcpMessage);
@@ -57,6 +57,9 @@ namespace DeusClientCore
             {
                 Console.WriteLine("UDP addr : " + addr.ToString() + " | port : " + (e.Packet as PacketClientConnected).PortUdp);
                 m_udpConnection = new DeusUdpConnection(new IPEndPoint(addr, (int)(e.Packet as PacketClientConnected).PortUdp));
+
+                PacketConnectedUdpAnswer feedback = new PacketConnectedUdpAnswer($"Player {new Random().Next(100)}");
+                m_udpConnection.SendPacket(feedback);
             }
             else
                 throw new Exception("Cannot parse IPAdress, abort the UDP connection...");
@@ -64,13 +67,13 @@ namespace DeusClientCore
 
         private void SendTcpMessage(object sender, SocketPacketEventArgs e)
         {
-            Console.WriteLine($"Send TCP {e.Packet.Type}");
+            //Console.WriteLine($"Send TCP {e.Packet.Type}");
             m_tcpConnection.SendPacket(e.Packet);
         }
 
         private void SendUdpMessage(object sender, SocketPacketEventArgs e)
         {
-            Console.WriteLine($"Send UDP {e.Packet.Type}");
+            //Console.WriteLine($"Send UDP {e.Packet.Type}");
             m_udpConnection.SendPacket(e.Packet);
         }
     }
