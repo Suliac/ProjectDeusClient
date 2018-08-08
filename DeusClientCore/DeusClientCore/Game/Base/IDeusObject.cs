@@ -10,5 +10,7 @@ namespace DeusClientCore
     public interface IDeusObject : IIdentifiable, IExecutable
     {
         EObjectType ObjectType { get; }
+
+        bool IsLocalPlayer { get; }
     }
 }

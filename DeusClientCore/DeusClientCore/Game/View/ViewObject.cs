@@ -9,12 +9,10 @@ namespace DeusClientCore
 {
     public struct ViewObjectCreateArgs
     {
-        public EObjectType Type { get; private set; }
         public GameObject LinkedGameObject { get; private set; }
 
-        public ViewObjectCreateArgs(EObjectType type, GameObject linkedGameObject)
+        public ViewObjectCreateArgs(GameObject linkedGameObject)
         {
-            Type = type;
             LinkedGameObject = linkedGameObject;
         }
     }
@@ -30,11 +28,15 @@ namespace DeusClientCore
 
         protected EObjectType m_objectType;
         public EObjectType ObjectType { get => m_objectType; protected set => m_objectType = value; }
+        
+        protected bool m_isLocalPlayer;
+        public bool IsLocalPlayer { get => m_isLocalPlayer; protected set => m_isLocalPlayer = value; }
 
-        public ViewObject(uint linkedGameObjectId, EObjectType objectType, ICollection<DeusViewComponent> viewComponents = null) : base (viewComponents)
+        public ViewObject(uint linkedGameObjectId, EObjectType objectType, bool isLocalPlayer, ICollection<DeusViewComponent> viewComponents = null) : base (viewComponents)
         {
             UniqueIdentifier = linkedGameObjectId; 
             ObjectType = objectType;
+            IsLocalPlayer = isLocalPlayer;
         }
 
         /// <summary>

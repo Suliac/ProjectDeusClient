@@ -69,8 +69,8 @@
     <Compile Include="Game\Base\IDeusObject.cs" />
     <Compile Include="Game\Base\GamePart.cs" />
     <Compile Include="Game\View\ViewObject.cs" />
-    <Compile Include="Game\View\ViewObjectFactory.cs" />
     <Compile Include="Packets\Game\PacketGetGameAnswer.cs" />
+    <Compile Include="Packets\Game\PacketPlayerReady.cs" />
     <Compile Include="Packets\Logic\PacketHealthUpdate.cs" />
     <Compile Include="Packets\Logic\PacketObjectLeave.cs" />
     <Compile Include="Packets\Logic\PacketObjectEnter.cs" />

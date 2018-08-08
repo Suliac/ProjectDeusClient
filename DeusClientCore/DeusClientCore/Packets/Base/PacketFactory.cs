@@ -47,6 +47,12 @@ namespace DeusClientCore.Packets
                 case EPacketType.LeaveGameAnswer:
                     packet = new PacketLeaveGameRequest();
                     break;
+                case EPacketType.ObjectEnter:
+                    packet = new PacketObjectEnter();
+                    break;
+                case EPacketType.ObjectLeave:
+                    packet = new PacketObjectLeave();
+                    break;
                 default:
                     throw new Exception("Impossible to instantiate the packet");
             }

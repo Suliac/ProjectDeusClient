@@ -9,31 +9,31 @@ using DeusClientCore.Packets;
 
 namespace DeusClientCore
 {
-    public enum EObjectType
+    public enum EObjectType : byte
     {
-        Player
+        Player = 0,
     }
 
     public struct GameObjectCreateArgs
     {
-        public EObjectType Type { get; set; }
+        public uint GameObjectId { get; private set; }
 
-        public GameObjectCreateArgs(EObjectType type)
+        public EObjectType Type { get; private set; }
+
+        public bool IsLocalPlayer { get; private set; }
+
+        public GameObjectCreateArgs(uint gameObjectId, EObjectType type, bool isLocalPlayer)
         {
+            GameObjectId = gameObjectId;
             Type = type;
+            IsLocalPlayer = isLocalPlayer;
         }
     }
 
     public class GameObjectFactory
     {
-        private static uint m_nextId = 1;
-
         public GameObject CreateGameObject(GameObjectCreateArgs args)
         {
-            // get id
-            uint gameObjectId = m_nextId;
-            m_nextId++;
-
             // Create all the components
             List<DeusComponent> components = new List<DeusComponent>();
             switch (args.Type)
@@ -47,7 +47,7 @@ namespace DeusClientCore
             }
 
             // Create the gameobject
-            GameObject gameObject = new GameObject(gameObjectId, args.Type, components);
+            GameObject gameObject = new GameObject(args, components);
 
             // notify the view that there is a new object to display
             PacketCreateViewObject packet = new PacketCreateViewObject();

@@ -6,40 +6,44 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Packets
 {
-    public enum EPacketType
+    public enum EPacketType : byte
     {
-        Error = 0,
+        Error                       = 0,
 
         // General
-        Text = 1,
-        Disconnect = 2,
-        Ack = 3,
-        Connected = 4,
+        Text                        = 1,
+        Disconnect                  = 2,
+        Ack                         = 3,
+        Connected                   = 4,
 
         // Lobby : Games management
-        CreateGameRequest = 10,
-        CreateGameAnswer = 11,
-        JoinGameRequest = 12,
-        JoinGameAnswer = 13,
-        GetGameRequest = 14,
-        GetGameAnswer = 15,
-        LeaveGameRequest = 16,
-        LeaveGameAnswer = 17,
-        DeleteGameRequest = 18,
-        NewPlayer = 19,
-        
+        CreateGameRequest           = 10,
+        CreateGameAnswer            = 11,
+        JoinGameRequest             = 12,
+        JoinGameAnswer              = 13,
+        GetGameRequest              = 14,
+        GetGameAnswer               = 15,
+        LeaveGameRequest            = 16,
+        LeaveGameAnswer             = 17,
+        DeleteGameRequest           = 18,
+        NewPlayer                   = 19,
+        PlayerReady                 = 20,
+        PlayerNotReady			    = 21,
+		StartGame				    = 22,
+
         // Game Logic
-        ObjectEnter = 50,
-        ObjectLeave = 51,
-        UpdateHealth = 52,
+        ObjectEnter                 = 50,
+        ObjectLeave                 = 51,
+        ObjectChangeCell            = 52,
+        UpdateHealth                = 53,
 
         // Game view
-        HandleClickUI = 100,
-        CreateViewObject = 101,
-        UpdateViewObject = 102,
-        DeleteViewObject = 103,
-        TestViewObject = 104,
-        TestDeleteViewObject = 105,
+        HandleClickUI               = 100,
+        CreateViewObject            = 101,
+        UpdateViewObject            = 102,
+        DeleteViewObject            = 103,
+        TestViewObject              = 104,
+        TestDeleteViewObject        = 105,
     };
 
     public abstract class Packet

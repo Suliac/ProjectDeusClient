@@ -132,7 +132,6 @@ namespace DeusClientCore
 
         private void ManageHandleUIPacket(PacketHandleClickUI packet)
         {
-            Console.WriteLine("Handle Game Input : ");
             // TODO : check state du jeu -> le joueur peut avoir cliqué sur le bouton?
             switch (packet.UIClicked)
             {
@@ -155,6 +154,9 @@ namespace DeusClientCore
                     newPacketText.MessageText = packet.TextMessage;
                     EventManager.Get().EnqueuePacket(0, newPacketText);
                     break;
+                case PacketHandleClickUI.UIButton.ReadyButton:
+                    EventManager.Get().EnqueuePacket(0, new PacketPlayerReady());
+                    break;
                 default:
                     break;
             }
@@ -162,7 +164,7 @@ namespace DeusClientCore
 
         private void ManageObjectEnter(PacketObjectEnter packet)
         {
-            GameObject gameObject = m_objectFactory.CreateGameObject(new GameObjectCreateArgs(packet.ObjectType));
+            GameObject gameObject = m_objectFactory.CreateGameObject(new GameObjectCreateArgs(packet.GameObjectId, packet.ObjectType, packet.IsLocalPlayer));
             AddObject(gameObject);
         }
 

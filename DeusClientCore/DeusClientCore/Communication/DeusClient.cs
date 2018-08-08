@@ -22,7 +22,8 @@ namespace DeusClientCore
             EventManager.Get().AddListener(EPacketType.CreateGameRequest, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.JoinGameRequest, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.LeaveGameRequest, SendTcpMessage);
-            EventManager.Get().AddListener(EPacketType.Text, SendUdpMessage);
+            EventManager.Get().AddListener(EPacketType.Text, SendTcpMessage);
+            EventManager.Get().AddListener(EPacketType.PlayerReady, SendTcpMessage);
 
             m_tcpConnection = new DeusTcpConnection(tcpClient); // launch the SendAndReceive() Task
         }
@@ -30,6 +31,12 @@ namespace DeusClientCore
         public void Dispose()
         {
             EventManager.Get().RemoveListener(EPacketType.Connected, InitUdp);
+            EventManager.Get().RemoveListener(EPacketType.GetGameRequest, SendUdpMessage);
+            EventManager.Get().RemoveListener(EPacketType.CreateGameRequest, SendTcpMessage);
+            EventManager.Get().RemoveListener(EPacketType.JoinGameRequest, SendTcpMessage);
+            EventManager.Get().RemoveListener(EPacketType.LeaveGameRequest, SendTcpMessage);
+            EventManager.Get().RemoveListener(EPacketType.Text, SendTcpMessage);
+            EventManager.Get().RemoveListener(EPacketType.PlayerReady, SendTcpMessage);
 
             m_tcpConnection.Dispose();
             m_udpConnection.Dispose();
@@ -57,11 +64,13 @@ namespace DeusClientCore
 
         private void SendTcpMessage(object sender, SocketPacketEventArgs e)
         {
+            Console.WriteLine($"Send TCP {e.Packet.Type}");
             m_tcpConnection.SendPacket(e.Packet);
         }
 
         private void SendUdpMessage(object sender, SocketPacketEventArgs e)
         {
+            Console.WriteLine($"Send UDP {e.Packet.Type}");
             m_udpConnection.SendPacket(e.Packet);
         }
     }

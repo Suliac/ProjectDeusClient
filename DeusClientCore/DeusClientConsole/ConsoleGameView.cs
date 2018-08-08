@@ -50,7 +50,7 @@ namespace DeusClientConsole
         {
             Console.WriteLine("create view object");
             // Create our view object
-            ViewObject viewObject = m_objectFactory.CreateViewObject(new ViewObjectCreateArgs(packet.ObjectType, packet.LinkedGameObject));
+            ViewObject viewObject = m_objectFactory.CreateViewObject(new ViewObjectCreateArgs(packet.LinkedGameObject));
             AddObject(viewObject);
         }
 

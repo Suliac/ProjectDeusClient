@@ -8,10 +8,9 @@ namespace DeusClientCore.Packets
 {
     public class PacketObjectEnter : Packet
     {
-        // TODO : add cell hash ?
-
         public uint GameObjectId { get; set; }
         public EObjectType ObjectType { get; set; }
+        public bool IsLocalPlayer { get; set; }
 
         public PacketObjectEnter() : base(EPacketType.ObjectEnter)
         {
@@ -20,7 +19,7 @@ namespace DeusClientCore.Packets
         public override ushort EstimateCurrentSerializedSize()
         {
             // +1 for 1 byte for ObjectType(uint8_t)
-            return sizeof(uint) + 1;
+            return sizeof(uint) + sizeof(EObjectType) + sizeof(bool);
         }
 
         public override void OnDeserialize(byte[] buffer, int index)
@@ -32,6 +31,10 @@ namespace DeusClientCore.Packets
             // Deerialize id
             EPacketType type = (EPacketType)((int)buffer[index]);
             index++;
+
+            bool isLocalPlayer = false;
+            Serializer.DeserializeData(buffer, ref index, out isLocalPlayer);
+            IsLocalPlayer = isLocalPlayer;
         }
 
         public override byte[] OnSerialize()
@@ -43,6 +46,8 @@ namespace DeusClientCore.Packets
 
             // serialize object type
             result.Add((byte)ObjectType);
+
+            result.AddRange(Serializer.SerializeData(IsLocalPlayer));
 
             return result.ToArray();
         }

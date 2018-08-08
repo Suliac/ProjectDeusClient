@@ -11,13 +11,13 @@ namespace DeusClientConsole
 {
     public class PlayerViewObject : ViewObject
     {
-        public PlayerViewObject(uint linkedGameObjectId) : base(linkedGameObjectId, EObjectType.Player, null)
+        public PlayerViewObject(uint linkedGameObjectId, bool isLocalPlayer) : base(linkedGameObjectId, EObjectType.Player, isLocalPlayer, null)
         {
         }
 
         public static ViewObject Create(ViewObjectCreateArgs args)
         {
-            PlayerViewObject viewObj = new PlayerViewObject(args.LinkedGameObject.UniqueIdentifier);
+            PlayerViewObject viewObj = new PlayerViewObject(args.LinkedGameObject.UniqueIdentifier, args.LinkedGameObject.IsLocalPlayer);
             List<IViewableComponent> components = args.LinkedGameObject.GetViewableGameComponents().ToList();
 
             if (components.Count != 1)
@@ -30,7 +30,7 @@ namespace DeusClientConsole
                     viewObj.AddComponent(new HealthViewComponent(component, component.UniqueIdentifier));
                 }
             }
-            
+
             if (components.Count != 1)
                 throw new DeusException("Try to create PlayerViewObject without the right number of components");
 

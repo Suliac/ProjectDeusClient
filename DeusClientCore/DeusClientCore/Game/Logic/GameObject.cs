@@ -20,10 +20,14 @@ namespace DeusClientCore
         protected EObjectType m_objectType;
         public EObjectType ObjectType { get => m_objectType; protected set => m_objectType = value; }
 
-        public GameObject(UInt32 identifier, EObjectType objectType, ICollection<DeusComponent> components = null) : base(components)
+        protected bool m_isLocalPlayer;
+        public bool IsLocalPlayer { get => m_isLocalPlayer; protected set => m_isLocalPlayer = value; }
+
+        public GameObject(GameObjectCreateArgs args, ICollection<DeusComponent> components = null) : base(components)
         {
-            UniqueIdentifier = identifier;
-            ObjectType = objectType;
+            UniqueIdentifier = args.GameObjectId;
+            ObjectType = args.Type;
+            IsLocalPlayer = args.IsLocalPlayer;
         }
 
         public IEnumerable<IViewableComponent> GetViewableGameComponents()

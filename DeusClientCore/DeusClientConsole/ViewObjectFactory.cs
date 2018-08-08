@@ -18,7 +18,7 @@ namespace DeusClientConsole
 
             // fill our viewobject with components by copying the ones we want
             List<IViewableComponent> components = args.LinkedGameObject.GetViewableGameComponents().ToList();
-            switch (args.Type)
+            switch (args.LinkedGameObject.ObjectType)
             {
                 case EObjectType.Player:
                     viewObject = PlayerViewObject.Create(args);

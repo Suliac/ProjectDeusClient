@@ -15,6 +15,7 @@ namespace DeusClientCore.Packets
             LeaveGameButton,
             GetGameButton,
             SendTextButton,
+            ReadyButton,
         }
 
         public UIButton UIClicked { get; set; }
