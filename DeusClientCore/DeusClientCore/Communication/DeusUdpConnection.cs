@@ -110,8 +110,7 @@ namespace DeusClientCore
         /// For the non-ack packet send <see cref="NUMBER_ACK_SEND_BACK"/> <see cref="PacketAck"/> back, where <see cref="NUMBER_ACK_SEND_BACK"/> is a const number set in <see cref="DeusUdpConnection"/>
         /// </summary>
         /// <param name="packet">The packet just received</param>
-        protected override void OnPacketDeserialized(Packet packet)
-        {
+        protected override void OnPacketDeserialized(Packet packet)        {
             if (packet.Type == EPacketType.Ack)
             {
                 // check if packet isn't already acked
@@ -137,6 +136,7 @@ namespace DeusClientCore
                     SendPacket(ackPacket);
                 }
 
+                Console.WriteLine($"UDP Enqueue{packet.Type}");
                 // enqueue the packet
                 EventManager.Get().EnqueuePacket(0, packet);
             }

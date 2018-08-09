@@ -21,6 +21,7 @@ namespace DeusClientConsole
             EventManager.Get().AddListener(EPacketType.CreateViewObject, ManagePacket);
             EventManager.Get().AddListener(EPacketType.UpdateViewObject, ManagePacket);
             EventManager.Get().AddListener(EPacketType.DeleteViewObject, ManagePacket);
+            
         }
 
         protected override void OnStop()

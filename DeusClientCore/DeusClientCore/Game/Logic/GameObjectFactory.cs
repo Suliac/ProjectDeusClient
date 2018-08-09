@@ -32,7 +32,7 @@ namespace DeusClientCore
 
     public class GameObjectFactory
     {
-        public GameObject CreateGameObject(GameObjectCreateArgs args)
+        public DeusGameObject CreateGameObject(GameObjectCreateArgs args)
         {
             // Create all the components
             List<DeusComponent> components = new List<DeusComponent>();
@@ -47,7 +47,7 @@ namespace DeusClientCore
             }
 
             // Create the gameobject
-            GameObject gameObject = new GameObject(args, components);
+            DeusGameObject gameObject = new DeusGameObject(args, components);
 
             // notify the view that there is a new object to display
             PacketCreateViewObject packet = new PacketCreateViewObject();

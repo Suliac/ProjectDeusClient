@@ -3,26 +3,34 @@ using DeusClientCore.Events;
 using DeusClientCore.Packets;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
-public class UnityGameView : GameView {
+public class UnityGameView : MonoBehaviour
+{
+    [SerializeField]
+    private List<UnityEngine.GameObject> m_viewObjects;
 
-    protected override void OnStart()
+    private void Awake()
     {
-        Debug.Log("View Started");
+        m_viewObjects = new List<UnityEngine.GameObject>();
+    }
+
+    public void Start()
+    {
         EventManager.Get().AddListener(EPacketType.CreateViewObject, ManagePacket);
         EventManager.Get().AddListener(EPacketType.UpdateViewObject, ManagePacket);
         EventManager.Get().AddListener(EPacketType.DeleteViewObject, ManagePacket);
     }
 
-    protected override void OnStop()
+    public void Stop()
     {
         EventManager.Get().RemoveListener(EPacketType.CreateViewObject, ManagePacket);
         EventManager.Get().RemoveListener(EPacketType.UpdateViewObject, ManagePacket);
         EventManager.Get().RemoveListener(EPacketType.DeleteViewObject, ManagePacket);
     }
-    
-    protected override void ManagePacket(object sender, SocketPacketEventArgs e)
+
+    private void ManagePacket(object sender, SocketPacketEventArgs e)
     {
         if (e.Packet is PacketCreateViewObject)
         {
@@ -41,27 +49,32 @@ public class UnityGameView : GameView {
     private void ManageViewObjectCreation(PacketCreateViewObject packet)
     {
         Debug.Log($"Create View Object | Id obj : {packet.LinkedGameObject.UniqueIdentifier} | Is local player : {packet.LinkedGameObject.IsLocalPlayer}");
-        
+
         // Create our view object
-        //ViewObject viewObject = m_objectFactory.CreateViewObject(new ViewObjectCreateArgs(packet.LinkedGameObject));
-        //AddObject(viewObject);
+        GameObject viewObject = ViewObjectFactory.CreateViewObject(new ViewObjectCreateArgs(packet.LinkedGameObject));
+        m_viewObjects.Add(viewObject);
     }
 
     private void ManageViewObjectDeletion(PacketDeleteViewObject packet)
     {
-        //RemoveObject(packet.ObjectId);
+        GameObject objectToDelete = m_viewObjects.FirstOrDefault(vo => vo.GetComponent<DeusObjectLinker>() && vo.GetComponent<DeusObjectLinker>().GetDeusObjectId() == packet.ObjectId);
+        if (objectToDelete)
+        {
+            m_viewObjects.Remove(objectToDelete);
+            Destroy(objectToDelete);
+        }
     }
 
     private void ManageViewObjectUpdate(PacketUpdateViewObject packet)
     {
-        //ViewObject viewObject = m_holdedObjects.FirstOrDefault(vo => vo.UniqueIdentifier == packet.ObjectId);
-        //if (viewObject != null)
-        //{
-        //    DeusViewComponent component = viewObject.Get(packet.ComponentId);
-        //    if (component != null)
-        //    {
-        //        component.UpdateViewValue(packet.NewValue);
-        //    }
-        //}
+        GameObject objectToUpdate = m_viewObjects.FirstOrDefault(vo => vo.GetComponent<DeusObjectLinker>() && vo.GetComponent<DeusObjectLinker>().GetDeusObjectId() == packet.ObjectId);
+        if (objectToUpdate)
+        {
+            DeusComponentLinker component = objectToUpdate.GetComponents<DeusComponentLinker>().FirstOrDefault(dcl =>dcl.GetComponentId() == packet.ComponentId);
+            if (component)
+            {
+                component.UpdateViewValue(packet.NewValue);
+            }
+        }
     }
 }

@@ -79,6 +79,7 @@ namespace DeusClientCore
         /// <param name="packet">The packet just serialized</param>
         protected override void OnPacketDeserialized(Packet packet)
         {
+            Console.WriteLine($"TCP Enqueue{packet.Type}");
             EventManager.Get().EnqueuePacket(0, packet);
         }
 

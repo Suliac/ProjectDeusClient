@@ -9,9 +9,9 @@ namespace DeusClientCore
 {
     public struct ViewObjectCreateArgs
     {
-        public GameObject LinkedGameObject { get; private set; }
+        public DeusGameObject LinkedGameObject { get; private set; }
 
-        public ViewObjectCreateArgs(GameObject linkedGameObject)
+        public ViewObjectCreateArgs(DeusGameObject linkedGameObject)
         {
             LinkedGameObject = linkedGameObject;
         }

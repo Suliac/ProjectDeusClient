@@ -10,7 +10,7 @@ namespace DeusClientCore.Packets
     public abstract class PacketView : Packet
     {
         public uint ObjectId;
-        public GameObject LinkedGameObject;
+        public DeusGameObject LinkedGameObject;
 
         public PacketView(EPacketType type) : base(type)
         {

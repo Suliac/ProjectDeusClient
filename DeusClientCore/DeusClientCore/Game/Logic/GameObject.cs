@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 namespace DeusClientCore
 {
     /// <summary>
-    /// A <see cref="GameObject"/> is <see cref="IDeusObject"/> : that means that it implement Start(), Update(decimal) and Stop() and have an identifier,
+    /// A <see cref="DeusGameObject"/> is <see cref="IDeusObject"/> : that means that it implement Start(), Update(decimal) and Stop() and have an identifier,
     /// it is also an <see cref="ExecutableObjectsHolder{DeusComponent}"/> : that means that it has a <see cref="List{DeusComponent}"/> and during the Start(), Stop() or Update(decimal), it call also thoses function for its components
     /// So almost every behavior is handled in <see cref="ExecutableObjectsHolder{DeusComponent}"/>
     /// </summary>
-    public class GameObject : ExecutableObjectsHolder<DeusComponent>, IDeusObject
+    public class DeusGameObject : ExecutableObjectsHolder<DeusComponent>, IDeusObject
     {
         protected uint m_uniqueIdentifier;
         public uint UniqueIdentifier { get => m_uniqueIdentifier; protected set => m_uniqueIdentifier = value; }
@@ -23,7 +23,7 @@ namespace DeusClientCore
         protected bool m_isLocalPlayer;
         public bool IsLocalPlayer { get => m_isLocalPlayer; protected set => m_isLocalPlayer = value; }
 
-        public GameObject(GameObjectCreateArgs args, ICollection<DeusComponent> components = null) : base(components)
+        public DeusGameObject(GameObjectCreateArgs args, ICollection<DeusComponent> components = null) : base(components)
         {
             UniqueIdentifier = args.GameObjectId;
             ObjectType = args.Type;

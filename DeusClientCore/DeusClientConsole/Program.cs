@@ -19,9 +19,9 @@ namespace DeusClientConsole
         {
             ConsoleGameView view = new ConsoleGameView();
             Game game = new Game();
-
             game.Start("127.0.0.1", 27015);
             view.Start();
+            Test t = new Test();
 
             Thread myThread = new Thread(new ThreadStart(HandleInput));
             myThread.Start();
@@ -44,8 +44,6 @@ namespace DeusClientConsole
 
             myThread.Join();
         }
-
-        static uint nextId = 1;
 
         static void HandleInput()
         {

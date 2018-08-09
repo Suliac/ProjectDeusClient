@@ -11,9 +11,9 @@ namespace DeusClientCore
 {
     /// <summary>
     /// <see cref="GameLogic"/> manage all the logic of the game, clien side.
-    /// It contains a <see cref="List{GameObject}"/> and when its Update(), Start or Stop() methods are called, they also called the methods for the all <see cref="GameObject"/>
+    /// It contains a <see cref="List{GameObject}"/> and when its Update(), Start or Stop() methods are called, they also called the methods for the all <see cref="DeusGameObject"/>
     /// </summary>
-    public class GameLogic : GamePart<GameObject>
+    public class GameLogic : GamePart<DeusGameObject>
     {
         private GameObjectFactory m_objectFactory;
 
@@ -92,7 +92,7 @@ namespace DeusClientCore
 
         private void ManageUpdateHealth(PacketHealthUpdate packet)
         {
-            GameObject gameObj = m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == packet.ObjectId);
+            DeusGameObject gameObj = m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == packet.ObjectId);
             if(gameObj != null)
             {
                 DeusComponent component = gameObj.GetComponent(packet.ObjectId);
@@ -164,7 +164,7 @@ namespace DeusClientCore
 
         private void ManageObjectEnter(PacketObjectEnter packet)
         {
-            GameObject gameObject = m_objectFactory.CreateGameObject(new GameObjectCreateArgs(packet.GameObjectId, packet.ObjectType, packet.IsLocalPlayer));
+            DeusGameObject gameObject = m_objectFactory.CreateGameObject(new GameObjectCreateArgs(packet.GameObjectId, packet.ObjectType, packet.IsLocalPlayer));
             Console.WriteLine($"Create Game Object | Id obj : {packet.GameObjectId} | Is local player : {packet.IsLocalPlayer}");
             AddObject(gameObject);
         }
