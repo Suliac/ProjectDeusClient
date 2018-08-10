@@ -10,6 +10,7 @@ public class MainMenuController : MonoBehaviour
     public GameObject GamesHolder;
     public GameObject GameLinePrefab;
 
+    private Dictionary<uint, GameObject> m_lines;
     // Use this for initialization
     void Start()
     {
@@ -21,6 +22,16 @@ public class MainMenuController : MonoBehaviour
     void Update()
     {
 
+    }
+
+    private void OnEnable()
+    {
+        if (m_lines == null)
+            m_lines = new Dictionary<uint, GameObject>();
+
+        PacketHandleClickUI packet = new PacketHandleClickUI();
+        packet.UIClicked = PacketHandleClickUI.UIButton.GetGameButton;
+        EventManager.Get().EnqueuePacket(0, packet);
     }
 
     protected void ManagePacket(object sender, SocketPacketEventArgs e)
@@ -39,9 +50,19 @@ public class MainMenuController : MonoBehaviour
 
     private void ManageGetGamesAnswer(PacketGetGameAnswer packet)
     {
+        if(m_lines != null && m_lines.Count > 0)
+        {
+            foreach (var line in m_lines)
+                Destroy(line.Value);
+        }
+
+        if (m_lines == null)
+            m_lines = new Dictionary<uint, GameObject>();
+
         foreach (var gameId in packet.GamesIds)
         {
             GameObject newGame = Instantiate(GameLinePrefab);
+            m_lines.Add(gameId, newGame);
             newGame.transform.SetParent(GamesHolder.transform);
 
             Text gameBtnText = newGame.GetComponentInChildren<Text>();
@@ -57,8 +78,15 @@ public class MainMenuController : MonoBehaviour
 
     private void ManageJoinGameAnswer(PacketJoinGameAnswer packet)
     {
+        if (m_lines != null && m_lines.Count > 0)
+        {
+            foreach (var line in m_lines)
+                Destroy(line.Value);
+        }
+
         MenuController.ChangeState(MenuController.EGameState.Lobby);
         MenuController.Instance.Lobby.SetGameId(packet.GameJoinedId);
+        MenuController.Instance.Lobby.SetAlreadyHerePlayer(packet.PlayerInfos);
     }
 
     #region Click events

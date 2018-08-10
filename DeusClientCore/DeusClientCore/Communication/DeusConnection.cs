@@ -62,11 +62,11 @@ namespace DeusClientCore
         /// then try to read some data on the network
         protected void SendAndReceive()
         {
-            //try
-            //{
+            try
+            {
                 // Init our TCP or UDP connection
                 OnInit();
-                
+
                 // Loop until cancellation is requested
                 while (!m_cancellationToken.IsCancellationRequested)
                 {
@@ -78,7 +78,7 @@ namespace DeusClientCore
                     ///////////////////////////////////////
                     // Try to take and send packet until we don't have one left
                     while (OnTryTakePacket(out packetToSend))
-                    {                       
+                    {
                         // Write with our connection method
                         OnSending(packetToSend.Item2);
                     }
@@ -122,15 +122,15 @@ namespace DeusClientCore
                         }
                     } // endif DataAvailable
                 } // end while cancellation requested ?
-            //}
-            //catch (Exception ex)
-            //{
-            //    Console.WriteLine("Error : " + ex.Message);
-            //}
-            //finally
-            //{
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error : " + ex.Message);
+            }
+            finally
+            {
                 OnEnd();
-            //}
+            }
         }
 
         /// <summary>

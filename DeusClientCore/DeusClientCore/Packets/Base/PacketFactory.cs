@@ -45,7 +45,7 @@ namespace DeusClientCore.Packets
                     packet = new PacketLeaveGameRequest();
                     break;
                 case EPacketType.LeaveGameAnswer:
-                    packet = new PacketLeaveGameRequest();
+                    packet = new PacketLeaveGameAnswer();
                     break;
                 case EPacketType.ObjectEnter:
                     packet = new PacketObjectEnter();
@@ -53,6 +53,10 @@ namespace DeusClientCore.Packets
                 case EPacketType.ObjectLeave:
                     packet = new PacketObjectLeave();
                     break;
+                case EPacketType.NewPlayerJoin:
+                    packet = new PacketNewPlayerJoin();
+                    break;
+
                 default:
                     throw new Exception("Impossible to instantiate the packet");
             }

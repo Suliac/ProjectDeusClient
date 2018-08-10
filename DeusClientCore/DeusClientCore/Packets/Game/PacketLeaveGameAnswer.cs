@@ -8,26 +8,32 @@ namespace DeusClientCore.Packets
 {
     public class PacketLeaveGameAnswer : PacketAnswer
     {
+        public UInt32 PlayerId { get; private set; }
 
         public PacketLeaveGameAnswer() : base(EPacketType.LeaveGameAnswer)
         {
         }
 
+        public PacketLeaveGameAnswer(UInt32 playerId) : base(EPacketType.LeaveGameAnswer)
+        {
+            PlayerId = playerId;
+        }
+
         public override ushort EstimateAnswerCurrentSerializedSize()
         {
-            // nothing to do, already done in base class
-            return 0;
+            return sizeof(UInt32);
         }
 
         public override void OnAnswerDeserialize(byte[] buffer, int index)
         {
-            // nothing to do, already done in base class
+            UInt32 tmpPlayerId = 0;
+            Serializer.DeserializeData(buffer, ref index, out tmpPlayerId);
+            PlayerId = tmpPlayerId;
         }
 
         public override byte[] OnAnswerSerialize()
         {
-            // nothing to do, already done in base class
-            return new byte[0];
+            return Serializer.SerializeData(PlayerId);
         }
     }
 }
