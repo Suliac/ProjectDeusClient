@@ -29,11 +29,13 @@ namespace DeusClientCore
 
             // Game view
             EventManager.Get().AddListener(Packets.EPacketType.HandleClickUI, ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.HandleMovementInputs, ManagePacket);
 
             // Game logic
             EventManager.Get().AddListener(Packets.EPacketType.ObjectEnter, ManagePacket);
             EventManager.Get().AddListener(Packets.EPacketType.ObjectLeave, ManagePacket);
             EventManager.Get().AddListener(Packets.EPacketType.UpdateHealth, ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.UpdateMovementAnswer, ManagePacket);
         }
 
         protected override void OnStop()
@@ -56,6 +58,7 @@ namespace DeusClientCore
         #region Events managements
         protected override void ManagePacket(object sender, SocketPacketEventArgs e)
         {
+            /////////////////////// LOBBY 
             if (e.Packet is PacketCreateGameAnswer)
             {
                 ManageCreateGameAnswerPacket((PacketCreateGameAnswer)e.Packet);
@@ -72,10 +75,18 @@ namespace DeusClientCore
             {
                 ManageLeaveGameAnswerPacket((PacketLeaveGameAnswer)e.Packet);
             }
+
+            /////////////////////// UI 
             else if (e.Packet is PacketHandleClickUI)
             {
                 ManageHandleUIPacket((PacketHandleClickUI)e.Packet);
             }
+            else if (e.Packet is PacketHandleMovementInput)
+            {
+                ManageHandleMovementRequest((PacketHandleMovementInput)e.Packet);
+            }
+
+            /////////////////////// LOGIC
             else if (e.Packet is PacketObjectEnter)
             {
                 ManageObjectEnter((PacketObjectEnter)e.Packet);
@@ -88,28 +99,13 @@ namespace DeusClientCore
             {
                 ManageUpdateHealth((PacketHealthUpdate)e.Packet);
             }
-        }
-
-        private void ManageUpdateHealth(PacketHealthUpdate packet)
-        {
-            DeusGameObject gameObj = m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == packet.ObjectId);
-            if(gameObj != null)
+            else if (e.Packet is PacketMovementUpdateAnswer)
             {
-                DeusComponent component = gameObj.GetComponent(packet.ComponentId);
-                if(component != null && component is HealthTimeLineComponent)
-                {
-                    (component as HealthTimeLineComponent).InsertData(packet.NewHealthAmount);
-
-                    // Notify the view, that component value has just changed : use this only if your component isn't getting directly informations
-                    PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();
-                    feedBackPacket.ObjectId     = packet.ObjectId;
-                    feedBackPacket.ComponentId  = packet.ComponentId;
-                    feedBackPacket.NewValue     = packet.NewHealthAmount;
-                    EventManager.Get().EnqueuePacket(0, feedBackPacket);
-                }
+                ManagePacketMovementAnswer((PacketMovementUpdateAnswer)e.Packet);
             }
         }
 
+        #region Lobby
         private void ManageCreateGameAnswerPacket(PacketCreateGameAnswer packet)
         {
             Console.WriteLine("Create game : " + (packet.IsSuccess ? "success" : "failed"));
@@ -129,7 +125,9 @@ namespace DeusClientCore
         {
             Console.WriteLine("Leaved game : " + (packet.IsSuccess ? "success" : "failed"));
         }
+        #endregion
 
+        #region View Requests
         private void ManageHandleUIPacket(PacketHandleClickUI packet)
         {
             // TODO : check state du jeu -> le joueur peut avoir cliqué sur le bouton?
@@ -162,6 +160,31 @@ namespace DeusClientCore
             }
         }
 
+        private void ManageHandleMovementRequest(PacketHandleMovementInput packet)
+        {
+            // Send requets to the server
+            //PacketMovementUpdateRequest movUpdateRequest = new PacketMovementUpdateRequest(packet.NewDir);
+            //EventManager.Get().EnqueuePacket(0, movUpdateRequest);
+
+            ///////////////////////////////////
+            // For now just echo back to the view -> should be done by the server in the futur
+            // TODO : Delete
+            DeusVector2 dir = packet.NewDir;
+            long timeStampMs = TimeHelper.GetUnixMsTimeStamp() + 200;
+            DeusVector2 posOrigin = DeusVector2.Zero;
+
+            var compo = FindComponent(packet.ObjectId, packet.ComponentId);
+            if(compo != null && compo is PositionTimeLineComponent)
+                posOrigin = (DeusVector2)(compo as PositionTimeLineComponent).GetViewValue(timeStampMs);
+
+            PacketMovementUpdateAnswer movUpdate = new PacketMovementUpdateAnswer(packet.ObjectId, packet.ComponentId, posOrigin, dir, timeStampMs);
+            EventManager.Get().EnqueuePacket(0, movUpdate);
+            ///////////////////////////////////
+
+        }
+        #endregion
+
+        #region Logic
         private void ManageObjectEnter(PacketObjectEnter packet)
         {
             DeusGameObject gameObject = m_objectFactory.CreateGameObject(new GameObjectCreateArgs(packet.GameObjectId, packet.ObjectType, packet.IsLocalPlayer));
@@ -179,6 +202,53 @@ namespace DeusClientCore
             deleteViewObjectRequest.ObjectId = packet.GameObjectId;
             EventManager.Get().EnqueuePacket(0, deleteViewObjectRequest);
         }
+
+        private void ManageUpdateHealth(PacketHealthUpdate packet)
+        {
+            DeusComponent component = FindComponent(packet.ObjectId, packet.ComponentId);
+            if (component != null && component is HealthTimeLineComponent)
+            {
+                (component as HealthTimeLineComponent).InsertData(packet.NewHealthAmount);
+
+                // Notify the view, that component value has just changed : use this only if your component isn't getting directly informations
+                PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();
+                feedBackPacket.ObjectId = packet.ObjectId;
+                feedBackPacket.ComponentId = packet.ComponentId;
+                feedBackPacket.NewValue = packet.NewHealthAmount;
+                EventManager.Get().EnqueuePacket(0, feedBackPacket);
+            }
+
+        }
+
+        private void ManagePacketMovementAnswer(PacketMovementUpdateAnswer packet)
+        {
+            UpdateTimelineComponent<PositionTimeLineComponent, DeusObjectMovement>(packet.ObjectId, packet.ComponentId, new DeusObjectMovement(packet.PositionOrigin, packet.DirMovement), packet.TimeStampMs);
+        }        
         #endregion
+        #endregion
+
+        private DeusComponent FindComponent(uint objectId, uint componentId)
+        {
+            return m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == objectId)?.GetComponent(componentId) ?? null;
+        }
+
+        private void UpdateTimelineComponent<T, U>(uint objectId, uint componentId, U newValue, long timeStampMs = -1) where T : TimeLineComponent<U>
+        {
+            DeusComponent component = FindComponent(objectId, componentId);
+            if (component != null && component is T)
+            {
+                if (timeStampMs < 0)
+                    (component as T).InsertData(newValue);
+                else
+                    (component as T).InsertData(newValue, timeStampMs);
+
+                // Notify the view, that component value has just changed : use this only if your component isn't getting directly informations
+                PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();
+                feedBackPacket.ObjectId = objectId;
+                feedBackPacket.ComponentId = componentId;
+                feedBackPacket.NewValue = newValue;
+                EventManager.Get().EnqueuePacket(0, feedBackPacket);
+            }
+        }
     }
 }

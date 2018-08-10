@@ -48,15 +48,22 @@ public class ViewObjectFactory : MonoBehaviour
         /////////////////////////////////////////////////////////////
         // Manage components
         List<IViewableComponent> components = args.LinkedGameObject.GetViewableGameComponents().ToList();
-        if (components.Count != 1)
+        if (components.Count != 2)
             throw new DeusException("Try to create PlayerViewObject without the right number of components");
 
+        uint idComponentPosition = 0;
         foreach (var component in components)
         {
             if (component is HealthTimeLineComponent)
             {
                 HealthComponentView compoLinker = viewObj.AddComponent<HealthComponentView>();
                 compoLinker.Init(component);
+            }
+            else if (component is PositionTimeLineComponent)
+            {
+                PositionComponentView compoLinker = viewObj.AddComponent<PositionComponentView>();
+                compoLinker.Init(component);
+                idComponentPosition = component.UniqueIdentifier;
             }
         }
         /////////////////////////////////////////////////////////////
@@ -65,15 +72,16 @@ public class ViewObjectFactory : MonoBehaviour
         // Specific behavior if this is the local player
         if (goLinker.IsLocalPlayer())
         {
+            PlayerInputHandler handlerInput = viewObj.AddComponent<PlayerInputHandler>();
+            handlerInput.ObjectId = goLinker.GetDeusObjectId();
+            handlerInput.PositionComponentId = idComponentPosition;
+
             Renderer rend = viewObj.GetComponentInChildren<Renderer>();
             if (rend)
                 rend.material.color = Color.red;
         }
         /////////////////////////////////////////////////////////////
-
-        if (components.Count != 1)
-            throw new DeusException("Try to create PlayerViewObject without the right number of components");
-
+        
         return viewObj;
     }
 }

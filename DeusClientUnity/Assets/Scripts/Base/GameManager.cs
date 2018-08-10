@@ -26,7 +26,7 @@ public class GameManager : MonoBehaviour
         {
             m_game.Update((decimal)Time.deltaTime);
 
-            if (Input.GetKeyDown(KeyCode.S))
+            if (Input.GetKeyDown(KeyCode.P))
             {
                 m_game.Stop();
                 DeusGameView.Stop();

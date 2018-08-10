@@ -38,14 +38,15 @@ namespace DeusClientCore.Packets
         ObjectLeave                 = 51,
         ObjectChangeCell            = 52,
         UpdateHealth                = 53,
+        UpdateMovementRequest       = 54,
+        UpdateMovementAnswer        = 55,
 
         // Game view
         HandleClickUI               = 100,
         CreateViewObject            = 101,
         UpdateViewObject            = 102,
         DeleteViewObject            = 103,
-        TestViewObject              = 104,
-        TestDeleteViewObject        = 105,
+        HandleMovementInputs        = 104,
     };
 
     public abstract class Packet

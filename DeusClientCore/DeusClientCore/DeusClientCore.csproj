@@ -40,10 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArchitectureCode\DataTimed.cs" />
+    <Compile Include="ArchitectureCode\DataTypes\DataTimed.cs" />
     <Compile Include="ArchitectureCode\Exceptions\DeusException.cs" />
     <Compile Include="ArchitectureCode\Exceptions\TimeLineException.cs" />
-    <Compile Include="ArchitectureCode\IIdentifiable.cs" />
+    <Compile Include="ArchitectureCode\Interfaces\IIdentifiable.cs" />
     <Compile Include="Communication\DeusClient.cs" />
     <Compile Include="Communication\DeusConnection.cs" />
     <Compile Include="Communication\DeusTcpConnection.cs" />
@@ -51,7 +51,9 @@
     <Compile Include="Components\Base\DeusViewComponent.cs" />
     <Compile Include="Components\Timelines\HealthTimeLineComponent.cs" />
     <Compile Include="Components\Base\IViewableComponent.cs" />
-    <Compile Include="Components\Timelines\HealthViewComponent.cs" />
+    <Compile Include="ArchitectureCode\DataTypes\DeusVector2.cs" />
+    <Compile Include="Components\Timelines\PositionTimeLineComponent.cs" />
+    <Compile Include="ArchitectureCode\DataTypes\DeusObjectMovement.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\SocketEventArgs.cs" />
     <Compile Include="Events\SocketPacketEventArgs.cs" />
@@ -62,8 +64,8 @@
     <Compile Include="Game\Base\IGamePart.cs" />
     <Compile Include="Game\Logic\GameLogic.cs" />
     <Compile Include="Game\Logic\GameObject.cs" />
-    <Compile Include="ArchitectureCode\IExecutable.cs" />
-    <Compile Include="ArchitectureCode\IUpdatable.cs" />
+    <Compile Include="ArchitectureCode\Interfaces\IExecutable.cs" />
+    <Compile Include="ArchitectureCode\Interfaces\IUpdatable.cs" />
     <Compile Include="Game\Logic\GameObjectFactory.cs" />
     <Compile Include="Game\View\GameView.cs" />
     <Compile Include="Game\Base\IDeusObject.cs" />
@@ -74,6 +76,8 @@
     <Compile Include="Packets\Game\PacketNewPlayerJoin.cs" />
     <Compile Include="Packets\General\PacketConnectedUdpAnswer.cs" />
     <Compile Include="Packets\Logic\PacketHealthUpdate.cs" />
+    <Compile Include="Packets\Logic\PacketMovementUpdateAnswer.cs" />
+    <Compile Include="Packets\Logic\PacketMovementUpdateRequest.cs" />
     <Compile Include="Packets\Logic\PacketObjectLeave.cs" />
     <Compile Include="Packets\Logic\PacketObjectEnter.cs" />
     <Compile Include="Packets\View\PacketHandleClickUI.cs" />
@@ -90,6 +94,7 @@
     <Compile Include="Packets\General\PacketAck.cs" />
     <Compile Include="Packets\General\PacketTextMessage.cs" />
     <Compile Include="Packets\Base\PacketFactory.cs" />
+    <Compile Include="Packets\View\PacketHandleMovementInput.cs" />
     <Compile Include="Packets\View\PacketTestDeleteViewObject.cs" />
     <Compile Include="Packets\View\PacketTestViewObject.cs" />
     <Compile Include="Packets\View\PacketUpdateViewObject.cs" />
@@ -98,7 +103,7 @@
     <Compile Include="Packets\View\PacketCreateViewObject.cs" />
     <Compile Include="Events\Serialization\Serializer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimeHelper.cs" />
+    <Compile Include="ArchitectureCode\Helpers\TimeHelper.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

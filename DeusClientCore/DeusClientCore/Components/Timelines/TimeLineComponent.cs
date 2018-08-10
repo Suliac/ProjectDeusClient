@@ -44,7 +44,7 @@ namespace DeusClientCore.Components
 
         public void InsertData(T data)
         {
-            InsertData(new DataTimed<T>(data, TimeHelper.GetUnixMsTimeStamp()));
+            InsertData(new DataTimed<T>(data, TimeHelper.GetUnixMsTimeStamp() + 200));
         }
 
         public void InsertData(T data, long timeStampMs)
@@ -57,6 +57,6 @@ namespace DeusClientCore.Components
             m_dataWithTime.Add(dataTimed);
         }
 
-        public abstract object GetViewValue();
+        public abstract object GetViewValue(long timeStampMs = -1);
     }
 }

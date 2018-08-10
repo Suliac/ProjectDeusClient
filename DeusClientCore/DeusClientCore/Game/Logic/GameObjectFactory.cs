@@ -39,8 +39,8 @@ namespace DeusClientCore
             switch (args.Type)
             {
                 case EObjectType.Player:
-                    var healthComponent = new HealthTimeLineComponent();
-                    components.Add(healthComponent);
+                    components.Add(new HealthTimeLineComponent());
+                    components.Add(new PositionTimeLineComponent());
                     break;
                 default:
                     break;
