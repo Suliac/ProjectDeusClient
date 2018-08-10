@@ -95,7 +95,7 @@ namespace DeusClientCore
             DeusGameObject gameObj = m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == packet.ObjectId);
             if(gameObj != null)
             {
-                DeusComponent component = gameObj.GetComponent(packet.ObjectId);
+                DeusComponent component = gameObj.GetComponent(packet.ComponentId);
                 if(component != null && component is HealthTimeLineComponent)
                 {
                     (component as HealthTimeLineComponent).InsertData(packet.NewHealthAmount);

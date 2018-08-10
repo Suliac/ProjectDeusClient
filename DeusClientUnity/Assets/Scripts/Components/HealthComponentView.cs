@@ -1,18 +1,27 @@
 ﻿using DeusClientCore.Components;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class HealthComponentView : DeusComponentLinker
 {
+    public TextMeshPro componentToUpdate;
+
     [SerializeField]
     private int m_currentHealth;
-      
+
+    public override void OnInit()
+    {
+        componentToUpdate = GetComponentInChildren<TextMeshPro>();
+    }
+
     public override void UpdateViewValue(System.Object value)
     {
         if (value is int)
             m_currentHealth = (int)value;
 
-        // TODO : change visuals
+        if (componentToUpdate)
+            componentToUpdate.text = $"Life : {m_currentHealth}";
     }
 }

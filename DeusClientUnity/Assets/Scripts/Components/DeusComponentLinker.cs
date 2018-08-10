@@ -19,6 +19,13 @@ public abstract class DeusComponentLinker : MonoBehaviour {
         m_deusLinkedComponent = linkedComponent;
         m_linkedComponentId = m_deusLinkedComponent.UniqueIdentifier;
         m_needRealtimeUpdate = m_deusLinkedComponent.RealtimeViewUpdate;
+
+        OnInit();
+    }
+
+    public virtual void OnInit()
+    {
+
     }
 
     public abstract void UpdateViewValue(System.Object value);

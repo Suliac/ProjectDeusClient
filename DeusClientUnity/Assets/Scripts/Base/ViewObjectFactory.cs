@@ -65,7 +65,7 @@ public class ViewObjectFactory : MonoBehaviour
         // Specific behavior if this is the local player
         if (goLinker.IsLocalPlayer())
         {
-            Renderer rend = viewObj.GetComponent<Renderer>();
+            Renderer rend = viewObj.GetComponentInChildren<Renderer>();
             if (rend)
                 rend.material.color = Color.red;
         }

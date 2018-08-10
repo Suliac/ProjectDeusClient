@@ -32,6 +32,7 @@ public class UnityGameView : MonoBehaviour
 
     private void ManagePacket(object sender, SocketPacketEventArgs e)
     {
+        Debug.Log($"receive {e.Packet.Type}");
         if (e.Packet is PacketCreateViewObject)
         {
             ManageViewObjectCreation((PacketCreateViewObject)e.Packet);

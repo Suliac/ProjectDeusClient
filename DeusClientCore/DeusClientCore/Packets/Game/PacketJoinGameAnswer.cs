@@ -51,16 +51,16 @@ namespace DeusClientCore.Packets
                 // 3.1 Player Id
                 uint playerId = 0;
                 Serializer.DeserializeData(buffer, ref index, out playerId);
-                GameJoinedId = playerId;
 
-                // 3.1 size of nickname
+                // 3.2.1 size of nickname
                 byte dataSize = buffer[index];
                 index++;
 
-                // 3.2 nickname
+                // 3.2.2 nickname
                 string tmpNickname;
                 Serializer.DeserializeData(buffer, ref index, out tmpNickname, (int)dataSize);
-                PlayerInfos[playerId] = tmpNickname;
+
+                PlayerInfos.Add(playerId, tmpNickname);
             }
 
         }

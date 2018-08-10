@@ -12,6 +12,10 @@ public class LobbyMenuController : MonoBehaviour
     public GameObject PlayersHolder;
     public GameObject LinePlayerPrefab;
 
+    public uint IdGameObj = 1;
+    public uint IdCompo = 1;
+    public int Amount = 50;
+
     public uint GameId { get; private set; }
     public Dictionary<uint, string> PlayerInfos { get; private set; }
 
@@ -106,5 +110,12 @@ public class LobbyMenuController : MonoBehaviour
         EventManager.Get().EnqueuePacket(0, packet);
     }
 
+    public void ClickDebug()
+    {
+        PacketHealthUpdate packet = new PacketHealthUpdate(IdGameObj, IdCompo, Amount);
+        EventManager.Get().EnqueuePacket(0, packet);
+
+
+    }
     #endregion
 }
