@@ -44,7 +44,7 @@ namespace DeusClientCore.Components
 
         public void InsertData(T data)
         {
-            InsertData(new DataTimed<T>(data, TimeHelper.GetUnixMsTimeStamp() + 200));
+            InsertData(new DataTimed<T>(data, TimeHelper.GetUnixMsTimeStamp() + Parameters.DEFAULT_LOCAL_LAG_MS));
         }
 
         public void InsertData(T data, long timeStampMs)

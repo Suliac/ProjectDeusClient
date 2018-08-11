@@ -64,6 +64,11 @@ namespace DeusClientCore.Packets
             return Encoding.ASCII.GetBytes(value + '\0');
         }
 
+        public static byte[] SerializeData(ISerializable value)
+        {
+            return value.Serialize();
+        }
+
         #endregion
 
         #region Deserialize
@@ -109,6 +114,25 @@ namespace DeusClientCore.Packets
             value = Encoding.ASCII.GetString(buffer, index, Math.Max(0, sizeStr - 1));
             index += sizeStr;
         }
+
+        public static void DeserializeData(byte[] buffer, ref int index, ISerializable value)
+        {
+            value.Deserialize(buffer, ref index);
+        }
+
+        //public static T DeserializeData<T>(byte[] buffer, ref int index) where T : struct
+        //{
+        //    T value = default(T);
+        //    int size = Marshal.SizeOf(value);
+
+        //    if (size > 8)
+        //        throw new Exception("Cannot serialize not primitive type that are larger than 8 bytes");
+
+        //    for(int i = 0; i < size; i++)
+        //        value |= buffer[i] << (8 * ((size - 1) - i));
+
+        //    return value;
+        //}
 
         #endregion
     }

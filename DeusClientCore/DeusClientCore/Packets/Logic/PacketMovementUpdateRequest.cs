@@ -21,17 +21,17 @@ namespace DeusClientCore.Packets
 
         public override ushort EstimateCurrentSerializedSize()
         {
-            throw new NotImplementedException();
+            return DirMovement.EstimateCurrentSerializedSize();
         }
 
         public override void OnDeserialize(byte[] buffer, int index)
         {
-            throw new NotImplementedException();
+            Serializer.DeserializeData(buffer, ref index, DirMovement);
         }
 
         public override byte[] OnSerialize()
         {
-            throw new NotImplementedException();
+            return Serializer.SerializeData(DirMovement);
         }
     }
 }

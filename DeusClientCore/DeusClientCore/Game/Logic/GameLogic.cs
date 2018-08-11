@@ -163,22 +163,22 @@ namespace DeusClientCore
         private void ManageHandleMovementRequest(PacketHandleMovementInput packet)
         {
             // Send requets to the server
-            //PacketMovementUpdateRequest movUpdateRequest = new PacketMovementUpdateRequest(packet.NewDir);
-            //EventManager.Get().EnqueuePacket(0, movUpdateRequest);
+            PacketMovementUpdateRequest movUpdateRequest = new PacketMovementUpdateRequest(packet.NewDir);
+            EventManager.Get().EnqueuePacket(0, movUpdateRequest);
 
             ///////////////////////////////////
             // For now just echo back to the view -> should be done by the server in the futur
             // TODO : Delete
-            DeusVector2 dir = packet.NewDir;
-            long timeStampMs = TimeHelper.GetUnixMsTimeStamp() + 200;
-            DeusVector2 posOrigin = DeusVector2.Zero;
-
-            var compo = FindComponent(packet.ObjectId, packet.ComponentId);
-            if(compo != null && compo is PositionTimeLineComponent)
-                posOrigin = (DeusVector2)(compo as PositionTimeLineComponent).GetViewValue(timeStampMs);
-
-            PacketMovementUpdateAnswer movUpdate = new PacketMovementUpdateAnswer(packet.ObjectId, packet.ComponentId, posOrigin, dir, timeStampMs);
-            EventManager.Get().EnqueuePacket(0, movUpdate);
+            //DeusVector2 dir = packet.NewDir;
+            //long timeStampMs = TimeHelper.GetUnixMsTimeStamp() + Parameters.DEFAULT_LOCAL_LAG_MS;
+            //DeusVector2 posOrigin = DeusVector2.Zero;
+            //
+            //var compo = FindComponent(packet.ObjectId, packet.ComponentId);
+            //if(compo != null && compo is PositionTimeLineComponent)
+            //    posOrigin = (DeusVector2)(compo as PositionTimeLineComponent).GetViewValue(timeStampMs);
+            //
+            //PacketMovementUpdateAnswer movUpdate = new PacketMovementUpdateAnswer(packet.ObjectId, packet.ComponentId, posOrigin, dir, timeStampMs);
+            //EventManager.Get().EnqueuePacket(0, movUpdate);
             ///////////////////////////////////
 
         }

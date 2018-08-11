@@ -40,10 +40,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ArchitectureCode\DataTypes\Parameters.cs" />
     <Compile Include="ArchitectureCode\DataTypes\DataTimed.cs" />
     <Compile Include="ArchitectureCode\Exceptions\DeusException.cs" />
     <Compile Include="ArchitectureCode\Exceptions\TimeLineException.cs" />
     <Compile Include="ArchitectureCode\Interfaces\IIdentifiable.cs" />
+    <Compile Include="ArchitectureCode\Interfaces\ISerializable.cs" />
     <Compile Include="Communication\DeusClient.cs" />
     <Compile Include="Communication\DeusConnection.cs" />
     <Compile Include="Communication\DeusTcpConnection.cs" />

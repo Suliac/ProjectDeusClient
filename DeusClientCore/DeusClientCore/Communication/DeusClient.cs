@@ -18,6 +18,7 @@ namespace DeusClientCore
         public DeusClient(TcpClient tcpClient)
         {
             EventManager.Get().AddListener(EPacketType.Connected, InitUdp); // subscribe to event 'Connected'
+
             EventManager.Get().AddListener(EPacketType.GetGameRequest, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.CreateGameRequest, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.JoinGameRequest, SendTcpMessage);
@@ -25,12 +26,15 @@ namespace DeusClientCore
             EventManager.Get().AddListener(EPacketType.Text, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.PlayerReady, SendTcpMessage);
 
+            EventManager.Get().AddListener(EPacketType.UpdateMovementRequest, SendUdpMessage);
+
             m_tcpConnection = new DeusTcpConnection(tcpClient); // launch the SendAndReceive() Task
         }
 
         public void Dispose()
         {
             EventManager.Get().RemoveListener(EPacketType.Connected, InitUdp);
+
             EventManager.Get().RemoveListener(EPacketType.GetGameRequest, SendUdpMessage);
             EventManager.Get().RemoveListener(EPacketType.CreateGameRequest, SendTcpMessage);
             EventManager.Get().RemoveListener(EPacketType.JoinGameRequest, SendTcpMessage);
@@ -38,6 +42,8 @@ namespace DeusClientCore
             EventManager.Get().RemoveListener(EPacketType.Text, SendTcpMessage);
             EventManager.Get().RemoveListener(EPacketType.PlayerReady, SendTcpMessage);
 
+            EventManager.Get().RemoveListener(EPacketType.UpdateMovementRequest, SendUdpMessage);
+            
             m_tcpConnection.Dispose();
             m_udpConnection.Dispose();
         }
