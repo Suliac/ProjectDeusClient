@@ -53,6 +53,7 @@ namespace DeusClientCore
             EventManager.Get().RemoveListener(Packets.EPacketType.ObjectEnter, ManagePacket);
             EventManager.Get().RemoveListener(Packets.EPacketType.ObjectLeave, ManagePacket);
             EventManager.Get().RemoveListener(Packets.EPacketType.UpdateHealth, ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.UpdateMovementAnswer, ManagePacket);
         }
 
         #region Events managements
@@ -163,24 +164,8 @@ namespace DeusClientCore
         private void ManageHandleMovementRequest(PacketHandleMovementInput packet)
         {
             // Send requets to the server
-            PacketMovementUpdateRequest movUpdateRequest = new PacketMovementUpdateRequest(packet.NewDir, packet.ComponentId);
+            PacketMovementUpdateRequest movUpdateRequest = new PacketMovementUpdateRequest(packet.DestinationWanted, packet.ComponentId);
             EventManager.Get().EnqueuePacket(0, movUpdateRequest);
-
-            ///////////////////////////////////
-            // For now just echo back to the view -> should be done by the server in the futur
-            // TODO : Delete
-            //DeusVector2 dir = packet.NewDir;
-            //long timeStampMs = TimeHelper.GetUnixMsTimeStamp() + Parameters.DEFAULT_LOCAL_LAG_MS;
-            //DeusVector2 posOrigin = DeusVector2.Zero;
-            //
-            //var compo = FindComponent(packet.ObjectId, packet.ComponentId);
-            //if(compo != null && compo is PositionTimeLineComponent)
-            //    posOrigin = (DeusVector2)(compo as PositionTimeLineComponent).GetViewValue(timeStampMs);
-            //
-            //PacketMovementUpdateAnswer movUpdate = new PacketMovementUpdateAnswer(packet.ObjectId, packet.ComponentId, posOrigin, dir, timeStampMs);
-            //EventManager.Get().EnqueuePacket(0, movUpdate);
-            ///////////////////////////////////
-
         }
         #endregion
 
@@ -223,7 +208,6 @@ namespace DeusClientCore
         private void ManagePacketMovementAnswer(PacketMovementUpdateAnswer packet)
         {
             UpdateTimelineComponent<PositionTimeLineComponent, DeusVector2>(packet.ObjectId, packet.ComponentId, packet.PositionOrigin, packet.OriginTimestampMs);
-
         }
         #endregion
         #endregion

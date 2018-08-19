@@ -8,11 +8,11 @@ namespace DeusClientCore.Packets
 {
     public class PacketHandleMovementInput : PacketView
     {
-        public DeusVector2 NewDir { get; set; }
+        public DeusVector2 DestinationWanted { get; set; }
 
-        public PacketHandleMovementInput(uint objectId, uint componentId, DeusVector2 newDir) : base(EPacketType.HandleMovementInputs)
+        public PacketHandleMovementInput(uint objectId, uint componentId, DeusVector2 destination) : base(EPacketType.HandleMovementInputs)
         {
-            NewDir = newDir;
+            DestinationWanted = destination;
             ObjectId = objectId;
             ComponentId = componentId;
         }
