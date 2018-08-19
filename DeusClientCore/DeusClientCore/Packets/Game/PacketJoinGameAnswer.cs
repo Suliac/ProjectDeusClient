@@ -68,7 +68,6 @@ namespace DeusClientCore.Packets
         public override byte[] OnAnswerSerialize()
         {
             throw new DeusException("Don't try to serialize this");
-            return Serializer.SerializeData(GameJoinedId);
         }
     }
 }

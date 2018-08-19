@@ -27,19 +27,20 @@ namespace DeusClientCore.Packets
         LeaveGameRequest            = 16,
         LeaveGameAnswer             = 17,
         DeleteGameRequest           = 18,
-        NewPlayer                   = 19,
+        NewPlayer                   = 19, // Server packet
         PlayerReady                 = 20,
         PlayerNotReady			    = 21,
-		StartGame				    = 22,
-		NewPlayerJoin			    = 23,
+		StartGame				    = 22, // Server packet
+        NewPlayerJoin			    = 23,
 
         // Game Logic
         ObjectEnter                 = 50,
         ObjectLeave                 = 51,
-        ObjectChangeCell            = 52,
+        ObjectChangeCell            = 52, // Server packet
         UpdateHealth                = 53,
         UpdateMovementRequest       = 54,
         UpdateMovementAnswer        = 55,
+        CellFirePacket              = 56, // Server packet
 
         // Game view
         HandleClickUI               = 100,

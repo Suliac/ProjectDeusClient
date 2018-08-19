@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeusClientCore.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,25 +12,19 @@ namespace DeusClientCore.Packets
         public uint ObjectId { get; set; }
         public uint ComponentId { get; set; }
         public DeusVector2 PositionOrigin { get; set; }
-        public DeusVector2 DirMovement { get; set; }
-        public long TimeStampMs { get; set; }
-
+        public long OriginTimestampMs { get; set; }
+        public DeusVector2 Destination { get; set; }
+        public long DestinationTimestampMs { get; set; }
+        
         public PacketMovementUpdateAnswer() : base(EPacketType.UpdateMovementAnswer)
         {
         }
-
-        public PacketMovementUpdateAnswer(uint objectId, uint componentId, DeusVector2 posOrigin, DeusVector2 dir, long timeStampMs) : this()
-        {
-            ObjectId = objectId;
-            ComponentId = componentId;
-            PositionOrigin = posOrigin;
-            DirMovement = dir;
-            TimeStampMs = timeStampMs;
-        }
-
+        
         public override ushort EstimateCurrentSerializedSize()
         {
-            return (ushort)(sizeof(uint) + sizeof(uint) + PositionOrigin.EstimateCurrentSerializedSize() + DirMovement.EstimateCurrentSerializedSize() + sizeof(long));
+            return (ushort)(sizeof(uint) + sizeof(uint) 
+                + (PositionOrigin.EstimateCurrentSerializedSize() + sizeof(long))
+                + (Destination.EstimateCurrentSerializedSize() + sizeof(long)));
         }
 
         public override void OnDeserialize(byte[] buffer, int index)
@@ -44,38 +39,26 @@ namespace DeusClientCore.Packets
             Serializer.DeserializeData(buffer, ref index, out tmpComponentId);
             ComponentId = tmpComponentId;
 
-            // 3 - PositionOrigin
+            // 3 - Origin
             Serializer.DeserializeData(buffer, ref index, PositionOrigin);
-            
-            // 4 - Dir
-            Serializer.DeserializeData(buffer, ref index, DirMovement);
 
-            // 5 - Timestamp
-            long tmpMs = 0;
-            Serializer.DeserializeData(buffer, ref index, out tmpMs);
-            TimeStampMs = tmpMs;
+            // 5 - Timestamp origin
+            long tmpSrcMs = 0;
+            Serializer.DeserializeData(buffer, ref index, out tmpSrcMs);
+            OriginTimestampMs = tmpSrcMs;
+
+            // 5 - Destination
+            Serializer.DeserializeData(buffer, ref index, Destination);
+
+            // 5 - Timestamp destination
+            long tmpDestMs = 0;
+            Serializer.DeserializeData(buffer, ref index, out tmpDestMs);
+            DestinationTimestampMs = tmpDestMs;
         }
 
         public override byte[] OnSerialize()
         {
-            List<byte> results = new List<byte>();
-
-            // 1 - ObjectId
-            results.AddRange(Serializer.SerializeData(ObjectId));
-
-            // 2 - ComponentId
-            results.AddRange(Serializer.SerializeData(ComponentId));
-
-            // 3 - PositionOrigin
-            results.AddRange(Serializer.SerializeData(PositionOrigin));
-
-            // 4 - Dir
-            results.AddRange(Serializer.SerializeData(DirMovement));
-
-            // 5 - Timestamp
-            results.AddRange(Serializer.SerializeData((long)TimeStampMs));
-
-            return results.ToArray(); 
+            throw new DeusException("Don't try to serialize this");
         }
     }
 }
