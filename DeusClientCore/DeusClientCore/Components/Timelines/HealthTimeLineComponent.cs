@@ -17,29 +17,15 @@ namespace DeusClientCore.Components
         public HealthTimeLineComponent() : base(false) // This component doesn't have its view updated in at each update loop
         {
         }
-
-        /// <summary>
-        /// Extrapolate the health the object has, at current time
-        /// </summary>
-        /// <returns>An <see cref="int"/> -> the interpolated health value</returns>
-        public override object GetViewValue(long timeStampMs = -1)
+        
+        protected override int Extrapolate(DataTimed<int> dataBeforeTimestamp, ulong currentMs)
         {
-            int interpolateValue = 0;
-            long currentTimeStamp = timeStampMs < 0 ? TimeHelper.GetUnixMsTimeStamp() : timeStampMs;
+            return dataBeforeTimestamp.Data;
+        }
 
-
-            if (!m_dataWithTime.Any())
-                throw new TimeLineException("Impossible to interpolate health without at least 1 entry");
-
-            // Interpolate the health of an object is very simple : 
-            // just take the last amount we got for any datas saved before the timestamp
-            if (m_dataWithTime.Any(d => d.TimeStampMs <= currentTimeStamp))
-                interpolateValue = m_dataWithTime.LastOrDefault(d => d.TimeStampMs <= currentTimeStamp).Data;
-            else
-                throw new TimeLineException("Impossible to interpolate health without at least 1 entry before the timestamp");
-
-
-            return interpolateValue;
+        protected override int Interpolate(DataTimed<int> dataBeforeTimestamp, DataTimed<int> dataAfterTimestamp, ulong currentMs)
+        {
+            return dataBeforeTimestamp.Data;
         }
 
         /// <summary>

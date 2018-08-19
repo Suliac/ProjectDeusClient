@@ -9,9 +9,9 @@ namespace DeusClientCore
     public class DataTimed<T>
     {
         public T Data;
-        public long TimeStampMs;
+        public ulong TimeStampMs;
 
-        public DataTimed(T data, long timeStampMs)
+        public DataTimed(T data, ulong timeStampMs)
         {
             Data = data;
             TimeStampMs = timeStampMs;

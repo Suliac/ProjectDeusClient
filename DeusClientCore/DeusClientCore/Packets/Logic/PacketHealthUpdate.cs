@@ -13,17 +13,15 @@ namespace DeusClientCore.Packets
         public uint ComponentId { get; private set; }
 
         public int NewHealthAmount { get; private set; }
+        public ulong NewHealthTimestamp { get; private set; }
 
-        public PacketHealthUpdate(uint objectId, uint componentId, int newHealthAmount) : base(EPacketType.UpdateHealth)
+        public PacketHealthUpdate() : base(EPacketType.UpdateHealth)
         {
-            ObjectId = objectId;
-            ComponentId = componentId;
-            NewHealthAmount = newHealthAmount;
         }
 
         public override ushort EstimateCurrentSerializedSize()
         {
-            return sizeof(uint) + sizeof(uint) + sizeof(int);
+            return sizeof(uint) + sizeof(uint) + sizeof(int) + sizeof(ulong);
         }
 
         public override void OnDeserialize(byte[] buffer, int index)
@@ -39,6 +37,10 @@ namespace DeusClientCore.Packets
             int health = 0;
             Serializer.DeserializeData(buffer, ref index, out health);
             NewHealthAmount = health;
+
+            ulong healthMs = 0;
+            Serializer.DeserializeData(buffer, ref index, out healthMs);
+            NewHealthTimestamp = healthMs;
         }
 
         public override byte[] OnSerialize()

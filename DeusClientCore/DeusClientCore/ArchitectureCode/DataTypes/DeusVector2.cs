@@ -51,12 +51,12 @@ namespace DeusClientCore
             Y = y;
         }
 
-        public static bool operator== (DeusVector2 a, DeusVector2 b)
+        public static bool operator ==(DeusVector2 a, DeusVector2 b)
         {
             return a.m_x == b.m_x && a.m_y == b.m_y;
         }
 
-        public static bool operator!= (DeusVector2 a, DeusVector2 b)
+        public static bool operator !=(DeusVector2 a, DeusVector2 b)
         {
             return a.m_x != b.m_x || a.m_y != b.m_y;
         }
@@ -66,6 +66,22 @@ namespace DeusClientCore
             DeusVector2 result = new DeusVector2();
             result.m_x = a.m_x + b.m_x;
             result.m_y = a.m_y + b.m_y;
+            return result;
+        }
+
+        public static DeusVector2 operator -(DeusVector2 a, DeusVector2 b)
+        {
+            DeusVector2 result = new DeusVector2();
+            result.m_x = a.m_x - b.m_x;
+            result.m_y = a.m_y - b.m_y;
+            return result;
+        }
+
+        public static DeusVector2 operator *(DeusVector2 a, float scalar)
+        {
+            DeusVector2 result = new DeusVector2();
+            result.m_x = (int)(a.m_x * scalar);
+            result.m_y = (int)(a.m_y * scalar);
             return result;
         }
 
@@ -98,7 +114,7 @@ namespace DeusClientCore
 
             // 3 - Precision -> cast in long
             results.AddRange(Serializer.SerializeData((long)m_precision));
-            
+
             return results.ToArray();
         }
 

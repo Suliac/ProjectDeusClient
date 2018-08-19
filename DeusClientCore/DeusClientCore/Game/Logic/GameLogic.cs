@@ -222,8 +222,9 @@ namespace DeusClientCore
 
         private void ManagePacketMovementAnswer(PacketMovementUpdateAnswer packet)
         {
-            UpdateTimelineComponent<PositionTimeLineComponent, DeusObjectMovement>(packet.ObjectId, packet.ComponentId, new DeusObjectMovement(packet.PositionOrigin, packet.DirMovement), packet.TimeStampMs);
-        }        
+            UpdateTimelineComponent<PositionTimeLineComponent, DeusVector2>(packet.ObjectId, packet.ComponentId, packet.PositionOrigin, packet.OriginTimestampMs);
+
+        }
         #endregion
         #endregion
 
@@ -232,15 +233,12 @@ namespace DeusClientCore
             return m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == objectId)?.GetComponent(componentId) ?? null;
         }
 
-        private void UpdateTimelineComponent<T, U>(uint objectId, uint componentId, U newValue, long timeStampMs = -1) where T : TimeLineComponent<U>
+        private void UpdateTimelineComponent<T, U>(uint objectId, uint componentId, U newValue, ulong timeStampMs = -1) where T : TimeLineComponent<U>
         {
             DeusComponent component = FindComponent(objectId, componentId);
             if (component != null && component is T)
             {
-                if (timeStampMs < 0)
-                    (component as T).InsertData(newValue);
-                else
-                    (component as T).InsertData(newValue, timeStampMs);
+                (component as T).InsertData(newValue, timeStampMs);
 
                 // Notify the view, that component value has just changed : use this only if your component isn't getting directly informations
                 PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();

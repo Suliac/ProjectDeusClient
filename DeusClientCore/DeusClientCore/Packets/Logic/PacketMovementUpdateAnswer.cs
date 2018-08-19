@@ -12,9 +12,9 @@ namespace DeusClientCore.Packets
         public uint ObjectId { get; set; }
         public uint ComponentId { get; set; }
         public DeusVector2 PositionOrigin { get; set; }
-        public long OriginTimestampMs { get; set; }
+        public ulong OriginTimestampMs { get; set; }
         public DeusVector2 Destination { get; set; }
-        public long DestinationTimestampMs { get; set; }
+        public ulong DestinationTimestampMs { get; set; }
         
         public PacketMovementUpdateAnswer() : base(EPacketType.UpdateMovementAnswer)
         {
@@ -23,8 +23,8 @@ namespace DeusClientCore.Packets
         public override ushort EstimateCurrentSerializedSize()
         {
             return (ushort)(sizeof(uint) + sizeof(uint) 
-                + (PositionOrigin.EstimateCurrentSerializedSize() + sizeof(long))
-                + (Destination.EstimateCurrentSerializedSize() + sizeof(long)));
+                + (PositionOrigin.EstimateCurrentSerializedSize() + sizeof(ulong))
+                + (Destination.EstimateCurrentSerializedSize() + sizeof(ulong)));
         }
 
         public override void OnDeserialize(byte[] buffer, int index)
@@ -43,7 +43,7 @@ namespace DeusClientCore.Packets
             Serializer.DeserializeData(buffer, ref index, PositionOrigin);
 
             // 5 - Timestamp origin
-            long tmpSrcMs = 0;
+            ulong tmpSrcMs = 0;
             Serializer.DeserializeData(buffer, ref index, out tmpSrcMs);
             OriginTimestampMs = tmpSrcMs;
 
@@ -51,7 +51,7 @@ namespace DeusClientCore.Packets
             Serializer.DeserializeData(buffer, ref index, Destination);
 
             // 5 - Timestamp destination
-            long tmpDestMs = 0;
+            ulong tmpDestMs = 0;
             Serializer.DeserializeData(buffer, ref index, out tmpDestMs);
             DestinationTimestampMs = tmpDestMs;
         }

@@ -8,6 +8,8 @@ namespace DeusClientCore.Components
 {
     public abstract class TimeLineComponent<T> : DeusComponent, IViewableComponent
     {
+        private const bool WANT_DATA_BEFORE_TIMESTAMP = true;
+
         /// <summary>
         /// The data we want with a timestamp
         /// </summary>
@@ -29,6 +31,60 @@ namespace DeusClientCore.Components
         {
             RealtimeViewUpdate = needRealtimeUpdateView;
         }
+                
+        public void InsertData(T data, ulong timeStampMs)
+        {
+            InsertData(new DataTimed<T>(data, timeStampMs));
+        }
+
+        public void InsertData(DataTimed<T> dataTimed)
+        {
+            // We delete all the futur datas that arn't valid anymore
+            m_dataWithTime.RemoveAll(dt => dt.TimeStampMs >= dataTimed.TimeStampMs);
+
+            // then we add our data
+            m_dataWithTime.Add(dataTimed);
+        }
+
+        public object GetViewValue(ulong timeStampMs = -1)
+        {
+            ulong currentTimeStamp = timeStampMs < 0 ? TimeHelper.GetUnixMsTimeStamp() : timeStampMs;
+
+            DataTimed<T> beforeTimeStamp = GetValueAtTime(currentTimeStamp, WANT_DATA_BEFORE_TIMESTAMP);
+            DataTimed<T> afterTimeStamp = GetValueAtTime(currentTimeStamp, !WANT_DATA_BEFORE_TIMESTAMP);
+
+            if (beforeTimeStamp != null && afterTimeStamp != null) // we are between 2 value -> interpolate
+                return Interpolate(beforeTimeStamp, afterTimeStamp, currentTimeStamp);
+            else if (beforeTimeStamp != null) // only data before timestamp -> Extrapolate
+                return Extrapolate(beforeTimeStamp, currentTimeStamp);
+            else // no data found or only after the timestamp -> return null; 
+                return null;
+        }
+
+        protected DataTimed<T> GetValueAtTime(ulong timeStampMs, bool wantDataBeforeTimestamp)
+        {
+            List<DataTimed<T>> ordered = null;
+            if (wantDataBeforeTimestamp)
+            {
+                ordered = m_dataWithTime.OrderByDescending(dt => dt.TimeStampMs).ToList();
+                for (int i = 0; i < ordered.Count; i++)
+                {
+                    if (ordered[i].TimeStampMs < timeStampMs)
+                        return ordered[i];
+                }
+            }
+            else
+            {
+                ordered = m_dataWithTime.OrderBy(dt => dt.TimeStampMs).ToList();
+                for (int i = 0; i < ordered.Count; i++)
+                {
+                    if (ordered[i].TimeStampMs > timeStampMs)
+                        return ordered[i];
+                }
+            }
+
+            return null;
+        }
 
         protected override void OnUpdate(decimal deltatimeMs)
         {
@@ -42,21 +98,7 @@ namespace DeusClientCore.Components
             m_dataWithTime.Clear();
         }
 
-        public void InsertData(T data)
-        {
-            InsertData(new DataTimed<T>(data, TimeHelper.GetUnixMsTimeStamp() + Parameters.DEFAULT_LOCAL_LAG_MS));
-        }
-
-        public void InsertData(T data, long timeStampMs)
-        {
-            InsertData(new DataTimed<T>(data, timeStampMs));
-        }
-
-        public void InsertData(DataTimed<T> dataTimed)
-        {
-            m_dataWithTime.Add(dataTimed);
-        }
-
-        public abstract object GetViewValue(long timeStampMs = -1);
+        protected abstract T Interpolate(DataTimed<T> dataBeforeTimestamp, DataTimed<T> dataAfterTimestamp, ulong currentMs);
+        protected abstract T Extrapolate(DataTimed<T> dataBeforeTimestamp, ulong currentMs);
     }
 }
