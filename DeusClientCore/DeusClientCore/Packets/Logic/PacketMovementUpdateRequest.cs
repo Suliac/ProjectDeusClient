@@ -9,29 +9,40 @@ namespace DeusClientCore.Packets
     public class PacketMovementUpdateRequest : Packet
     {
         public DeusVector2 DirMovement { get; set; }
+        public uint ComponentId{ get; set; }
 
         public PacketMovementUpdateRequest() : base(EPacketType.UpdateMovementRequest)
         {
         }
 
-        public PacketMovementUpdateRequest(DeusVector2 dir) : this()
+        public PacketMovementUpdateRequest(DeusVector2 dir, uint componentId) : this()
         {
             DirMovement = dir;
+            ComponentId = componentId;
         }
 
         public override ushort EstimateCurrentSerializedSize()
         {
-            return DirMovement.EstimateCurrentSerializedSize();
+            return (ushort)(sizeof(uint) + DirMovement.EstimateCurrentSerializedSize());
         }
 
         public override void OnDeserialize(byte[] buffer, int index)
         {
+            uint componentId = 0;
+            Serializer.DeserializeData(buffer, ref index, out componentId);
+            ComponentId = componentId;
+
             Serializer.DeserializeData(buffer, ref index, DirMovement);
         }
 
         public override byte[] OnSerialize()
         {
-            return Serializer.SerializeData(DirMovement);
+            List<byte> result = new List<byte>();
+
+            result.AddRange(Serializer.SerializeData(ComponentId));
+            result.AddRange(Serializer.SerializeData(DirMovement));
+
+            return result.ToArray(); 
         }
     }
 }

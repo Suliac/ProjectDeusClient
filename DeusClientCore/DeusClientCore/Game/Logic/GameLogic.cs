@@ -163,7 +163,7 @@ namespace DeusClientCore
         private void ManageHandleMovementRequest(PacketHandleMovementInput packet)
         {
             // Send requets to the server
-            PacketMovementUpdateRequest movUpdateRequest = new PacketMovementUpdateRequest(packet.NewDir);
+            PacketMovementUpdateRequest movUpdateRequest = new PacketMovementUpdateRequest(packet.NewDir, packet.ComponentId);
             EventManager.Get().EnqueuePacket(0, movUpdateRequest);
 
             ///////////////////////////////////
