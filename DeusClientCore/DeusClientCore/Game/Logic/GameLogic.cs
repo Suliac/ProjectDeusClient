@@ -208,7 +208,7 @@ namespace DeusClientCore
             DeusComponent component = FindComponent(packet.ObjectId, packet.ComponentId);
             if (component != null && component is HealthTimeLineComponent)
             {
-                (component as HealthTimeLineComponent).InsertData(packet.NewHealthAmount);
+                (component as HealthTimeLineComponent).InsertData(packet.NewHealthAmount, packet.NewHealthTimestamp);
 
                 // Notify the view, that component value has just changed : use this only if your component isn't getting directly informations
                 PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();
@@ -233,7 +233,7 @@ namespace DeusClientCore
             return m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == objectId)?.GetComponent(componentId) ?? null;
         }
 
-        private void UpdateTimelineComponent<T, U>(uint objectId, uint componentId, U newValue, ulong timeStampMs = -1) where T : TimeLineComponent<U>
+        private void UpdateTimelineComponent<T, U>(uint objectId, uint componentId, U newValue, ulong timeStampMs = 0) where T : TimeLineComponent<U>
         {
             DeusComponent component = FindComponent(objectId, componentId);
             if (component != null && component is T)

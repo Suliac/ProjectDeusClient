@@ -127,25 +127,25 @@ namespace DeusClientConsole
                 //        EventManager.Get().EnqueuePacket(0, packet);
                 //    }
                 //}
-                else if (choice == "7")
-                {
-                    Console.WriteLine("Id game obj : ");
-                    string idToDelete = Console.ReadLine();
-
-                    uint id = 0;
-                    if (uint.TryParse(idToDelete, out id))
-                    {
-                        Console.WriteLine("Id game compo : ");
-                        string idComp = Console.ReadLine();
-
-                        uint idCompo = 0;
-                        if (uint.TryParse(idComp, out idCompo))
-                        {
-                            PacketHealthUpdate packet = new PacketHealthUpdate(id, idCompo, 50);
-                            EventManager.Get().EnqueuePacket(0, packet);
-                        }
-                    }
-                }
+                //else if (choice == "7")
+                //{
+                //    Console.WriteLine("Id game obj : ");
+                //    string idToDelete = Console.ReadLine();
+                //
+                //    uint id = 0;
+                //    if (uint.TryParse(idToDelete, out id))
+                //    {
+                //        Console.WriteLine("Id game compo : ");
+                //        string idComp = Console.ReadLine();
+                //
+                //        uint idCompo = 0;
+                //        if (uint.TryParse(idComp, out idCompo))
+                //        {
+                //            PacketHealthUpdate packet = new PacketHealthUpdate(id, idCompo, 50);
+                //            EventManager.Get().EnqueuePacket(0, packet);
+                //        }
+                //    }
+                //}
             }
         }
     }

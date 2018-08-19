@@ -46,9 +46,9 @@ namespace DeusClientCore.Components
             m_dataWithTime.Add(dataTimed);
         }
 
-        public object GetViewValue(ulong timeStampMs = -1)
+        public object GetViewValue(ulong timeStampMs = 0)
         {
-            ulong currentTimeStamp = timeStampMs < 0 ? TimeHelper.GetUnixMsTimeStamp() : timeStampMs;
+            ulong currentTimeStamp = timeStampMs <= 0 ? TimeHelper.GetUnixMsTimeStamp() : timeStampMs;
 
             DataTimed<T> beforeTimeStamp = GetValueAtTime(currentTimeStamp, WANT_DATA_BEFORE_TIMESTAMP);
             DataTimed<T> afterTimeStamp = GetValueAtTime(currentTimeStamp, !WANT_DATA_BEFORE_TIMESTAMP);
