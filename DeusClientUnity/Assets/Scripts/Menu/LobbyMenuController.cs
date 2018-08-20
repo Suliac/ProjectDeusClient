@@ -112,8 +112,8 @@ public class LobbyMenuController : MonoBehaviour
 
     public void ClickDebug()
     {
-        PacketHealthUpdate packet = new PacketHealthUpdate(IdGameObj, IdCompo, Amount);
-        EventManager.Get().EnqueuePacket(0, packet);
+        //PacketHealthUpdate packet = new PacketHealthUpdate(IdGameObj, IdCompo, Amount);
+        //EventManager.Get().EnqueuePacket(0, packet);
 
 
     }

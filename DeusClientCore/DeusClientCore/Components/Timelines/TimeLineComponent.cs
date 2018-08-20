@@ -32,7 +32,7 @@ namespace DeusClientCore.Components
             RealtimeViewUpdate = needRealtimeUpdateView;
         }
                 
-        public void InsertData(T data, ulong timeStampMs)
+        public void InsertData(T data, uint timeStampMs)
         {
             InsertData(new DataTimed<T>(data, timeStampMs));
         }
@@ -46,9 +46,9 @@ namespace DeusClientCore.Components
             m_dataWithTime.Add(dataTimed);
         }
 
-        public object GetViewValue(ulong timeStampMs = 0)
+        public object GetViewValue(uint timeStampMs = 0)
         {
-            ulong currentTimeStamp = timeStampMs <= 0 ? TimeHelper.GetUnixMsTimeStamp() : timeStampMs;
+            uint currentTimeStamp = timeStampMs <= 0 ? TimeHelper.GetUnixMsTimeStamp() : timeStampMs;
 
             DataTimed<T> beforeTimeStamp = GetValueAtTime(currentTimeStamp, WANT_DATA_BEFORE_TIMESTAMP);
             DataTimed<T> afterTimeStamp = GetValueAtTime(currentTimeStamp, !WANT_DATA_BEFORE_TIMESTAMP);
@@ -61,7 +61,7 @@ namespace DeusClientCore.Components
                 return null;
         }
 
-        protected DataTimed<T> GetValueAtTime(ulong timeStampMs, bool wantDataBeforeTimestamp)
+        protected DataTimed<T> GetValueAtTime(uint timeStampMs, bool wantDataBeforeTimestamp)
         {
             List<DataTimed<T>> ordered = null;
             if (wantDataBeforeTimestamp)
@@ -98,7 +98,7 @@ namespace DeusClientCore.Components
             m_dataWithTime.Clear();
         }
 
-        protected abstract T Interpolate(DataTimed<T> dataBeforeTimestamp, DataTimed<T> dataAfterTimestamp, ulong currentMs);
-        protected abstract T Extrapolate(DataTimed<T> dataBeforeTimestamp, ulong currentMs);
+        protected abstract T Interpolate(DataTimed<T> dataBeforeTimestamp, DataTimed<T> dataAfterTimestamp, uint currentMs);
+        protected abstract T Extrapolate(DataTimed<T> dataBeforeTimestamp, uint currentMs);
     }
 }

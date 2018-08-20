@@ -202,12 +202,13 @@ namespace DeusClientCore
                 feedBackPacket.NewValue = packet.NewHealthAmount;
                 EventManager.Get().EnqueuePacket(0, feedBackPacket);
             }
-
         }
 
         private void ManagePacketMovementAnswer(PacketMovementUpdateAnswer packet)
         {
-            UpdateTimelineComponent<PositionTimeLineComponent, DeusVector2>(packet.ObjectId, packet.ComponentId, packet.PositionOrigin, packet.OriginTimestampMs);
+            Console.WriteLine($"Manage update movement | Origin ({packet.PositionOrigin.X},{packet.PositionOrigin.Y}) : {packet.OriginTimestampMs} | Destination ({packet.Destination.X},{packet.Destination.Y}) : {packet.DestinationTimestampMs}");
+            Console.WriteLine($"Current Ms : {TimeHelper.GetUnixMsTimeStamp()}");
+            UpdateTimelineComponent<PositionTimeLineComponent, DeusVector2>(packet.ObjectId, packet.ComponentId, packet.PositionOrigin, packet.OriginTimestampMs, packet.Destination, packet.DestinationTimestampMs);
         }
         #endregion
         #endregion
@@ -217,19 +218,13 @@ namespace DeusClientCore
             return m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == objectId)?.GetComponent(componentId) ?? null;
         }
 
-        private void UpdateTimelineComponent<T, U>(uint objectId, uint componentId, U newValue, ulong timeStampMs = 0) where T : TimeLineComponent<U>
+        private void UpdateTimelineComponent<T, U>(uint objectId, uint componentId, U originValue, uint originTimestampMs, U destinationValue, uint destinationTimestampMs) where T : TimeLineComponent<U>
         {
             DeusComponent component = FindComponent(objectId, componentId);
             if (component != null && component is T)
             {
-                (component as T).InsertData(newValue, timeStampMs);
-
-                // Notify the view, that component value has just changed : use this only if your component isn't getting directly informations
-                PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();
-                feedBackPacket.ObjectId = objectId;
-                feedBackPacket.ComponentId = componentId;
-                feedBackPacket.NewValue = newValue;
-                EventManager.Get().EnqueuePacket(0, feedBackPacket);
+                (component as T).InsertData(originValue, originTimestampMs);
+                (component as T).InsertData(destinationValue, destinationTimestampMs);
             }
         }
     }

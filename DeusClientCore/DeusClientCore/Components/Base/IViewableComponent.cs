@@ -16,6 +16,6 @@ namespace DeusClientCore.Components
 
         bool Stopped { get; }
 
-        object GetViewValue(ulong timeStampMs = 0);
+        object GetViewValue(uint timeStampMs = 0);
     }
 }

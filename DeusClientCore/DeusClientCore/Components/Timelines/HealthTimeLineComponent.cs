@@ -18,12 +18,12 @@ namespace DeusClientCore.Components
         {
         }
         
-        protected override int Extrapolate(DataTimed<int> dataBeforeTimestamp, ulong currentMs)
+        protected override int Extrapolate(DataTimed<int> dataBeforeTimestamp, uint currentMs)
         {
             return dataBeforeTimestamp.Data;
         }
 
-        protected override int Interpolate(DataTimed<int> dataBeforeTimestamp, DataTimed<int> dataAfterTimestamp, ulong currentMs)
+        protected override int Interpolate(DataTimed<int> dataBeforeTimestamp, DataTimed<int> dataAfterTimestamp, uint currentMs)
         {
             return dataBeforeTimestamp.Data;
         }

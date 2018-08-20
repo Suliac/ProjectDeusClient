@@ -107,7 +107,7 @@ namespace DeusClientCore.Packets
             value = (long)((buffer[index++] << 56) | (buffer[index++] << 48) | (buffer[index++] << 40) | (buffer[index++] << 32)
                | (buffer[index++] << 24) | (buffer[index++] << 16) | (buffer[index++] << 8) | buffer[index++]);
         }
-
+        
         public static void DeserializeData(byte[] buffer, ref int index, out string value, int sizeStr)
         {
             value = "";

@@ -8,9 +8,9 @@ namespace DeusClientCore
 {
     public class TimeHelper
     {
-        public static ulong GetUnixMsTimeStamp()
+        public static uint GetUnixMsTimeStamp()
         {
-            return (ulong)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+            return (uint)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
         }
     }
 }

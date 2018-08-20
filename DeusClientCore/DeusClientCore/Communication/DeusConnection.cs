@@ -62,8 +62,8 @@ namespace DeusClientCore
         /// then try to read some data on the network
         protected void SendAndReceive()
         {
-            try
-            {
+            //try
+            //{
                 // Init our TCP or UDP connection
                 OnInit();
 
@@ -122,15 +122,15 @@ namespace DeusClientCore
                         }
                     } // endif DataAvailable
                 } // end while cancellation requested ?
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error : " + ex.Message);
-            }
-            finally
-            {
-                OnEnd();
-            }
+           //}
+           //catch (Exception ex)
+           //{
+           //    Console.WriteLine("Error : " + ex.Message);
+           //}
+           //finally
+           //{
+           //    OnEnd();
+           //}
         }
 
         /// <summary>

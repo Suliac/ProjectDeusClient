@@ -25,7 +25,7 @@ public class PositionComponentView : DeusComponentLinker
         {
             UpdateViewValue((m_deusLinkedComponent as PositionTimeLineComponent).GetViewValue());
 
-            Debug.Log($"{m_objectPos.X}, {m_objectPos.Y}");
+            //Debug.Log($"{m_objectPos.X}, {m_objectPos.Y}");
             // update transform here
             gameObject.transform.position = new Vector3(m_objectPos.X, 0, m_objectPos.Y);
         }

@@ -105,6 +105,10 @@ namespace DeusClientConsole
                     PacketHandleClickUI packet = new PacketHandleClickUI();
                     packet.UIClicked = PacketHandleClickUI.UIButton.ReadyButton;
                     EventManager.Get().EnqueuePacket(0, packet);
+                }else if(choice == "6")
+                {
+                    PacketHandleMovementInput packet = new PacketHandleMovementInput(1, 2, new DeusVector2(0, 10));
+                    EventManager.Get().EnqueuePacket(0, packet);
                 }
                 //else if (choice == "5")
                 //{

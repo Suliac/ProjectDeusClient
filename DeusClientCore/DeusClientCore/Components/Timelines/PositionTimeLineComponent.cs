@@ -19,7 +19,7 @@ namespace DeusClientCore.Components
         /// <param name="dataBeforeTimestamp">The last data known</param>
         /// <param name="currentMs">The current time</param>
         /// <returns>The <see cref="DeusVector2"/> we extrapolate</returns>
-        protected override DeusVector2 Extrapolate(DataTimed<DeusVector2> dataBeforeTimestamp, ulong currentMs)
+        protected override DeusVector2 Extrapolate(DataTimed<DeusVector2> dataBeforeTimestamp, uint currentMs)
         {
             return dataBeforeTimestamp.Data;
         }
@@ -33,7 +33,7 @@ namespace DeusClientCore.Components
         /// <param name="dataAfterTimestamp">The destination</param>
         /// <param name="currentMs">The current time</param>
         /// <returns>The <see cref="DeusVector2"/> we interpolate</returns>
-        protected override DeusVector2 Interpolate(DataTimed<DeusVector2> dataBeforeTimestamp, DataTimed<DeusVector2> dataAfterTimestamp, ulong currentMs)
+        protected override DeusVector2 Interpolate(DataTimed<DeusVector2> dataBeforeTimestamp, DataTimed<DeusVector2> dataAfterTimestamp, uint currentMs)
         {
             return dataBeforeTimestamp.Data + (dataAfterTimestamp.Data - dataBeforeTimestamp.Data) * (float)((float)(currentMs - dataBeforeTimestamp.TimeStampMs) / (float)(dataAfterTimestamp.TimeStampMs - dataBeforeTimestamp.TimeStampMs));
         }

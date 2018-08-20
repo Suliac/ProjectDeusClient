@@ -19,7 +19,7 @@ public class PlayerInputHandler : MonoBehaviour {
 	void Update () {
         if(Input.GetKeyDown(KeyCode.Z))
         {
-            PacketHandleMovementInput packet = new PacketHandleMovementInput(ObjectId, PositionComponentId, new DeusVector2(0, 1));
+            PacketHandleMovementInput packet = new PacketHandleMovementInput(ObjectId, PositionComponentId, new DeusVector2(0, 10));
             EventManager.Get().EnqueuePacket(0, packet);
         }
 
