@@ -13,7 +13,7 @@ namespace DeusClientCore.Components
         /// <summary>
         /// The data we want with a timestamp
         /// </summary>
-        protected List<DataTimed<T>> m_dataWithTime = new List<DataTimed<T>>();
+        public List<DataTimed<T>> m_dataWithTime = new List<DataTimed<T>>();
 
         /// <summary>
         /// The number of datas we save in time
@@ -54,7 +54,10 @@ namespace DeusClientCore.Components
             DataTimed<T> afterTimeStamp = GetValueAtTime(currentTimeStamp, !WANT_DATA_BEFORE_TIMESTAMP);
 
             if (beforeTimeStamp != null && afterTimeStamp != null) // we are between 2 value -> interpolate
+            {
+                Console.WriteLine("Interpolate");
                 return Interpolate(beforeTimeStamp, afterTimeStamp, currentTimeStamp);
+            }
             else if (beforeTimeStamp != null) // only data before timestamp -> Extrapolate
                 return Extrapolate(beforeTimeStamp, currentTimeStamp);
             else // no data found or only after the timestamp -> return null; 

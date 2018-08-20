@@ -166,6 +166,30 @@ namespace DeusClientCore
             // Send requets to the server
             PacketMovementUpdateRequest movUpdateRequest = new PacketMovementUpdateRequest(packet.DestinationWanted, packet.ComponentId);
             EventManager.Get().EnqueuePacket(0, movUpdateRequest);
+
+            ///////////////////////////////////
+            // For now just echo back to the view -> should be done by the server in the futur
+            // TODO : Delete
+            //DeusVector2 destination = packet.DestinationWanted;
+            //uint originTimestampMs = TimeHelper.GetUnixMsTimeStamp() + 200;
+            //DeusVector2 origin = DeusVector2.Zero;
+            //
+            //// get value at update
+            //var compo = FindComponent(packet.ObjectId, packet.ComponentId);
+            //if (compo != null && compo is PositionTimeLineComponent)
+            //{
+            //    origin = (DeusVector2)(compo as PositionTimeLineComponent).GetViewValue(originTimestampMs);
+            //    Console.WriteLine($"Estimate value : ({origin.X},{origin.Y})");
+            //}
+            //
+            //// get futur ms
+            //double sqrtDist = DeusVector2.SqrtMagnitude(origin, destination);
+            //uint dtReachDestinationMs = (uint)(sqrtDist / 0.001d); // t = d / s
+            //Console.WriteLine($"Time to go there : {dtReachDestinationMs} ms");
+            //
+            //PacketMovementUpdateAnswer movUpdate = new PacketMovementUpdateAnswer(packet.ObjectId, packet.ComponentId, origin, originTimestampMs, destination, originTimestampMs + dtReachDestinationMs);
+            //EventManager.Get().EnqueuePacket(0, movUpdate);
+            ///////////////////////////////////
         }
         #endregion
 
@@ -225,6 +249,7 @@ namespace DeusClientCore
             {
                 (component as T).InsertData(originValue, originTimestampMs);
                 (component as T).InsertData(destinationValue, destinationTimestampMs);
+                Console.WriteLine($"data in timeline : {(component as T).m_dataWithTime.Count}");
             }
         }
     }

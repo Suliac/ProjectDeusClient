@@ -19,7 +19,17 @@ namespace DeusClientCore.Packets
         public PacketMovementUpdateAnswer() : base(EPacketType.UpdateMovementAnswer)
         {
         }
-        
+
+        public PacketMovementUpdateAnswer(uint objectId, uint componentId, DeusVector2 origin, uint originMs, DeusVector2 destination, uint destMs) : base(EPacketType.UpdateMovementAnswer)
+        {
+            ObjectId = objectId;
+            ComponentId = componentId;
+            PositionOrigin = origin;
+            OriginTimestampMs = originMs;
+            Destination = destination;
+            DestinationTimestampMs = destMs;
+        }
+
         public override ushort EstimateAnswerCurrentSerializedSize()
         {
             return (ushort)(sizeof(uint) + sizeof(uint) 

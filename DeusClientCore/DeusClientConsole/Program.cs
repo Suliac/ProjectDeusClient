@@ -110,46 +110,12 @@ namespace DeusClientConsole
                     PacketHandleMovementInput packet = new PacketHandleMovementInput(1, 2, new DeusVector2(0, 10));
                     EventManager.Get().EnqueuePacket(0, packet);
                 }
-                //else if (choice == "5")
-                //{
-                //    PacketObjectEnter packet = new PacketObjectEnter();
-                //    packet.GameObjectId = nextId;
-                //    nextId++;
-                //    packet.ObjectType = EObjectType.Player;
-                //    EventManager.Get().EnqueuePacket(0, packet);
-                //}
-                //else if (choice == "6")
-                //{
-                //    PacketObjectLeave packet = new PacketObjectLeave();
-                //    Console.WriteLine("Id to delete : ");
-                //    string idToDelete = Console.ReadLine();
+                else if (choice == "7")
+                {
+                    PacketHandleMovementInput packet = new PacketHandleMovementInput(1, 2, new DeusVector2(0, 0));
+                    EventManager.Get().EnqueuePacket(0, packet);
+                }
 
-                //    uint id = 0;
-                //    if (uint.TryParse(idToDelete, out id))
-                //    {
-                //        packet.GameObjectId = id;
-                //        EventManager.Get().EnqueuePacket(0, packet);
-                //    }
-                //}
-                //else if (choice == "7")
-                //{
-                //    Console.WriteLine("Id game obj : ");
-                //    string idToDelete = Console.ReadLine();
-                //
-                //    uint id = 0;
-                //    if (uint.TryParse(idToDelete, out id))
-                //    {
-                //        Console.WriteLine("Id game compo : ");
-                //        string idComp = Console.ReadLine();
-                //
-                //        uint idCompo = 0;
-                //        if (uint.TryParse(idComp, out idCompo))
-                //        {
-                //            PacketHealthUpdate packet = new PacketHealthUpdate(id, idCompo, 50);
-                //            EventManager.Get().EnqueuePacket(0, packet);
-                //        }
-                //    }
-                //}
             }
         }
     }

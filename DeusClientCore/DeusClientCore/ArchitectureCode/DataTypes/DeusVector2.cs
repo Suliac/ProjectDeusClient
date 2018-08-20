@@ -87,6 +87,18 @@ namespace DeusClientCore
 
         public static DeusVector2 Zero { get { return new DeusVector2(); } }
 
+        public static double SqrtMagnitude(DeusVector2 lhs, DeusVector2 rhs)
+        {
+            return Math.Sqrt(Magnitude(lhs, rhs));
+        }
+
+        public static double Magnitude(DeusVector2 lhs, DeusVector2 rhs)
+        {
+            float precision = Math.Min(lhs.m_precision, rhs.m_precision);
+            return Math.Pow((rhs.m_x - lhs.m_x) / precision, 2) +
+                Math.Pow((rhs.m_y - lhs.m_y) / precision, 2);
+        }
+
         public override bool Equals(object obj)
         {
             var vector = obj as DeusVector2;
