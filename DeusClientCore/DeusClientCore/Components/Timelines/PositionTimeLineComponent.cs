@@ -35,7 +35,9 @@ namespace DeusClientCore.Components
         /// <returns>The <see cref="DeusVector2"/> we interpolate</returns>
         protected override DeusVector2 Interpolate(DataTimed<DeusVector2> dataBeforeTimestamp, DataTimed<DeusVector2> dataAfterTimestamp, uint currentMs)
         {
-            return dataBeforeTimestamp.Data + (dataAfterTimestamp.Data - dataBeforeTimestamp.Data) * (float)((float)(currentMs - dataBeforeTimestamp.TimeStampMs) / (float)(dataAfterTimestamp.TimeStampMs - dataBeforeTimestamp.TimeStampMs));
+            DeusVector2 result = dataBeforeTimestamp.Data + (dataAfterTimestamp.Data - dataBeforeTimestamp.Data) * (float)((float)(currentMs - dataBeforeTimestamp.TimeStampMs) / (float)(dataAfterTimestamp.TimeStampMs - dataBeforeTimestamp.TimeStampMs));
+            //Console.WriteLine($"BEFORE : {dataBeforeTimestamp} | AFTER : {dataAfterTimestamp} | RESULT : [{currentMs}]{result}");
+            return result;
         }
 
         protected override void OnStart()

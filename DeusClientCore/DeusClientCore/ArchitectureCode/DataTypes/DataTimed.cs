@@ -16,5 +16,10 @@ namespace DeusClientCore
             Data = data;
             TimeStampMs = timeStampMs;
         }
+
+        public override string ToString()
+        {
+            return $"[{TimeStampMs}]{Data}";
+        }
     }
 }

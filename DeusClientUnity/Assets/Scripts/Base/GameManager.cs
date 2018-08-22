@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DeusClientCore;
 using System.Threading;
+using System;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,6 +15,7 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
+        UnitySystemConsoleRedirector.Redirect();
         m_game = new Game();
 
         m_game.Start("127.0.0.1", 27015);

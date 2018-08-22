@@ -230,8 +230,8 @@ namespace DeusClientCore
 
         private void ManagePacketMovementAnswer(PacketMovementUpdateAnswer packet)
         {
-            Console.WriteLine($"Manage update movement | Origin ({packet.PositionOrigin.X},{packet.PositionOrigin.Y}) : {packet.OriginTimestampMs} | Destination ({packet.Destination.X},{packet.Destination.Y}) : {packet.DestinationTimestampMs}");
-            Console.WriteLine($"Current Ms : {TimeHelper.GetUnixMsTimeStamp()}");
+            //Console.WriteLine($"Manage update movement | Origin ({packet.PositionOrigin.X},{packet.PositionOrigin.Y}) : {packet.OriginTimestampMs} | Destination ({packet.Destination.X},{packet.Destination.Y}) : {packet.DestinationTimestampMs}");
+            //Console.WriteLine($"Current Ms : {TimeHelper.GetUnixMsTimeStamp()}. Time to execute : {packet.OriginTimestampMs - TimeHelper.GetUnixMsTimeStamp()}");
             UpdateTimelineComponent<PositionTimeLineComponent, DeusVector2>(packet.ObjectId, packet.ComponentId, packet.PositionOrigin, packet.OriginTimestampMs, packet.Destination, packet.DestinationTimestampMs);
         }
         #endregion
@@ -249,7 +249,7 @@ namespace DeusClientCore
             {
                 (component as T).InsertData(originValue, originTimestampMs);
                 (component as T).InsertData(destinationValue, destinationTimestampMs);
-                Console.WriteLine($"data in timeline : {(component as T).m_dataWithTime.Count}");
+                //Console.WriteLine($"nbr data in timeline : {(component as T).m_dataWithTime.Count}");
             }
         }
     }

@@ -152,5 +152,10 @@ namespace DeusClientCore
         {
             return sizeof(int) + sizeof(int) + sizeof(long);
         }
+
+        public override string ToString()
+        {
+            return $"({X},{Y})";
+        }
     }
 }

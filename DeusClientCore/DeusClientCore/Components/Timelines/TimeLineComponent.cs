@@ -55,7 +55,7 @@ namespace DeusClientCore.Components
 
             if (beforeTimeStamp != null && afterTimeStamp != null) // we are between 2 value -> interpolate
             {
-                Console.WriteLine("Interpolate");
+                //Console.WriteLine("Interpolate");
                 return Interpolate(beforeTimeStamp, afterTimeStamp, currentTimeStamp);
             }
             else if (beforeTimeStamp != null) // only data before timestamp -> Extrapolate
@@ -72,7 +72,7 @@ namespace DeusClientCore.Components
                 ordered = m_dataWithTime.OrderByDescending(dt => dt.TimeStampMs).ToList();
                 for (int i = 0; i < ordered.Count; i++)
                 {
-                    if (ordered[i].TimeStampMs < timeStampMs)
+                    if (ordered[i].TimeStampMs <= timeStampMs)
                         return ordered[i];
                 }
             }
