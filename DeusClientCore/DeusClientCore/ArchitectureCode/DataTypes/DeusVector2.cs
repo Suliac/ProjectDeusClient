@@ -53,12 +53,15 @@ namespace DeusClientCore
 
         public static bool operator ==(DeusVector2 a, DeusVector2 b)
         {
-            return a.m_x == b.m_x && a.m_y == b.m_y;
+            if (object.ReferenceEquals(null, a) || object.ReferenceEquals(null, b))
+                return false;
+
+            return a.Equals(b);
         }
 
         public static bool operator !=(DeusVector2 a, DeusVector2 b)
         {
-            return a.m_x != b.m_x || a.m_y != b.m_y;
+            return !(a == b);
         }
 
         public static DeusVector2 operator +(DeusVector2 a, DeusVector2 b)
@@ -101,6 +104,9 @@ namespace DeusClientCore
 
         public override bool Equals(object obj)
         {
+            if (ReferenceEquals(null, obj))
+                return false;
+
             var vector = obj as DeusVector2;
             return m_x == vector.m_x &&
                    m_y == vector.m_y;

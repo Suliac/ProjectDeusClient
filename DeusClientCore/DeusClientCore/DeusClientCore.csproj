@@ -50,12 +50,12 @@
     <Compile Include="Communication\DeusConnection.cs" />
     <Compile Include="Communication\DeusTcpConnection.cs" />
     <Compile Include="Communication\DeusUdpConnection.cs" />
+    <Compile Include="Components\Base\DeusSerializableComponent.cs" />
     <Compile Include="Components\Base\DeusViewComponent.cs" />
     <Compile Include="Components\Timelines\HealthTimeLineComponent.cs" />
     <Compile Include="Components\Base\IViewableComponent.cs" />
     <Compile Include="ArchitectureCode\DataTypes\DeusVector2.cs" />
     <Compile Include="Components\Timelines\PositionTimeLineComponent.cs" />
-    <Compile Include="ArchitectureCode\DataTypes\DeusObjectMovement.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\SocketEventArgs.cs" />
     <Compile Include="Events\SocketPacketEventArgs.cs" />

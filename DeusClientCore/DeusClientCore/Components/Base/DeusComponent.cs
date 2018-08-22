@@ -6,13 +6,20 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Components
 {
+    public enum EComponentType : byte
+    {
+        HealthComponent = 1,
+        PositionComponent = 2,
+    }
+
     public abstract class DeusComponent : IExecutable, IIdentifiable
     {
+
         protected uint m_uniqueIdentifier;
         public uint UniqueIdentifier { get => m_uniqueIdentifier; protected set => m_uniqueIdentifier = value; }
 
         public bool Stopped { get; protected set; }
-        
+
         private static uint m_nextId = 1;
 
         public DeusComponent()
