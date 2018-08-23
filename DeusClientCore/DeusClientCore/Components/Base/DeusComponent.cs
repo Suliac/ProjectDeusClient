@@ -14,24 +14,17 @@ namespace DeusClientCore.Components
 
     public abstract class DeusComponent : IExecutable, IIdentifiable
     {
-
         protected uint m_uniqueIdentifier;
         public uint UniqueIdentifier { get => m_uniqueIdentifier; protected set => m_uniqueIdentifier = value; }
 
+        protected EComponentType m_componentType;
+        public EComponentType ComponentType { get => m_componentType; protected set => m_componentType = value; }
+
         public bool Stopped { get; protected set; }
-
-        private static uint m_nextId = 1;
-
-        public DeusComponent()
-        {
-            m_uniqueIdentifier = m_nextId;
-            m_nextId++;
-        }
-
-        public DeusComponent(uint identifier)
+        
+        public DeusComponent(uint identifier, EComponentType type)
         {
             m_uniqueIdentifier = identifier;
-            m_nextId = identifier + 1;
         }
 
         public void Update(decimal deltatimeMs)

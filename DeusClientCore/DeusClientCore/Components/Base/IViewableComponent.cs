@@ -12,6 +12,8 @@ namespace DeusClientCore.Components
     /// </summary>
     public interface IViewableComponent : IIdentifiable
     {
+        EComponentType ComponentType { get; }
+
         bool RealtimeViewUpdate { get; }
 
         bool Stopped { get; }

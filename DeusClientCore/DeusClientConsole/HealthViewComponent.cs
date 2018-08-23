@@ -12,7 +12,7 @@ namespace DeusClientConsole
     {
         private int m_currentHealth;
 
-        public HealthViewComponent(IViewableComponent linkedComponent, uint identifier) : base(linkedComponent, identifier)
+        public HealthViewComponent(IViewableComponent linkedComponent, uint identifier) : base(linkedComponent, identifier, EComponentType.HealthComponent)
         {
         }
 

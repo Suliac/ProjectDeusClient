@@ -54,16 +54,20 @@ public class ViewObjectFactory : MonoBehaviour
         uint idComponentPosition = 0;
         foreach (var component in components)
         {
-            if (component is HealthTimeLineComponent)
+            DeusComponentLinker linker = null;
+            switch (component.ComponentType)
             {
-                HealthComponentView compoLinker = viewObj.AddComponent<HealthComponentView>();
-                compoLinker.Init(component);
-            }
-            else if (component is PositionTimeLineComponent)
-            {
-                PositionComponentView compoLinker = viewObj.AddComponent<PositionComponentView>();
-                compoLinker.Init(component);
-                idComponentPosition = component.UniqueIdentifier;
+                case EComponentType.HealthComponent:
+                    linker = viewObj.AddComponent<HealthComponentView>();
+                    linker.Init(component);
+                    break;
+                case EComponentType.PositionComponent:
+                    linker = viewObj.AddComponent<PositionComponentView>();
+                    linker.Init(component);
+                    idComponentPosition = component.UniqueIdentifier;
+                    break;
+                default:
+                    throw new DeusException("Unknown component type. Did you forget to update your ViewObjectFactory ?");
             }
         }
         /////////////////////////////////////////////////////////////

@@ -27,7 +27,7 @@ namespace DeusClientCore.Components
         /// </summary>
         public bool RealtimeViewUpdate { get; protected set; }
 
-        public TimeLineComponent(bool needRealtimeUpdateView)
+        public TimeLineComponent(bool needRealtimeUpdateView, uint identifier, EComponentType type) : base(identifier, type)
         {
             RealtimeViewUpdate = needRealtimeUpdateView;
         }

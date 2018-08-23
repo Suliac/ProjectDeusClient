@@ -14,19 +14,27 @@ namespace DeusClientConsole
 
         public ViewObject CreateViewObject(ViewObjectCreateArgs args)
         {
-            ViewObject viewObject = null;
+            ViewObject viewObject = new ViewObject(args.LinkedGameObject.UniqueIdentifier, args.LinkedGameObject.ObjectType, args.LinkedGameObject.IsLocalPlayer);
 
-            // fill our viewobject with components by copying the ones we want
             List<IViewableComponent> components = args.LinkedGameObject.GetViewableGameComponents().ToList();
-            switch (args.LinkedGameObject.ObjectType)
-            {
-                case EObjectType.Player:
-                    viewObject = PlayerViewObject.Create(args);
-                    break;
-                default:
-                    break;
-            }
 
+            foreach (var component in components)
+            {
+                DeusViewComponent tmpComponent = null;
+                switch (component.ComponentType)
+                {
+                    case EComponentType.HealthComponent:
+                        tmpComponent = new HealthViewComponent(component, component.UniqueIdentifier);
+                        break;
+                    case EComponentType.PositionComponent:
+                        break;
+                    default:
+                        break;
+                }
+                if (tmpComponent != null)
+                    viewObject.AddComponent(tmpComponent);
+            }
+            
             return viewObject;
         }
 

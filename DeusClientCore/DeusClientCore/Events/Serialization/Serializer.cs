@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeusClientCore.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -69,6 +70,30 @@ namespace DeusClientCore.Packets
             return value.Serialize();
         }
 
+        public static byte[] SerializeData<T>(T value)
+        {
+            if (value is uint)
+                return SerializeData(Convert.ToUInt32(value));
+            else if (value is int)
+                return SerializeData(Convert.ToInt32(value));
+            else if (value is ushort)
+                return SerializeData(Convert.ToUInt16(value));
+            else if (value is short)
+                return SerializeData(Convert.ToInt16(value));
+            else if (value is ulong)
+                return SerializeData(Convert.ToUInt64(value));
+            else if (value is long)
+                return SerializeData(Convert.ToInt64(value));
+            else if (value is string)
+                return SerializeData(Convert.ToString(value));
+            else if (value is bool)
+                return SerializeData(Convert.ToBoolean(value));
+            else if (value is ISerializable)
+                return SerializeData(value as ISerializable);
+
+            throw new DeusException("Cannot serialize this type");
+        }
+
         #endregion
 
         #region Deserialize
@@ -107,7 +132,7 @@ namespace DeusClientCore.Packets
             value = (long)((buffer[index++] << 56) | (buffer[index++] << 48) | (buffer[index++] << 40) | (buffer[index++] << 32)
                | (buffer[index++] << 24) | (buffer[index++] << 16) | (buffer[index++] << 8) | buffer[index++]);
         }
-        
+
         public static void DeserializeData(byte[] buffer, ref int index, out string value, int sizeStr)
         {
             value = "";
@@ -120,19 +145,63 @@ namespace DeusClientCore.Packets
             value.Deserialize(buffer, ref index);
         }
 
-        //public static T DeserializeData<T>(byte[] buffer, ref int index) where T : struct
-        //{
-        //    T value = default(T);
-        //    int size = Marshal.SizeOf(value);
+        public static void DeserializeData<T>(byte[] buffer, ref int index, out T value)
+        {
+            value = default(T);
 
-        //    if (size > 8)
-        //        throw new Exception("Cannot serialize not primitive type that are larger than 8 bytes");
+            if (value is uint)
+            {
+                uint tmpData = 0;
+                DeserializeData(buffer, ref index, out tmpData);
+                value = (T)Convert.ChangeType(tmpData, typeof(T));
+            }
+            else if (value is int)
+            {
+                int tmpData = 0;
+                DeserializeData(buffer, ref index, out tmpData);
+                value = (T)Convert.ChangeType(tmpData, typeof(T));
+            }
+            else if (value is ushort)
+            {
+                ushort tmpData = 0;
+                DeserializeData(buffer, ref index, out tmpData);
+                value = (T)Convert.ChangeType(tmpData, typeof(T));
+            }
+            else if (value is short)
+            {
+                short tmpData = 0;
+                DeserializeData(buffer, ref index, out tmpData);
+                value = (T)Convert.ChangeType(tmpData, typeof(T));
+            }
+            else if (value is ulong)
+            {
+                ulong tmpData = 0;
+                DeserializeData(buffer, ref index, out tmpData);
+                value = (T)Convert.ChangeType(tmpData, typeof(T));
+            }
+            else if (value is long)
+            {
+                long tmpData = 0;
+                DeserializeData(buffer, ref index, out tmpData);
+                value = (T)Convert.ChangeType(tmpData, typeof(T));
+            }
+            else if (value is string)
+            {
+                string tmpData = "";
+                DeserializeData(buffer, ref index, out tmpData);
+                value = (T)Convert.ChangeType(tmpData, typeof(T));
+            }
+            else if (value is bool)
+            {
+                bool tmpData = false;
+                DeserializeData(buffer, ref index, out tmpData);
+                value = (T)Convert.ChangeType(tmpData, typeof(T));
+            }
+            else if (value is ISerializable)
+                SerializeData(value as ISerializable);
 
-        //    for(int i = 0; i < size; i++)
-        //        value |= buffer[i] << (8 * ((size - 1) - i));
-
-        //    return value;
-        //}
+            throw new DeusException("Cannot serialize this type");
+        }
 
         #endregion
     }

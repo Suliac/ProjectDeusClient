@@ -15,26 +15,5 @@ namespace DeusClientConsole
         {
         }
 
-        public static ViewObject Create(ViewObjectCreateArgs args)
-        {
-            PlayerViewObject viewObj = new PlayerViewObject(args.LinkedGameObject.UniqueIdentifier, args.LinkedGameObject.IsLocalPlayer);
-            List<IViewableComponent> components = args.LinkedGameObject.GetViewableGameComponents().ToList();
-
-            if (components.Count != 2)
-                throw new DeusException("Try to create PlayerViewObject without the right number of components");
-
-            foreach (var component in components)
-            {
-                if (component is HealthTimeLineComponent)
-                {
-                    viewObj.AddComponent(new HealthViewComponent(component, component.UniqueIdentifier));
-                }
-            }
-
-            if (components.Count != 2)
-                throw new DeusException("Try to create PlayerViewObject without the right number of components");
-
-            return viewObj;
-        }
     }
 }

@@ -14,7 +14,7 @@ namespace DeusClientCore.Components
         /// We specify with the 'base(false)' that we don't want our ViewComponent to bypass the event queue, 
         /// and the view component will only be updated by handling <see cref="Packets.PacketUpdateViewObject"/> packets
         /// </summary>
-        public HealthTimeLineComponent() : base(false) // This component doesn't have its view updated in at each update loop
+        public HealthTimeLineComponent(uint identifier) : base(false, identifier, EComponentType.HealthComponent) // This component doesn't have its view updated in at each update loop
         {
         }
         

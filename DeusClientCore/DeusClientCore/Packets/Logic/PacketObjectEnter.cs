@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DeusClientCore.Components;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,14 +13,21 @@ namespace DeusClientCore.Packets
         public EObjectType ObjectType { get; set; }
         public bool IsLocalPlayer { get; set; }
 
+        public List<ISerializableComponent> Components { get; set; }
+
         public PacketObjectEnter() : base(EPacketType.ObjectEnter)
         {
+            Components = new List<ISerializableComponent>();
         }
 
         public override ushort EstimateCurrentSerializedSize()
         {
+            ushort sizeOfComponents = sizeof(byte); // the number of item is saved before as an uint8
+            foreach (var component in Components)
+                sizeOfComponents += component.EstimateCurrentSerializedSize();
+
             // +1 for 1 byte for ObjectType(uint8_t)
-            return sizeof(uint) + sizeof(EObjectType) + sizeof(bool);
+            return (ushort)(sizeof(uint) + sizeof(EObjectType) + sizeof(bool) + sizeOfComponents);
         }
 
         public override void OnDeserialize(byte[] buffer, int index)
@@ -35,6 +43,17 @@ namespace DeusClientCore.Packets
             bool isLocalPlayer = false;
             Serializer.DeserializeData(buffer, ref index, out isLocalPlayer);
             IsLocalPlayer = isLocalPlayer;
+
+            // Deserialize components
+            byte componentsNumber = 0;
+            Serializer.DeserializeData(buffer, ref index, out componentsNumber);
+
+            for (int i = 0; i < componentsNumber; i++)
+            {
+                DeusSerializableComponent tmpComponent;
+                Serializer.DeserializeData(buffer, ref index, out tmpComponent);
+                Components.Add(tmpComponent);
+            }
         }
 
         public override byte[] OnSerialize()
@@ -48,6 +67,13 @@ namespace DeusClientCore.Packets
             result.Add((byte)ObjectType);
 
             result.AddRange(Serializer.SerializeData(IsLocalPlayer));
+
+            // serialize component
+            result.AddRange(Serializer.SerializeData((byte)Components.Count));
+            for (int i = 0; i < Components.Count; i++)
+            {
+                result.AddRange(Serializer.SerializeData(Components[i]));
+            }
 
             return result.ToArray();
         }
