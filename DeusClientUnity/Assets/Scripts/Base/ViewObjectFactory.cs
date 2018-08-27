@@ -23,21 +23,16 @@ public class ViewObjectFactory : MonoBehaviour
     public static GameObject CreateViewObject(ViewObjectCreateArgs args)
     {
         GameObject viewObj = null;
+        /////////////////////////////////////////////////////////////
+        // Instantiate the good prefab if needed
         switch (args.LinkedGameObject.ObjectType)
         {
             case EObjectType.Player:
-                viewObj = CreatePlayer(args);
+                viewObj = Instantiate(instance.playerPrefab);
                 break;
             default:
                 break;
         }
-
-        return viewObj;
-    }
-
-    private static GameObject CreatePlayer(ViewObjectCreateArgs args)
-    {
-        GameObject viewObj = Instantiate(instance.playerPrefab);
 
         /////////////////////////////////////////////////////////////
         // always create deusobjectlinker
@@ -48,8 +43,6 @@ public class ViewObjectFactory : MonoBehaviour
         /////////////////////////////////////////////////////////////
         // Manage components
         List<IViewableComponent> components = args.LinkedGameObject.GetViewableGameComponents().ToList();
-        if (components.Count != 2)
-            throw new DeusException("Try to create PlayerViewObject without the right number of components");
 
         uint idComponentPosition = 0;
         foreach (var component in components)
@@ -85,7 +78,8 @@ public class ViewObjectFactory : MonoBehaviour
                 rend.material.color = Color.red;
         }
         /////////////////////////////////////////////////////////////
-        
+
         return viewObj;
     }
+
 }

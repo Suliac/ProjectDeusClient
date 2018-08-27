@@ -13,6 +13,11 @@ namespace DeusClientCore
         public T Data;
         public uint TimeStampMs;
 
+        public DataTimed()
+        {
+
+        }
+
         public DataTimed(T data, uint timeStampMs)
         {
             Data = data;

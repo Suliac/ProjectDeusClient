@@ -28,13 +28,6 @@ namespace DeusClientCore.Components
             return dataBeforeTimestamp.Data;
         }
 
-        /// <summary>
-        /// On <see cref="HealthTimeLineComponent"/> start, we just insert by default 0 life
-        /// </summary>
-        protected override void OnStart()
-        {
-            // On start, init datas with 0 life at time 0
-            InsertData(0, 0);
-        }
+        
     }
 }

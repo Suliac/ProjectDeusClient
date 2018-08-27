@@ -31,8 +31,9 @@ namespace DeusClientCore.Components
         {
             RealtimeViewUpdate = needRealtimeUpdateView;
 
-            InsertData(origin);
+            m_componentType = type;
 
+            InsertData(origin);
             if (destination != null)
                 InsertData(destination);
         }

@@ -14,11 +14,7 @@ namespace DeusClientCore.Components
         {
             ISerializableComponent component = null;
 
-            uint tmpComponentId = 0;
-            Serializer.DeserializeData(buffer, ref index, out tmpComponentId);
-
-            byte tmpType;
-            Serializer.DeserializeData(buffer, ref index, out tmpType);
+            byte tmpType = buffer[index + sizeof(uint)]; // we know that the type is after the id
 
             switch ((EComponentType)tmpType)
             {
@@ -31,6 +27,8 @@ namespace DeusClientCore.Components
                 default:
                     throw new Exception("Impossible to instantiate the serializable component");
             }
+
+            component.Deserialize(buffer, ref index);
 
             return component;
         }
@@ -47,7 +45,7 @@ namespace DeusClientCore.Components
                 case EComponentType.HealthComponent:
                     return new HealthTimeLineComponent(args.ComponentId, (args as DeusSerializableTimelineComponent<int>).Origin, (args as DeusSerializableTimelineComponent<int>).Destination);
                 case EComponentType.PositionComponent:
-                    return new PositionTimeLineComponent(args.ComponentId, (args as DeusSerializableTimelineComponent<DeusVector2>).Origin, (args as DeusSerializableTimelineComponent<DeusVector2>).Destination); ;
+                    return new PositionTimeLineComponent(args.ComponentId, (args as DeusSerializableTimelineComponent<DeusVector2>).Origin, (args as DeusSerializableTimelineComponent<DeusVector2>).Destination);
                 default:
                     return null;
             }

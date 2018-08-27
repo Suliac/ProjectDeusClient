@@ -147,7 +147,7 @@ namespace DeusClientCore.Packets
 
         public static void DeserializeData<T>(byte[] buffer, ref int index, out T value)
         {
-            value = default(T);
+            value = Activator.CreateInstance<T>();
 
             if (value is uint)
             {
@@ -197,10 +197,12 @@ namespace DeusClientCore.Packets
                 DeserializeData(buffer, ref index, out tmpData);
                 value = (T)Convert.ChangeType(tmpData, typeof(T));
             }
-            else if (value is ISerializable)
-                SerializeData(value as ISerializable);
-
-            throw new DeusException("Cannot serialize this type");
+            else if (typeof(ISerializable).IsAssignableFrom(typeof(T)))
+            {
+                DeserializeData(buffer, ref index, (value as ISerializable));
+            }
+            else
+                throw new DeusException("Cannot serialize this type");
         }
 
         #endregion

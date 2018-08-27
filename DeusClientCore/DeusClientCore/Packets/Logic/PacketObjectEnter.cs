@@ -47,8 +47,8 @@ namespace DeusClientCore.Packets
             IsLocalPlayer = isLocalPlayer;
 
             // Deserialize components
-            byte componentsNumber = 0;
-            Serializer.DeserializeData(buffer, ref index, out componentsNumber);
+            byte componentsNumber = buffer[index];
+            index++;
 
             for (int i = 0; i < componentsNumber; i++)
             {

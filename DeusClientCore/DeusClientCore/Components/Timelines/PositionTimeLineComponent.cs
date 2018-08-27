@@ -40,9 +40,5 @@ namespace DeusClientCore.Components
             return result;
         }
 
-        protected override void OnStart()
-        {
-            InsertData(DeusVector2.Zero, 0);
-        }
     }
 }
