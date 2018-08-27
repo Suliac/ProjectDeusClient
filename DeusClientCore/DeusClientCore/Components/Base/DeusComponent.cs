@@ -8,6 +8,7 @@ namespace DeusClientCore.Components
 {
     public enum EComponentType : byte
     {
+        Error = 0,
         HealthComponent = 1,
         PositionComponent = 2,
     }

@@ -1,4 +1,5 @@
 ﻿using DeusClientCore.Components;
+using DeusClientCore.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,12 +33,13 @@ namespace DeusClientCore.Packets
 
         public override void OnDeserialize(byte[] buffer, int index)
         {
+            // object id
             uint objectId;
             Serializer.DeserializeData(buffer, ref index, out objectId);
             GameObjectId = objectId;
 
-            // Deerialize id
-            EPacketType type = (EPacketType)((int)buffer[index]);
+            // object type
+            EObjectType type = (EObjectType)((int)buffer[index]);
             index++;
 
             bool isLocalPlayer = false;
@@ -50,32 +52,32 @@ namespace DeusClientCore.Packets
 
             for (int i = 0; i < componentsNumber; i++)
             {
-                DeusSerializableComponent tmpComponent;
-                Serializer.DeserializeData(buffer, ref index, out tmpComponent);
+                ISerializableComponent tmpComponent = GameComponentFactory.DeserializeComponent(buffer, ref index);
                 Components.Add(tmpComponent);
             }
         }
 
         public override byte[] OnSerialize()
         {
-            List<byte> result = new List<byte>();
+            //List<byte> result = new List<byte>();
 
-            // serialize id
-            result.AddRange(Serializer.SerializeData(GameObjectId));
+            //// serialize id
+            //result.AddRange(Serializer.SerializeData(GameObjectId));
 
-            // serialize object type
-            result.Add((byte)ObjectType);
+            //// serialize object type
+            //result.Add((byte)ObjectType);
 
-            result.AddRange(Serializer.SerializeData(IsLocalPlayer));
+            //result.AddRange(Serializer.SerializeData(IsLocalPlayer));
 
-            // serialize component
-            result.AddRange(Serializer.SerializeData((byte)Components.Count));
-            for (int i = 0; i < Components.Count; i++)
-            {
-                result.AddRange(Serializer.SerializeData(Components[i]));
-            }
+            //// serialize component
+            //result.AddRange(Serializer.SerializeData((byte)Components.Count));
+            //for (int i = 0; i < Components.Count; i++)
+            //{
+            //    result.AddRange(Serializer.SerializeData(Components[i]));
+            //}
 
-            return result.ToArray();
+            //return result.ToArray();
+            throw new DeusException("Don't try to send this message");
         }
     }
 }

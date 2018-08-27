@@ -7,8 +7,11 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Components
 {
-    public class DeusSerializableComponent : ISerializableComponent
+    public class DeusSerializableTimelineComponent<T> : ISerializableComponent
     {
+        public DataTimed<T> Origin { get; set; }
+        public DataTimed<T> Destination { get; set; }
+
         public uint ComponentId { get; set; }
         public EComponentType ComponentType { get; set; }
 
@@ -21,6 +24,14 @@ namespace DeusClientCore.Components
             byte tmpType;
             Serializer.DeserializeData(packetsBuffer, ref index, out tmpType);
             ComponentType = (EComponentType)tmpType;
+
+            DataTimed<T> tmpOrigin = null;
+            Serializer.DeserializeData(packetsBuffer, ref index, out tmpOrigin);
+            Origin = tmpOrigin;
+
+            DataTimed<T> tmpDestination = null;
+            Serializer.DeserializeData(packetsBuffer, ref index, out tmpDestination);
+            Destination = tmpDestination;
         }
 
         public byte[] Serialize()
@@ -30,12 +41,16 @@ namespace DeusClientCore.Components
             result.AddRange(Serializer.SerializeData(ComponentId));
             result.AddRange(Serializer.SerializeData((byte)ComponentType));
 
+            result.AddRange(Serializer.SerializeData(Origin));
+            result.AddRange(Serializer.SerializeData(Destination));
+
             return result.ToArray();
         }
 
         public ushort EstimateCurrentSerializedSize()
         {
-            return (ushort)(sizeof(uint) + sizeof(byte));
+            return (ushort)(sizeof(uint) + sizeof(byte) + Origin.EstimateCurrentSerializedSize() + Destination.EstimateCurrentSerializedSize());
         }
+
     }
 }

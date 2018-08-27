@@ -27,11 +27,16 @@ namespace DeusClientCore.Components
         /// </summary>
         public bool RealtimeViewUpdate { get; protected set; }
 
-        public TimeLineComponent(bool needRealtimeUpdateView, uint identifier, EComponentType type) : base(identifier, type)
+        public TimeLineComponent(bool needRealtimeUpdateView, uint identifier, EComponentType type, DataTimed<T> origin, DataTimed<T> destination = null) : base(identifier, type)
         {
             RealtimeViewUpdate = needRealtimeUpdateView;
+
+            InsertData(origin);
+
+            if (destination != null)
+                InsertData(destination);
         }
-                
+
         public void InsertData(T data, uint timeStampMs)
         {
             InsertData(new DataTimed<T>(data, timeStampMs));
