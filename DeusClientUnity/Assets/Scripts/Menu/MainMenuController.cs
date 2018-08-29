@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MainMenuController : MonoBehaviour
+public class MainMenuController : IMenuController
 {
     public GameObject GamesHolder;
     public GameObject GameLinePrefab;
@@ -84,9 +84,7 @@ public class MainMenuController : MonoBehaviour
                 Destroy(line.Value);
         }
 
-        MenuController.ChangeState(MenuController.EGameState.Lobby);
-        MenuController.Instance.Lobby.SetGameId(packet.GameJoinedId);
-        MenuController.Instance.Lobby.SetAlreadyHerePlayer(packet.PlayerInfos);
+        MenuController.ToLobby(packet.GameJoinedId, packet.PlayerInfos);
     }
 
     #region Click events

@@ -19,7 +19,7 @@ namespace DeusClientConsole
         {
             ConsoleGameView view = new ConsoleGameView();
             Game game = new Game();
-            game.Start("127.0.0.1", 27015);
+            game.Start("127.0.0.1", 27015, $"Player {new Random().Next(100)}");
             view.Start();
             Test t = new Test();
 

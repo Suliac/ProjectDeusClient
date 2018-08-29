@@ -32,6 +32,7 @@ namespace DeusClientCore.Packets
         PlayerNotReady			    = 21,
 		StartGame				    = 22, // Server packet
         NewPlayerJoin			    = 23,
+        GameStarted                 = 24,
 
         // Game Logic
         ObjectEnter                 = 50,

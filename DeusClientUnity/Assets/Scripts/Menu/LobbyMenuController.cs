@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class LobbyMenuController : MonoBehaviour
+public class LobbyMenuController : IMenuController
 {
     public Text Title;
     public GameObject PlayersHolder;
@@ -24,6 +24,7 @@ public class LobbyMenuController : MonoBehaviour
     {
         EventManager.Get().AddListener(EPacketType.NewPlayerJoin, ManagePacket);
         EventManager.Get().AddListener(EPacketType.LeaveGameAnswer, ManagePacket);
+        EventManager.Get().AddListener(EPacketType.GameStarted, ManagePacket);
     }
 
     public void SetGameId(uint id)
@@ -59,6 +60,10 @@ public class LobbyMenuController : MonoBehaviour
         if (e.Packet is PacketLeaveGameAnswer)
         {
             ManagePlayerLeave(e.Packet as PacketLeaveGameAnswer);
+        }
+        if(e.Packet is PacketGameStarted)
+        {
+            MenuController.ChangeState(MenuController.EGameState.InGame);
         }
 
     }

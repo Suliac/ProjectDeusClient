@@ -28,13 +28,10 @@ namespace DeusClientCore
         /// </summary>
         /// <param name="addr">The ip address of the server</param>
         /// <param name="port">The default port of the server</param>
-        public void Start(string addr, int port)
+        public void Start(string addr, int port, string playerName)
         {
-            // Init event manager
-            EventManager.Get().Start();
-
             // Init connections
-            m_deusClient = new DeusClient(new TcpClient(addr, port));
+            m_deusClient = new DeusClient(new TcpClient(addr, port), playerName);
 
             // Init game logic
             m_logic.Start();

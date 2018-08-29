@@ -59,6 +59,9 @@ namespace DeusClientCore.Packets
                 case EPacketType.UpdateMovementAnswer:
                     packet = new PacketMovementUpdateAnswer();
                     break;
+                case EPacketType.GameStarted:
+                    packet = new PacketGameStarted();
+                    break;
                 default:
                     throw new Exception("Impossible to instantiate the packet");
             }

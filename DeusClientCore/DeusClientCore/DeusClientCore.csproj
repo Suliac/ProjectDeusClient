@@ -75,6 +75,7 @@
     <Compile Include="Game\Base\IDeusObject.cs" />
     <Compile Include="Game\Base\GamePart.cs" />
     <Compile Include="Game\View\ViewObject.cs" />
+    <Compile Include="Packets\Game\PacketGameStarted.cs" />
     <Compile Include="Packets\Game\PacketGetGameAnswer.cs" />
     <Compile Include="Packets\Game\PacketPlayerReady.cs" />
     <Compile Include="Packets\Game\PacketNewPlayerJoin.cs" />

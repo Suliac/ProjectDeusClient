@@ -18,7 +18,10 @@ namespace DeusClientCore.Events
         public static EventManager Get()
         {
             if (m_instance == null)
+            {
                 m_instance = new EventManager();
+                m_instance.Start();
+            }
 
             return m_instance;
         }
@@ -55,22 +58,25 @@ namespace DeusClientCore.Events
 
         private EventManager()
         {
-            Stopped = false;
-            m_onMessageReceived = new Dictionary<EPacketType, EventHandler<SocketPacketEventArgs>>();
-            m_packetQueue[0] = new BlockingCollection<Tuple<int, Packet>>();
-            m_packetQueue[1] = new BlockingCollection<Tuple<int, Packet>>();
+            Stopped = true;
+            //m_onMessageReceived = new Dictionary<EPacketType, EventHandler<SocketPacketEventArgs>>();
+            //m_packetQueue[0] = new BlockingCollection<Tuple<int, Packet>>();
+            //m_packetQueue[1] = new BlockingCollection<Tuple<int, Packet>>();
         }
 
         public void Start()
         {
-            Stopped = false;
+            if (Stopped)
+            {
+                Stopped = false;
 
-            if (m_onMessageReceived != null)
-                m_onMessageReceived.Clear();
+                if (m_onMessageReceived != null)
+                    m_onMessageReceived.Clear();
 
-            m_onMessageReceived = new Dictionary<EPacketType, EventHandler<SocketPacketEventArgs>>();
-            m_packetQueue[0] = new BlockingCollection<Tuple<int, Packet>>();
-            m_packetQueue[1] = new BlockingCollection<Tuple<int, Packet>>();
+                m_onMessageReceived = new Dictionary<EPacketType, EventHandler<SocketPacketEventArgs>>();
+                m_packetQueue[0] = new BlockingCollection<Tuple<int, Packet>>();
+                m_packetQueue[1] = new BlockingCollection<Tuple<int, Packet>>(); 
+            }
         }
 
         public void Stop()

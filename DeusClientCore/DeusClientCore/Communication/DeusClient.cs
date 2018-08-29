@@ -15,8 +15,12 @@ namespace DeusClientCore
         private DeusTcpConnection m_tcpConnection;
         private DeusUdpConnection m_udpConnection;
 
-        public DeusClient(TcpClient tcpClient)
+        private string m_playerName;
+
+        public DeusClient(TcpClient tcpClient, string playerName)
         {
+            m_playerName = playerName;
+
             EventManager.Get().AddListener(EPacketType.Connected, InitUdp); // subscribe to event 'Connected'
 
             EventManager.Get().AddListener(EPacketType.GetGameRequest, SendTcpMessage);
@@ -64,7 +68,7 @@ namespace DeusClientCore
                 Console.WriteLine("UDP addr : " + addr.ToString() + " | port : " + (e.Packet as PacketClientConnected).PortUdp);
                 m_udpConnection = new DeusUdpConnection(new IPEndPoint(addr, (int)(e.Packet as PacketClientConnected).PortUdp));
 
-                PacketConnectedUdpAnswer feedback = new PacketConnectedUdpAnswer($"Player {new Random().Next(100)}");
+                PacketConnectedUdpAnswer feedback = new PacketConnectedUdpAnswer(m_playerName);
                 m_udpConnection.SendPacket(feedback);
             }
             else
