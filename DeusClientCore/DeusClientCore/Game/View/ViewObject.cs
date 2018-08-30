@@ -31,12 +31,16 @@ namespace DeusClientCore
         
         protected bool m_isLocalPlayer;
         public bool IsLocalPlayer { get => m_isLocalPlayer; protected set => m_isLocalPlayer = value; }
+        
+        protected uint m_playerLinkedId;
+        public uint PlayerLinkedId { get => m_playerLinkedId; protected set => m_playerLinkedId = value; }
 
-        public ViewObject(uint linkedGameObjectId, EObjectType objectType, bool isLocalPlayer, ICollection<DeusViewComponent> viewComponents = null) : base (viewComponents)
+        public ViewObject(uint linkedGameObjectId, EObjectType objectType, bool isLocalPlayer, uint playerLinkedId, ICollection<DeusViewComponent> viewComponents = null) : base (viewComponents)
         {
             UniqueIdentifier = linkedGameObjectId; 
             ObjectType = objectType;
             IsLocalPlayer = isLocalPlayer;
+            PlayerLinkedId = playerLinkedId;
         }
 
         /// <summary>

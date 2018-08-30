@@ -4,6 +4,7 @@ using DeusClientCore.Exceptions;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 public class ViewObjectFactory : MonoBehaviour
@@ -29,6 +30,15 @@ public class ViewObjectFactory : MonoBehaviour
         {
             case EObjectType.Player:
                 viewObj = Instantiate(instance.playerPrefab);
+                viewObj.transform.parent = GameManager.GameObjectContainer.transform;
+
+                if (args.LinkedGameObject.PlayerLinkedId > 0)
+                {
+                    string playerName = GameManager.PlayerInfos?.FirstOrDefault(pi => pi.Key == args.LinkedGameObject.PlayerLinkedId).Value ?? "";
+                    TextMeshPro text = viewObj.transform.GetChild(0).GetChild(1).GetComponent<TextMeshPro>();
+                    if (text)
+                        text.text = playerName; 
+                }
                 break;
             default:
                 break;

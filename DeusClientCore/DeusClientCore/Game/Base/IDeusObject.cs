@@ -12,5 +12,7 @@ namespace DeusClientCore
         EObjectType ObjectType { get; }
 
         bool IsLocalPlayer { get; }
+
+        uint PlayerLinkedId { get; }
     }
 }

@@ -23,11 +23,15 @@ namespace DeusClientCore
         protected bool m_isLocalPlayer;
         public bool IsLocalPlayer { get => m_isLocalPlayer; protected set => m_isLocalPlayer = value; }
 
+        protected uint m_playerLinkedId;
+        public uint PlayerLinkedId { get => m_playerLinkedId; protected set => m_playerLinkedId = value; }
+
         public DeusGameObject(GameObjectCreateArgs args, ICollection<DeusComponent> components = null) : base(components)
         {
             UniqueIdentifier = args.GameObjectId;
             ObjectType = args.Type;
             IsLocalPlayer = args.IsLocalPlayer;
+            m_playerLinkedId = args.PlayerLinkedId;
         }
 
         public IEnumerable<IViewableComponent> GetViewableGameComponents()

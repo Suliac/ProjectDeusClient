@@ -196,7 +196,7 @@ namespace DeusClientCore
         #region Logic
         private void ManageObjectEnter(PacketObjectEnter packet)
         {
-            DeusGameObject gameObject = m_objectFactory.CreateGameObject(new GameObjectCreateArgs(packet.GameObjectId, packet.ObjectType, packet.IsLocalPlayer, packet.Components));
+            DeusGameObject gameObject = m_objectFactory.CreateGameObject(new GameObjectCreateArgs(packet.GameObjectId, packet.ObjectType, packet.IsLocalPlayer, packet.Components, packet.PlayerLinked));
             Console.WriteLine($"Create Game Object | Id obj : {packet.GameObjectId} | Is local player : {packet.IsLocalPlayer}");
             AddObject(gameObject);
         }

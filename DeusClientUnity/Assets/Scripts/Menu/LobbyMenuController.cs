@@ -14,10 +14,6 @@ public class LobbyMenuController : IMenuController
 
     public uint IdGameObj = 1;
     public uint IdCompo = 1;
-    public int Amount = 50;
-
-    public uint GameId { get; private set; }
-    public Dictionary<uint, string> PlayerInfos { get; private set; }
 
     private Dictionary<uint, Text> m_lines;
     private void Start()
@@ -29,14 +25,14 @@ public class LobbyMenuController : IMenuController
 
     public void SetGameId(uint id)
     {
-        GameId = id;
+        GameManager.GameId = id;
         Title.text = $"Game {id}";
     }
 
     public void SetAlreadyHerePlayer(Dictionary<uint, string> playerInfos)
     {
         m_lines = new Dictionary<uint, Text>();
-        PlayerInfos = playerInfos;
+        GameManager.PlayerInfos = playerInfos;
         foreach (var p in playerInfos)
         {
             GameObject tmpInfo = Instantiate(LinePlayerPrefab);
@@ -70,7 +66,7 @@ public class LobbyMenuController : IMenuController
 
     private void ManageNewPlayerJoin(PacketNewPlayerJoin packetNewPlayerJoin)
     {
-        PlayerInfos.Add(packetNewPlayerJoin.PlayerId, packetNewPlayerJoin.PlayerNickname);
+        GameManager.PlayerInfos.Add(packetNewPlayerJoin.PlayerId, packetNewPlayerJoin.PlayerNickname);
 
         GameObject tmpInfo = Instantiate(LinePlayerPrefab);
         Text textCompo = tmpInfo.GetComponent<Text>();
@@ -83,7 +79,7 @@ public class LobbyMenuController : IMenuController
 
     private void ManagePlayerLeave(PacketLeaveGameAnswer packetLeaveGame)
     {
-        PlayerInfos.Remove(packetLeaveGame.PlayerId);
+        GameManager.PlayerInfos.Remove(packetLeaveGame.PlayerId);
 
         if (m_lines.ContainsKey(packetLeaveGame.PlayerId))
         {
@@ -99,12 +95,12 @@ public class LobbyMenuController : IMenuController
         packet.UIClicked = PacketHandleClickUI.UIButton.LeaveGameButton;
         EventManager.Get().EnqueuePacket(0, packet);
 
-        foreach (var p in PlayerInfos)
+        foreach (var p in GameManager.PlayerInfos)
             if (m_lines.ContainsKey(p.Key))
                 Destroy(m_lines[p.Key].gameObject);
 
         m_lines.Clear();
-        PlayerInfos.Clear();
+        GameManager.PlayerInfos.Clear();
         MenuController.ChangeState(MenuController.EGameState.Menu);
     }
 

@@ -14,7 +14,7 @@ namespace DeusClientConsole
 
         public ViewObject CreateViewObject(ViewObjectCreateArgs args)
         {
-            ViewObject viewObject = new ViewObject(args.LinkedGameObject.UniqueIdentifier, args.LinkedGameObject.ObjectType, args.LinkedGameObject.IsLocalPlayer);
+            ViewObject viewObject = new ViewObject(args.LinkedGameObject.UniqueIdentifier, args.LinkedGameObject.ObjectType, args.LinkedGameObject.IsLocalPlayer, args.LinkedGameObject.PlayerLinkedId);
 
             List<IViewableComponent> components = args.LinkedGameObject.GetViewableGameComponents().ToList();
 

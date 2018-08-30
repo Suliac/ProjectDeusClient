@@ -13,7 +13,7 @@ public class HealthComponentView : DeusComponentLinker
 
     public override void OnInit()
     {
-        componentToUpdate = GetComponentInChildren<TextMeshPro>();
+        componentToUpdate = transform.GetChild(0).GetChild(0).GetComponent<TextMeshPro>();
         UpdateViewValue((m_deusLinkedComponent as HealthTimeLineComponent).GetViewValue());
     }
 

@@ -11,7 +11,7 @@ namespace DeusClientConsole
 {
     public class PlayerViewObject : ViewObject
     {
-        public PlayerViewObject(uint linkedGameObjectId, bool isLocalPlayer) : base(linkedGameObjectId, EObjectType.Player, isLocalPlayer, null)
+        public PlayerViewObject(uint linkedGameObjectId, bool isLocalPlayer, uint playerId) : base(linkedGameObjectId, EObjectType.Player, isLocalPlayer, playerId, null)
         {
         }
 

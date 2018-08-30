@@ -10,15 +10,32 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+    private void Awake()
+    {
+        if (Instance == null)
+            Instance = this;
+        else if (Instance != this)
+            Destroy(gameObject);
+    }
+
     public UnityGameView DeusGameView;
-
-    private Game m_game;
-
-    private bool m_stopped = true;
 
     public Text Adress;
     public Text Port;
     public Text Pseudo;
+    
+    public GameObject m_GameObjectContainer;
+    public static GameObject GameObjectContainer { get { return Instance.m_GameObjectContainer; } }
+
+    private Game m_game;
+    private bool m_stopped = true;
+
+    private uint m_gameId = 0;
+    private Dictionary<uint, string> m_playerInfos = new Dictionary<uint, string>();
+
+    public static uint GameId { get { return Instance.m_gameId; } set { Instance.m_gameId = value; } }
+    public static Dictionary<uint, string> PlayerInfos { get { return Instance.m_playerInfos; } set { Instance.m_playerInfos = value; } }
 
     void Start()
     {

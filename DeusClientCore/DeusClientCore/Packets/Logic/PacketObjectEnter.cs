@@ -13,6 +13,7 @@ namespace DeusClientCore.Packets
         public uint GameObjectId { get; set; }
         public EObjectType ObjectType { get; set; }
         public bool IsLocalPlayer { get; set; }
+        public uint PlayerLinked { get; set; }
 
         public List<ISerializableComponent> Components { get; set; }
 
@@ -28,7 +29,7 @@ namespace DeusClientCore.Packets
                 sizeOfComponents += component.EstimateCurrentSerializedSize();
 
             // +1 for 1 byte for ObjectType(uint8_t)
-            return (ushort)(sizeof(uint) + sizeof(EObjectType) + sizeof(bool) + sizeOfComponents);
+            return (ushort)(sizeof(uint) + sizeof(EObjectType) + sizeof(uint) + sizeof(bool) + sizeOfComponents);
         }
 
         public override void OnDeserialize(byte[] buffer, int index)
@@ -45,6 +46,11 @@ namespace DeusClientCore.Packets
             bool isLocalPlayer = false;
             Serializer.DeserializeData(buffer, ref index, out isLocalPlayer);
             IsLocalPlayer = isLocalPlayer;
+
+            // player linked id
+            uint playerId = 0;
+            Serializer.DeserializeData(buffer, ref index, out playerId);
+            PlayerLinked = playerId;
 
             // Deserialize components
             byte componentsNumber = buffer[index];

@@ -22,14 +22,17 @@ namespace DeusClientCore
 
         public bool IsLocalPlayer { get; private set; }
 
+        public uint PlayerLinkedId { get; private set; }
+
         public List<ISerializableComponent> ComponentsInfos { get; private set; }
 
-        public GameObjectCreateArgs(uint gameObjectId, EObjectType type, bool isLocalPlayer, List<ISerializableComponent> componentsInfos)
+        public GameObjectCreateArgs(uint gameObjectId, EObjectType type, bool isLocalPlayer, List<ISerializableComponent> componentsInfos, uint playerLinkedId)
         {
             GameObjectId = gameObjectId;
             Type = type;
             IsLocalPlayer = isLocalPlayer;
             ComponentsInfos = componentsInfos;
+            PlayerLinkedId = playerLinkedId;
         }
     }
 
