@@ -26,6 +26,7 @@ public class GameManager : MonoBehaviour
     public Text Pseudo;
 
     public Camera MainCamera;
+    public Camera PlayerCamera;
 
     public GameObject m_GameObjectContainer;
     public static GameObject GameObjectContainer { get { return Instance.m_GameObjectContainer; } }
@@ -56,10 +57,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SetCamera(bool enable)
+    public static void EnableCamera(bool enable)
     {
-        MainCamera.gameObject.SetActive(enable);
+        Instance.MainCamera.gameObject.SetActive(enable);
     }
+
+    public static void SetPlayerCam(Camera cam)
+    {
+        Instance.PlayerCamera = cam;
+    }
+
+
 
     private void OnConnected(object sender, SocketPacketEventArgs e)
     {

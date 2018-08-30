@@ -7,26 +7,30 @@ using UnityEngine;
 public class IngameMenuController : IMenuController
 {
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+    // Use this for initialization
+    void Start()
+    {
+
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+
+    }
 
     public void ClickLeave()
     {
-        GameManager.Instance.SetCamera(true);
+        GameManager.EnableCamera(true);
+        GameManager.SetPlayerCam(null);
+
         PacketHandleClickUI packet = new PacketHandleClickUI();
 
-        foreach(Transform child in GameManager.GameObjectContainer.transform)
+        foreach (Transform child in GameManager.GameObjectContainer.transform)
         {
             Destroy(child.gameObject);
         }
-        
+
         packet.UIClicked = PacketHandleClickUI.UIButton.LeaveGameButton;
         EventManager.Get().EnqueuePacket(0, packet);
         MenuController.ChangeState(MenuController.EGameState.Menu);

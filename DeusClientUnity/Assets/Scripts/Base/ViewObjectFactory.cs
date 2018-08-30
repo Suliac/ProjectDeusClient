@@ -91,7 +91,8 @@ public class ViewObjectFactory : MonoBehaviour
             if(playerCam)
             {
                 playerCam.gameObject.SetActive(true);
-                GameManager.Instance.SetCamera(false);
+                GameManager.EnableCamera(false);
+                GameManager.SetPlayerCam(playerCam);
             }
 
         }

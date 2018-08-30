@@ -15,18 +15,22 @@ public class PlayerInputHandler : MonoBehaviour {
 		
 	}
 	
-	// Update is called once per frame
-	void Update () {
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
-            PacketHandleMovementInput packet = new PacketHandleMovementInput(ObjectId, PositionComponentId, new DeusVector2(0, 10));
-            EventManager.Get().EnqueuePacket(0, packet);
-        }
 
-        if(Input.GetKeyUp(KeyCode.Z))
+    public float distance = 50f;
+    //replace Update method in your class with this one
+    void Update()
+    {
+        //if mouse button (left hand side) pressed instantiate a raycast
+        if (Input.GetMouseButtonDown(0))
         {
-            PacketHandleMovementInput packet = new PacketHandleMovementInput(ObjectId, PositionComponentId, new DeusVector2(0, 0));
-            EventManager.Get().EnqueuePacket(0, packet);
+            //create a ray cast and set it to the mouses cursor position in game
+            Ray ray = GameManager.Instance.PlayerCamera.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, distance))
+            {
+                PacketHandleMovementInput packet = new PacketHandleMovementInput(ObjectId, PositionComponentId, new DeusVector2(hit.point.x, hit.point.z));
+                EventManager.Get().EnqueuePacket(0, packet);
+            }
         }
     }
 }
