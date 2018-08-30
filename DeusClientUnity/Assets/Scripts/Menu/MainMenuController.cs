@@ -50,14 +50,13 @@ public class MainMenuController : IMenuController
 
     private void ManageGetGamesAnswer(PacketGetGameAnswer packet)
     {
-        if(m_lines != null && m_lines.Count > 0)
+        if (m_lines != null && m_lines.Count > 0)
         {
             foreach (var line in m_lines)
                 Destroy(line.Value);
         }
 
-        if (m_lines == null)
-            m_lines = new Dictionary<uint, GameObject>();
+        m_lines = new Dictionary<uint, GameObject>();
 
         foreach (var gameId in packet.GamesIds)
         {
@@ -66,7 +65,7 @@ public class MainMenuController : IMenuController
             newGame.transform.SetParent(GamesHolder.transform);
 
             Text gameBtnText = newGame.GetComponentInChildren<Text>();
-            if(gameBtnText)
+            if (gameBtnText)
                 gameBtnText.text = $"Game {gameId}";
 
             Button gameBtn = newGame.GetComponent<Button>();
@@ -109,7 +108,7 @@ public class MainMenuController : IMenuController
         packet.GameIdToJoin = gameId;
 
         EventManager.Get().EnqueuePacket(0, packet);
-    } 
+    }
     #endregion
 
 }

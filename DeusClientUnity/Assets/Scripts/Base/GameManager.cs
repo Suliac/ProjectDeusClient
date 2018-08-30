@@ -24,7 +24,9 @@ public class GameManager : MonoBehaviour
     public Text Adress;
     public Text Port;
     public Text Pseudo;
-    
+
+    public Camera MainCamera;
+
     public GameObject m_GameObjectContainer;
     public static GameObject GameObjectContainer { get { return Instance.m_GameObjectContainer; } }
 
@@ -52,6 +54,11 @@ public class GameManager : MonoBehaviour
             EventManager.Get().AddListener(EPacketType.Connected, OnConnected);
             m_stopped = false;
         }
+    }
+
+    public void SetCamera(bool enable)
+    {
+        MainCamera.gameObject.SetActive(enable);
     }
 
     private void OnConnected(object sender, SocketPacketEventArgs e)

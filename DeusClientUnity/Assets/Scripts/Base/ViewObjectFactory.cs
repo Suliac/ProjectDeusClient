@@ -35,7 +35,7 @@ public class ViewObjectFactory : MonoBehaviour
                 if (args.LinkedGameObject.PlayerLinkedId > 0)
                 {
                     string playerName = GameManager.PlayerInfos?.FirstOrDefault(pi => pi.Key == args.LinkedGameObject.PlayerLinkedId).Value ?? "";
-                    TextMeshPro text = viewObj.transform.GetChild(0).GetChild(1).GetComponent<TextMeshPro>();
+                    TextMeshPro text = viewObj.transform.GetChild(0).GetChild(0).GetChild(1).GetComponent<TextMeshPro>();
                     if (text)
                         text.text = playerName; 
                 }
@@ -86,6 +86,14 @@ public class ViewObjectFactory : MonoBehaviour
             Renderer rend = viewObj.GetComponentInChildren<Renderer>();
             if (rend)
                 rend.material.color = Color.red;
+
+            Camera playerCam = viewObj.transform.GetChild(1).GetComponentInChildren<Camera>(true);
+            if(playerCam)
+            {
+                playerCam.gameObject.SetActive(true);
+                GameManager.Instance.SetCamera(false);
+            }
+
         }
         /////////////////////////////////////////////////////////////
 
