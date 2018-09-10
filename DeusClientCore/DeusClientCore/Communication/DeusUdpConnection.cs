@@ -27,12 +27,7 @@ namespace DeusClientCore
         /// The number of ACK we send back when we receive a packet
         /// </summary>
         private const int NUMBER_ACK_SEND_BACK = 3;
-
-        /// <summary>
-        /// Try each N milliseconds to resend packet if the pcket isn't acked
-        /// </summary>
-        private const double PACKET_DELAY_CHECK_ACK_MS = 100;
-
+        
         /// <summary>
         /// Array of acked packet's ids
         /// </summary>
@@ -191,9 +186,10 @@ namespace DeusClientCore
                 if (m_packetsToSend.TryTake(out tmpPacket))
                 {
                     double currentMs = (new TimeSpan(DateTime.UtcNow.Ticks)).TotalMilliseconds;
+                    //double tmpPacketTime = tmpPacket.Item1 + Parameters.EMULATE_LAG;
 
                     // check if we reached the time to resend a packet otherwise re-enqueue it
-                    if ((tmpPacket.Item1 > 0 && tmpPacket.Item1 + PACKET_DELAY_CHECK_ACK_MS <= currentMs)
+                    if ((tmpPacket.Item1 > 0 && tmpPacket.Item1 <= currentMs)
                         || tmpPacket.Item1 == 0)
                     {
                         // check if the packet is already acked and just need to be popped
@@ -226,7 +222,7 @@ namespace DeusClientCore
         /// <param name="packet">The packet to requeue</param>
         public void RequeuePacket(Packet packet)
         {
-            double timeStamp = (new TimeSpan(DateTime.UtcNow.Ticks)).TotalMilliseconds;
+            double timeStamp = (new TimeSpan(DateTime.UtcNow.Ticks)).TotalMilliseconds + Parameters.PACKET_DELAY_CHECK_ACK_MS;
             m_packetsToRequeue.Add(new Tuple<double, Packet>(timeStamp, packet));
         }
 

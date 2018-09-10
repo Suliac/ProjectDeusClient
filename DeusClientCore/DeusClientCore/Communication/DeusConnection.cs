@@ -225,7 +225,8 @@ namespace DeusClientCore
         /// <param name="packet">The packet to send</param>
         public void SendPacket(Packet packet)
         {
-            m_packetsToSend.Add(new Tuple<double, Packet>(0, packet));
+            double timeStamp = (new TimeSpan(DateTime.UtcNow.Ticks)).TotalMilliseconds;
+            m_packetsToSend.Add(new Tuple<double, Packet>(timeStamp, packet));
         }
     }
 }

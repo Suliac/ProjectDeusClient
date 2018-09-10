@@ -57,7 +57,7 @@ namespace DeusClientCore
             if (isTcp)
                 m_tcpConnection.SendPacket(packet);
             else
-                throw new NotImplementedException();
+                m_udpConnection.SendPacket(packet);
         }
 
         private void InitUdp(object sender, SocketPacketEventArgs e)
@@ -78,13 +78,14 @@ namespace DeusClientCore
         private void SendTcpMessage(object sender, SocketPacketEventArgs e)
         {
             //Console.WriteLine($"Send TCP {e.Packet.Type}");
-            m_tcpConnection.SendPacket(e.Packet);
+            SendPacket(e.Packet, true);
         }
 
         private void SendUdpMessage(object sender, SocketPacketEventArgs e)
         {
             //Console.WriteLine($"Send UDP {e.Packet.Type}");
-            m_udpConnection.SendPacket(e.Packet);
+            SendPacket(e.Packet, false);
+
         }
     }
 }
