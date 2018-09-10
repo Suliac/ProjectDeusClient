@@ -12,8 +12,8 @@ public class LobbyMenuController : IMenuController
     public GameObject PlayersHolder;
     public GameObject LinePlayerPrefab;
 
-    public uint IdGameObj = 1;
-    public uint IdCompo = 1;
+    /*public uint IdGameObj = 1;
+    public uint IdCompo = 1;*/
 
     private Dictionary<uint, Text> m_lines;
     private void Start()

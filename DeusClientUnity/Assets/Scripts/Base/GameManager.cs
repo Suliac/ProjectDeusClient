@@ -26,6 +26,8 @@ public class GameManager : MonoBehaviour
     public Text Pseudo;
 
     public Camera MainCamera;
+
+    [HideInInspector]
     public Camera PlayerCamera;
 
     public GameObject m_GameObjectContainer;
