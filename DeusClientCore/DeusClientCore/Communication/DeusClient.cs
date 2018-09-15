@@ -47,7 +47,7 @@ namespace DeusClientCore
             EventManager.Get().RemoveListener(EPacketType.PlayerReady, SendTcpMessage);
 
             EventManager.Get().RemoveListener(EPacketType.UpdateMovementRequest, SendUdpMessage);
-            
+
             m_tcpConnection.Dispose();
             m_udpConnection.Dispose();
         }
@@ -70,6 +70,11 @@ namespace DeusClientCore
 
                 PacketConnectedUdpAnswer feedback = new PacketConnectedUdpAnswer(m_playerName);
                 m_udpConnection.SendPacket(feedback);
+
+                PacketPingRequest ping = new PacketPingRequest();
+                for (int i = 0; i < Parameters.PING_NUMBER_PACKET; i++)
+                    m_udpConnection.SendPacket(ping);
+
             }
             else
                 throw new Exception("Cannot parse IPAdress, abort the UDP connection...");
