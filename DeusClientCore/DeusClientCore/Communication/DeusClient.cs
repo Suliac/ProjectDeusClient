@@ -24,6 +24,7 @@ namespace DeusClientCore
 
             EventManager.Get().AddListener(EPacketType.Connected, InitUdp); // subscribe to event 'Connected'
             EventManager.Get().AddListener(EPacketType.PingAnswer, ReceivePingAnswer);
+            EventManager.Get().AddListener(EPacketType.ClockSyncAnswer, ReceiveSyncClockAnswer);
 
             EventManager.Get().AddListener(EPacketType.GetGameRequest, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.CreateGameRequest, SendTcpMessage);
@@ -87,32 +88,41 @@ namespace DeusClientCore
 
         private void ReceivePingAnswer(object sender, SocketPacketEventArgs e)
         {
-            if (TimeHelper.PingPacketSent == TimeHelper.PingPacketRecv && 
+            if (TimeHelper.PingPacketSent == TimeHelper.PingPacketRecv &&
                 TimeHelper.PingPacketRecv >= Parameters.PING_NUMBER_PACKET)
+            {
+                if (TimeHelper.PingPacketRecv > 2)
                 {
-                    if (TimeHelper.PingPacketRecv > 2)
-                    {
-                        // remove max and min
-                        TimeHelper.PingPacketNfo = TimeHelper.PingPacketNfo.OrderBy(ts => ts.Value).ToDictionary(ts => ts.Key, ts => ts.Value);
-                        uint lastPacketID = TimeHelper.PingPacketNfo.Keys.Last();
-                        uint firstPacketID = TimeHelper.PingPacketNfo.Keys.First();
+                    // remove max and min
+                    TimeHelper.PingPacketNfo = TimeHelper.PingPacketNfo.OrderBy(ts => ts.Value).ToDictionary(ts => ts.Key, ts => ts.Value);
+                    uint lastPacketID = TimeHelper.PingPacketNfo.Keys.Last();
+                    uint firstPacketID = TimeHelper.PingPacketNfo.Keys.First();
 
-                        TimeHelper.PingPacketNfo.Remove(lastPacketID);
-                        TimeHelper.PingPacketNfo.Remove(firstPacketID);
-                    }
+                    TimeHelper.PingPacketNfo.Remove(lastPacketID);
+                    TimeHelper.PingPacketNfo.Remove(firstPacketID);
+                }
 
-                    // get average
-                    ulong timestampSum = (ulong)TimeHelper.PingPacketNfo.Sum(ts => ts.Value);
-                    uint avgTS = (uint)timestampSum / (uint)TimeHelper.PingPacketNfo.Count;
+                // get average
+                ulong timestampSum = (ulong)TimeHelper.PingPacketNfo.Sum(ts => ts.Value);
+                uint avgTS = (uint)timestampSum / (uint)TimeHelper.PingPacketNfo.Count;
 
-                    // divide by two because currently we get the time for the packet to go to the server AND comeback
-                    uint ping = avgTS / 2;
-                    TimeHelper.CurrentPing = ping;
-                    Console.WriteLine($"Current Ping : {ping}");
+                // divide by two because currently we get the time for the packet to go to the server AND comeback
+                uint ping = avgTS / 2;
+                TimeHelper.CurrentPing = ping;
+                Console.WriteLine($"Current Ping : {ping}");
 
-                    TimeHelper.PingPacketNfo.Clear();
-                
+                TimeHelper.PingPacketNfo.Clear();
+
+                // Now sync clock with the server's one
+                PacketSyncClockRequest packetSync = new PacketSyncClockRequest();
+                m_udpConnection.SendPacket(packetSync);
+
             }
+        }
+
+        private void ReceiveSyncClockAnswer(object sender, SocketPacketEventArgs e)
+        {
+            TimeHelper
         }
 
         private void SendTcpMessage(object sender, SocketPacketEventArgs e)

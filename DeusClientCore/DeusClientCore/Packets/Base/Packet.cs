@@ -18,6 +18,8 @@ namespace DeusClientCore.Packets
         ConnectedUdpAnswer          = 5,
         PingRequest                 = 6,
         PingAnswer                  = 7,
+        ClockSyncRequest            = 8,
+        ClockSyncAnswer             = 9,
 
         // Lobby : Games management
         CreateGameRequest           = 10,

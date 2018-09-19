@@ -12,12 +12,25 @@ namespace DeusClientCore
         public static uint PingPacketSent = 0;
         public static uint PingPacketRecv = 0;
 
+        /// <summary>
+        /// First item : client time, second one : distant/server time
+        /// </summary>
+        private static Tuple<uint, uint> SyncNfos = new Tuple<uint, uint>(1, 1);
+
         public static uint CurrentPing { get; set; }
 
         public static uint GetUnixMsTimeStamp()
         {
-            return (uint)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+            uint currentLocalTime = (uint)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalMilliseconds;
+
+            //  Local time Saved    ->    Corresponding distant time
+            //  Current local time  ->                ?
+            return currentLocalTime * SyncNfos.Item2 / SyncNfos.Item1;
         }
 
+        public static void Sync(uint localTime, uint distantTime)
+        {
+            SyncNfos = new Tuple<uint, uint>(localTime, distantTime + CurrentPing);
+        }
     }
 }
