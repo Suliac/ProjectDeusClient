@@ -63,6 +63,8 @@ namespace DeusClientCore.Packets
         public UInt16 SerializedSize { get; private set; }
         public EPacketType Type { get; private set; }
 
+        public UInt32 RecvTimeStamp { get; set; }
+
         public Packet(EPacketType type)
         {
             Id = m_nextId;

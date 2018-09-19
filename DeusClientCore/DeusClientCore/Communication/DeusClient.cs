@@ -17,11 +17,13 @@ namespace DeusClientCore
 
         private string m_playerName;
 
+
         public DeusClient(TcpClient tcpClient, string playerName)
         {
             m_playerName = playerName;
 
             EventManager.Get().AddListener(EPacketType.Connected, InitUdp); // subscribe to event 'Connected'
+            EventManager.Get().AddListener(EPacketType.PingAnswer, ReceivePingAnswer);
 
             EventManager.Get().AddListener(EPacketType.GetGameRequest, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.CreateGameRequest, SendTcpMessage);
@@ -71,13 +73,46 @@ namespace DeusClientCore
                 PacketConnectedUdpAnswer feedback = new PacketConnectedUdpAnswer(m_playerName);
                 m_udpConnection.SendPacket(feedback);
 
-                PacketPingRequest ping = new PacketPingRequest();
                 for (int i = 0; i < Parameters.PING_NUMBER_PACKET; i++)
+                {
+                    PacketPingRequest ping = new PacketPingRequest();
+                    TimeHelper.PingPacketNfo.Add(ping.Id, 0);
                     m_udpConnection.SendPacket(ping);
+                }
 
             }
             else
                 throw new Exception("Cannot parse IPAdress, abort the UDP connection...");
+        }
+
+        private void ReceivePingAnswer(object sender, SocketPacketEventArgs e)
+        {
+            if (TimeHelper.PingPacketSent == TimeHelper.PingPacketRecv && 
+                TimeHelper.PingPacketRecv >= Parameters.PING_NUMBER_PACKET)
+                {
+                    if (TimeHelper.PingPacketRecv > 2)
+                    {
+                        // remove max and min
+                        TimeHelper.PingPacketNfo = TimeHelper.PingPacketNfo.OrderBy(ts => ts.Value).ToDictionary(ts => ts.Key, ts => ts.Value);
+                        uint lastPacketID = TimeHelper.PingPacketNfo.Keys.Last();
+                        uint firstPacketID = TimeHelper.PingPacketNfo.Keys.First();
+
+                        TimeHelper.PingPacketNfo.Remove(lastPacketID);
+                        TimeHelper.PingPacketNfo.Remove(firstPacketID);
+                    }
+
+                    // get average
+                    ulong timestampSum = (ulong)TimeHelper.PingPacketNfo.Sum(ts => ts.Value);
+                    uint avgTS = (uint)timestampSum / (uint)TimeHelper.PingPacketNfo.Count;
+
+                    // divide by two because currently we get the time for the packet to go to the server AND comeback
+                    uint ping = avgTS / 2;
+                    TimeHelper.CurrentPing = ping;
+                    Console.WriteLine($"Current Ping : {ping}");
+
+                    TimeHelper.PingPacketNfo.Clear();
+                
+            }
         }
 
         private void SendTcpMessage(object sender, SocketPacketEventArgs e)

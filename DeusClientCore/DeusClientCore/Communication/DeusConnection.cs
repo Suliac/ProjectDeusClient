@@ -64,73 +64,87 @@ namespace DeusClientCore
         {
             //try
             //{
-                // Init our TCP or UDP connection
-                OnInit();
+            // Init our TCP or UDP connection
+            OnInit();
 
-                // Loop until cancellation is requested
-                while (!m_cancellationToken.IsCancellationRequested)
+            // Loop until cancellation is requested
+            while (!m_cancellationToken.IsCancellationRequested)
+            {
+                Thread.Sleep(5); // Give some sleep time to that poor thread, damn !
+                Tuple<double, Packet> packetToSend;
+
+                ///////////////////////////////////////
+                //                SEND               //
+                ///////////////////////////////////////
+                // Try to take and send packet until we don't have one left
+                while (OnTryTakePacket(out packetToSend))
                 {
-                    Thread.Sleep(5); // Give some sleep time to that poor thread, damn !
-                    Tuple<double, Packet> packetToSend;
-
-                    ///////////////////////////////////////
-                    //                SEND               //
-                    ///////////////////////////////////////
-                    // Try to take and send packet until we don't have one left
-                    while (OnTryTakePacket(out packetToSend))
+                    // Write with our connection method
+                    OnSending(packetToSend.Item2);
+                    if (packetToSend.Item2.Type == EPacketType.PingRequest && TimeHelper.PingPacketNfo.ContainsKey(packetToSend.Item2.Id))
                     {
-                        // Write with our connection method
-                        OnSending(packetToSend.Item2);
+                        TimeHelper.PingPacketNfo[packetToSend.Item2.Id] = TimeHelper.GetUnixMsTimeStamp();
+                        TimeHelper.PingPacketSent++;
                     }
+                }
 
-                    OnAfterSend();
+                OnAfterSend();
 
-                    ///////////////////////////////////////
-                    //             RECEIVE               //
-                    ///////////////////////////////////////
-                    if (AreThereAnyPendingDatas())
+                ///////////////////////////////////////
+                //             RECEIVE               //
+                ///////////////////////////////////////
+                if (AreThereAnyPendingDatas())
+                {
+                    int readedByteCount = 0;
+                    uint recvTimeStamp = TimeHelper.GetUnixMsTimeStamp();
+                    do
                     {
-                        int readedByteCount = 0;
+                        byte[] tempBuffer = new byte[DEFAULT_BUFFER_SIZE];
 
-                        do
+                        // We read the 'DEFAULT_BUFFER_SIZE' first bytes into our tmp buffer
+
+                        readedByteCount = OnReceiving(ref tempBuffer);
+
+                        // then we add our buffer to our packetBuffer
+                        packetsBuffer = packetsBuffer.Concat(tempBuffer.Take(readedByteCount)).ToArray();
+
+                        // we continue to read while there is data left and we already fill our temp buffer
+                        // because if we already fill completely our tmp buffer, there is data left to receive !
+                    } while (AreThereAnyPendingDatas() && readedByteCount == DEFAULT_BUFFER_SIZE);
+
+                    while (packetsBuffer.Length > 0)
+                    {
+                        // Deserialize our packet
+                        Packet packet = Packet.Deserialize(packetsBuffer);
+                        if (packet == null)
+                            break;
+
+                        packet.RecvTimeStamp = recvTimeStamp;
+
+                        // we update info for ping
+                        if (packet.Type == EPacketType.PingAnswer
+                            && TimeHelper.PingPacketNfo.ContainsKey((packet as PacketPingAnswer).AnswerToPacketId))
                         {
-                            byte[] tempBuffer = new byte[DEFAULT_BUFFER_SIZE];
-
-                            // We read the 'DEFAULT_BUFFER_SIZE' first bytes into our tmp buffer
-                            //readedByteCount = networkStream.Read(tempBuffer, 0, tempBuffer.Length);
-                            readedByteCount = OnReceiving(ref tempBuffer);
-
-                            // then we add our buffer to our packetBuffer
-                            packetsBuffer = packetsBuffer.Concat(tempBuffer.Take(readedByteCount)).ToArray();
-
-                            // we continue to read while there is data left and we already fill our temp buffer
-                            // because if we already fill completely our tmp buffer, there is data left to receive !
-                        } while (AreThereAnyPendingDatas() && readedByteCount == DEFAULT_BUFFER_SIZE);
-
-                        while (packetsBuffer.Length > 0)
-                        {
-                            // Deserialize our packet
-                            Packet packet = Packet.Deserialize(packetsBuffer);
-                            if (packet == null)
-                                break;
-
-                            // Then we delete all the byte of our deserialized message
-                            packetsBuffer = packetsBuffer.Skip((int)packet.SerializedSize).ToArray();
-
-                            // Enqueue our packet received
-                            OnPacketDeserialized(packet);
+                            TimeHelper.PingPacketNfo[(packet as PacketPingAnswer).AnswerToPacketId] = packet.RecvTimeStamp - TimeHelper.PingPacketNfo[(packet as PacketPingAnswer).AnswerToPacketId];
+                            TimeHelper.PingPacketRecv++;
                         }
-                    } // endif DataAvailable
-                } // end while cancellation requested ?
-           //}
-           //catch (Exception ex)
-           //{
-           //    Console.WriteLine("Error : " + ex.Message);
-           //}
-           //finally
-           //{
-           //    OnEnd();
-           //}
+                        // Then we delete all the byte of our deserialized message
+                        packetsBuffer = packetsBuffer.Skip((int)packet.SerializedSize).ToArray();
+
+                        // Enqueue our packet received
+                        OnPacketDeserialized(packet);
+                    }
+                } // endif DataAvailable
+            } // end while cancellation requested ?
+            //}
+            //catch (Exception ex)
+            //{
+            //    Console.WriteLine("Error : " + ex.Message);
+            //}
+            //finally
+            //{
+            //    OnEnd();
+            //}
         }
 
         /// <summary>

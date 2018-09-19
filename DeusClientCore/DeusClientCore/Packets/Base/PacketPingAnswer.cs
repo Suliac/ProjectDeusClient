@@ -8,11 +8,10 @@ namespace DeusClientCore.Packets
 {
     public class PacketPingAnswer : Packet
     {
-        public uint SenderLocalTime { get; private set; }
+        public uint AnswerToPacketId { get; set; }
 
         public PacketPingAnswer() : base(EPacketType.PingAnswer)
         {
-            SenderLocalTime = TimeHelper.GetUnixMsTimeStamp();
         }
 
         public override ushort EstimateCurrentSerializedSize()
@@ -24,12 +23,12 @@ namespace DeusClientCore.Packets
         {
             uint tmpTime = 0;
             Serializer.DeserializeData(buffer, ref index, out tmpTime);
-            SenderLocalTime = tmpTime;
+            AnswerToPacketId = tmpTime;
         }
 
         public override byte[] OnSerialize()
         {
-            return Serializer.SerializeData(SenderLocalTime);
+            return Serializer.SerializeData(AnswerToPacketId);
         }
     }
 }

@@ -62,6 +62,12 @@ namespace DeusClientCore.Packets
                 case EPacketType.GameStarted:
                     packet = new PacketGameStarted();
                     break;
+                case EPacketType.PingAnswer:
+                    packet = new PacketPingAnswer();
+                    break;
+                case EPacketType.PingRequest:
+                    packet = new PacketPingRequest();
+                    break;
                 default:
                     throw new Exception("Impossible to instantiate the packet");
             }
