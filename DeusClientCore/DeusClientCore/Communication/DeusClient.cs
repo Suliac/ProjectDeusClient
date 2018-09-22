@@ -74,12 +74,10 @@ namespace DeusClientCore
                 PacketConnectedUdpAnswer feedback = new PacketConnectedUdpAnswer(m_playerName);
                 m_udpConnection.SendPacket(feedback);
 
-                for (int i = 0; i < Parameters.PING_NUMBER_PACKET; i++)
-                {
-                    PacketPingRequest ping = new PacketPingRequest();
-                    TimeHelper.PingPacketNfo.Add(ping.Id, 0);
-                    m_udpConnection.SendPacket(ping);
-                }
+
+                PacketPingRequest ping = new PacketPingRequest();
+                TimeHelper.PingPacketNfo.Add(ping.Id, 0);
+                m_udpConnection.SendPacket(ping);
 
             }
             else
@@ -118,11 +116,18 @@ namespace DeusClientCore
                 m_udpConnection.SendPacket(packetSync);
 
             }
+            else
+            {
+                // If there isn't enough ping info to estimate current ping, send another ping request
+                PacketPingRequest ping = new PacketPingRequest();
+                TimeHelper.PingPacketNfo.Add(ping.Id, 0);
+                m_udpConnection.SendPacket(ping);
+            }
         }
 
         private void ReceiveSyncClockAnswer(object sender, SocketPacketEventArgs e)
         {
-            TimeHelper
+            TimeHelper.Sync(e.Packet.RecvTimeStamp, (e.Packet as PacketSyncClockAnswer).DistantClockValue);
         }
 
         private void SendTcpMessage(object sender, SocketPacketEventArgs e)

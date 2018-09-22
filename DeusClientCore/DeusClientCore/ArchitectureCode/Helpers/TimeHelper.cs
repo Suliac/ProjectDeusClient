@@ -25,12 +25,14 @@ namespace DeusClientCore
 
             //  Local time Saved    ->    Corresponding distant time
             //  Current local time  ->                ?
-            return currentLocalTime * SyncNfos.Item2 / SyncNfos.Item1;
+            long distantTime = (long)currentLocalTime * SyncNfos.Item2 / SyncNfos.Item1;
+            return (uint)distantTime;
         }
 
         public static void Sync(uint localTime, uint distantTime)
         {
             SyncNfos = new Tuple<uint, uint>(localTime, distantTime + CurrentPing);
+            Console.WriteLine($"Current localtime : {SyncNfos.Item1} | Distant : {SyncNfos.Item2} | Diff : {(long)SyncNfos.Item1 - (long)SyncNfos.Item2}");
         }
     }
 }

@@ -155,7 +155,7 @@ namespace DeusClientCore
         /// <param name="sendBuffer">The datas to send</param>
         protected override void OnSending(Packet packetToSend)
         {
-            //Console.WriteLine($"Send packet with id : {packetToSend.Id.ToString()}");
+            //Console.WriteLine($"Send packet with type : {packetToSend.Type} ({packetToSend.Id})");
 
             // Serialize our packet into a byte[]
             byte[] sendBuffer = Packet.Serialize(packetToSend);

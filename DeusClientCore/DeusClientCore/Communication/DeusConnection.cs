@@ -84,6 +84,7 @@ namespace DeusClientCore
                     if (packetToSend.Item2.Type == EPacketType.PingRequest && TimeHelper.PingPacketNfo.ContainsKey(packetToSend.Item2.Id))
                     {
                         TimeHelper.PingPacketNfo[packetToSend.Item2.Id] = TimeHelper.GetUnixMsTimeStamp();
+                        //Console.WriteLine($"Send : {TimeHelper.PingPacketNfo[packetToSend.Item2.Id]}"); 
                         TimeHelper.PingPacketSent++;
                     }
                 }
@@ -125,6 +126,8 @@ namespace DeusClientCore
                         if (packet.Type == EPacketType.PingAnswer
                             && TimeHelper.PingPacketNfo.ContainsKey((packet as PacketPingAnswer).AnswerToPacketId))
                         {
+
+                            //Console.WriteLine($"Recv : {recvTimeStamp}");
                             TimeHelper.PingPacketNfo[(packet as PacketPingAnswer).AnswerToPacketId] = packet.RecvTimeStamp - TimeHelper.PingPacketNfo[(packet as PacketPingAnswer).AnswerToPacketId];
                             TimeHelper.PingPacketRecv++;
                         }

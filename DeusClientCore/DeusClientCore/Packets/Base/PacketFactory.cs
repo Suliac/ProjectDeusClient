@@ -68,6 +68,9 @@ namespace DeusClientCore.Packets
                 case EPacketType.PingRequest:
                     packet = new PacketPingRequest();
                     break;
+                case EPacketType.ClockSyncAnswer:
+                    packet = new PacketSyncClockAnswer();
+                    break;
                 default:
                     throw new Exception("Impossible to instantiate the packet");
             }
