@@ -167,8 +167,8 @@ namespace DeusClientCore
             // in case of the packet isn't received by the client
             // and need to be resend. We don't requeue ACK
             if (packetToSend.Type != EPacketType.Ack &&
-                packetToSend.Type != EPacketType.PingAnswer &&
-                packetToSend.Type != EPacketType.PingRequest)
+                packetToSend.Type != EPacketType.PingRequest && 
+                packetToSend.Type != EPacketType.ClockSyncRequest)
                 RequeuePacket(packetToSend);
         }
 
