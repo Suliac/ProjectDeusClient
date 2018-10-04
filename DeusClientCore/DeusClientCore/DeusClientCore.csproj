@@ -111,6 +111,8 @@
     <Compile Include="Packets\View\PacketView.cs" />
     <Compile Include="Packets\View\PacketCreateViewObject.cs" />
     <Compile Include="Events\Serialization\Serializer.cs" />
+    <Compile Include="PacketUseSkillAnswer.cs" />
+    <Compile Include="PacketUseSkillRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ArchitectureCode\Helpers\TimeHelper.cs" />
   </ItemGroup>

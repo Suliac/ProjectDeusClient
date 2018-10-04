@@ -46,6 +46,8 @@ namespace DeusClientCore.Packets
         UpdateMovementRequest       = 54,
         UpdateMovementAnswer        = 55,
         CellFirePacket              = 56, // Server packet
+        UseSkillRequest             = 57,
+        UseSkillAnswer              = 58,
 
         // Game view
         HandleClickUI               = 100,
