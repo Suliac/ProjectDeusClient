@@ -1,6 +1,7 @@
 ﻿using DeusClientCore;
 using DeusClientCore.Events;
 using DeusClientCore.Packets;
+using DeusClientCore.Resources;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,6 +18,9 @@ namespace DeusClientConsole
 
         static void Main(string[] args)
         {
+            ResourcesHandler.Get();
+            return;
+
             ConsoleGameView view = new ConsoleGameView();
             Game game = new Game();
             game.Start("127.0.0.1", 27015, $"Player {new Random().Next(100)}");

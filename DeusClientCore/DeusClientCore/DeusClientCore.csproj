@@ -111,11 +111,17 @@
     <Compile Include="Packets\View\PacketView.cs" />
     <Compile Include="Packets\View\PacketCreateViewObject.cs" />
     <Compile Include="Events\Serialization\Serializer.cs" />
-    <Compile Include="PacketUseSkillAnswer.cs" />
-    <Compile Include="PacketUseSkillRequest.cs" />
+    <Compile Include="Packets\Logic\PacketUseSkillAnswer.cs" />
+    <Compile Include="Packets\Logic\PacketUseSkillRequest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ArchitectureCode\Helpers\TimeHelper.cs" />
+    <Compile Include="Resources\ResourcesHandler.cs" />
+    <Compile Include="Resources\Skills\Skill.cs" />
+    <Compile Include="Resources\Skills\SkillEffect.cs" />
+    <Compile Include="Resources\Skills\SkillFactory.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\skills.xml" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
