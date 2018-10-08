@@ -104,7 +104,7 @@
     <Compile Include="Packets\General\PacketAck.cs" />
     <Compile Include="Packets\General\PacketTextMessage.cs" />
     <Compile Include="Packets\Base\PacketFactory.cs" />
-    <Compile Include="Packets\View\PacketHandleMovementInput - Copier.cs" />
+    <Compile Include="Packets\View\PacketHandleMovementInput.cs" />
     <Compile Include="Packets\View\PacketHandleSkillInput.cs" />
     <Compile Include="Packets\View\PacketTestDeleteViewObject.cs" />
     <Compile Include="Packets\View\PacketTestViewObject.cs" />
