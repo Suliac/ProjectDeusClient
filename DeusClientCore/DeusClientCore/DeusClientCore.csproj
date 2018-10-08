@@ -58,6 +58,7 @@
     <Compile Include="Components\Base\IViewableComponent.cs" />
     <Compile Include="ArchitectureCode\DataTypes\DeusVector2.cs" />
     <Compile Include="Components\Timelines\PositionTimeLineComponent.cs" />
+    <Compile Include="Components\Timelines\SkillTimeLineComponent.cs" />
     <Compile Include="Events\EventManager.cs" />
     <Compile Include="Events\SocketEventArgs.cs" />
     <Compile Include="Events\SocketPacketEventArgs.cs" />
@@ -103,7 +104,8 @@
     <Compile Include="Packets\General\PacketAck.cs" />
     <Compile Include="Packets\General\PacketTextMessage.cs" />
     <Compile Include="Packets\Base\PacketFactory.cs" />
-    <Compile Include="Packets\View\PacketHandleMovementInput.cs" />
+    <Compile Include="Packets\View\PacketHandleMovementInput - Copier.cs" />
+    <Compile Include="Packets\View\PacketHandleSkillInput.cs" />
     <Compile Include="Packets\View\PacketTestDeleteViewObject.cs" />
     <Compile Include="Packets\View\PacketTestViewObject.cs" />
     <Compile Include="Packets\View\PacketUpdateViewObject.cs" />

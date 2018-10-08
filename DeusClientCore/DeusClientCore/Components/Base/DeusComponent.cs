@@ -11,6 +11,7 @@ namespace DeusClientCore.Components
         Error = 0,
         HealthComponent = 1,
         PositionComponent = 2,
+        SkillComponent = 3,
     }
 
     public abstract class DeusComponent : IExecutable, IIdentifiable
@@ -18,14 +19,18 @@ namespace DeusClientCore.Components
         protected uint m_uniqueIdentifier;
         public uint UniqueIdentifier { get => m_uniqueIdentifier; protected set => m_uniqueIdentifier = value; }
 
+        protected uint m_objectIdentifier;
+        public uint ObjectIdentifier { get => m_objectIdentifier; protected set => m_objectIdentifier = value; }
+
         protected EComponentType m_componentType;
         public EComponentType ComponentType { get => m_componentType; protected set => m_componentType = value; }
 
         public bool Stopped { get; protected set; }
         
-        public DeusComponent(uint identifier, EComponentType type)
+        public DeusComponent(uint identifier, uint objectIdentifier, EComponentType type)
         {
             m_uniqueIdentifier = identifier;
+            m_objectIdentifier = objectIdentifier;
         }
 
         public void Update(decimal deltatimeMs)

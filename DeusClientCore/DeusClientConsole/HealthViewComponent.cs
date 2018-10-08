@@ -12,7 +12,7 @@ namespace DeusClientConsole
     {
         private int m_currentHealth;
 
-        public HealthViewComponent(IViewableComponent linkedComponent, uint identifier) : base(linkedComponent, identifier, EComponentType.HealthComponent)
+        public HealthViewComponent(IViewableComponent linkedComponent, uint identifier, uint objectIdentifier) : base(linkedComponent, identifier, objectIdentifier, EComponentType.HealthComponent)
         {
         }
 
@@ -33,8 +33,8 @@ namespace DeusClientConsole
         /// <param name="deltatimeMs">The time elapsed since the last loop</param>
         protected override void OnRealtimeViewUpdate(decimal deltatimeMs)
         {
-            if (m_linkedComponent is HealthTimeLineComponent)
-                UpdateViewValue(m_linkedComponent.GetViewValue());
+            //if (m_linkedComponent is HealthTimeLineComponent)
+            //    UpdateViewValue(m_linkedComponent.GetViewValue());
         }
     }
 }

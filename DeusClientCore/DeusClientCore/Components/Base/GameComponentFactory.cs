@@ -38,14 +38,17 @@ namespace DeusClientCore.Components
         //    return null;
         //}
 
-        public static DeusComponent CreateComponent(ISerializableComponent args)
+        public static DeusComponent CreateComponent(ISerializableComponent args, uint gameObjectId)
         {
             switch (args.ComponentType)
             {
                 case EComponentType.HealthComponent:
-                    return new HealthTimeLineComponent(args.ComponentId, (args as DeusSerializableTimelineComponent<int>).Origin, (args as DeusSerializableTimelineComponent<int>).Destination);
+                    return new HealthTimeLineComponent(args.ComponentId, gameObjectId, (args as DeusSerializableTimelineComponent<int>).Origin, (args as DeusSerializableTimelineComponent<int>).Destination);
                 case EComponentType.PositionComponent:
-                    return new PositionTimeLineComponent(args.ComponentId, (args as DeusSerializableTimelineComponent<DeusVector2>).Origin, (args as DeusSerializableTimelineComponent<DeusVector2>).Destination);
+                    return new PositionTimeLineComponent(args.ComponentId, gameObjectId, (args as DeusSerializableTimelineComponent<DeusVector2>).Origin, (args as DeusSerializableTimelineComponent<DeusVector2>).Destination);
+                //case EComponentType.SkillComponent:
+                    //return new SkillTimeLineComponent(args.ComponentId, gameObjectId, (args as DeusSerializableTimelineComponent<int>).Origin, (args as DeusSerializableTimelineComponent<int>).Destination);
+
                 default:
                     return null;
             }

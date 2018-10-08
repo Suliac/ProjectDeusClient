@@ -5,32 +5,45 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInputHandler : MonoBehaviour {
+public class PlayerInputHandler : MonoBehaviour
+{
 
     public uint PositionComponentId;
     public uint ObjectId;
+    public float Distance = 50f;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
+    // Use this for initialization
+    void Start()
+    {
 
-    public float distance = 50f;
-    //replace Update method in your class with this one
+    }
+
     void Update()
     {
-        //if mouse button (left hand side) pressed instantiate a raycast
         if (Input.GetMouseButtonDown(0))
         {
-            //create a ray cast and set it to the mouses cursor position in game
-            Ray ray = GameManager.Instance.PlayerCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, distance))
+            if (GetMouseGamePosition(out hit))
             {
                 PacketHandleMovementInput packet = new PacketHandleMovementInput(ObjectId, PositionComponentId, new DeusVector2(hit.point.x, hit.point.z));
                 EventManager.Get().EnqueuePacket(0, packet);
             }
         }
+
+        if(Input.GetKeyDown(KeyCode.A))
+        {
+            RaycastHit hit;
+            if (GetMouseGamePosition(out hit))
+            {
+                PacketHandleSkillInput packet = new PacketHandleSkillInput(ObjectId, PositionComponentId, 1, new DeusVector2(hit.point.x, hit.point.z));
+                EventManager.Get().EnqueuePacket(0, packet);
+            }
+        }
+    }
+
+    bool GetMouseGamePosition(out RaycastHit hit)
+    {
+        Ray ray = GameManager.Instance.PlayerCamera.ScreenPointToRay(Input.mousePosition);
+        return Physics.Raycast(ray, out hit, Distance);
     }
 }

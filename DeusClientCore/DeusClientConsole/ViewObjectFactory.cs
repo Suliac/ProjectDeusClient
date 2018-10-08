@@ -24,7 +24,7 @@ namespace DeusClientConsole
                 switch (component.ComponentType)
                 {
                     case EComponentType.HealthComponent:
-                        tmpComponent = new HealthViewComponent(component, component.UniqueIdentifier);
+                        tmpComponent = new HealthViewComponent(component, component.UniqueIdentifier, args.LinkedGameObject.UniqueIdentifier);
                         break;
                     case EComponentType.PositionComponent:
                         break;

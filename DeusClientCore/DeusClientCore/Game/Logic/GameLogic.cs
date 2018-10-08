@@ -30,6 +30,7 @@ namespace DeusClientCore
             // Game view
             EventManager.Get().AddListener(Packets.EPacketType.HandleClickUI, ManagePacket);
             EventManager.Get().AddListener(Packets.EPacketType.HandleMovementInputs, ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.HandleSkillInputs, ManagePacket);
 
             // Game logic
             EventManager.Get().AddListener(Packets.EPacketType.ObjectEnter, ManagePacket);
@@ -48,6 +49,8 @@ namespace DeusClientCore
 
             // Game view
             EventManager.Get().RemoveListener(Packets.EPacketType.HandleClickUI, ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.HandleMovementInputs, ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.HandleSkillInputs, ManagePacket);
 
             // Game logic
             EventManager.Get().RemoveListener(Packets.EPacketType.ObjectEnter, ManagePacket);
@@ -85,6 +88,10 @@ namespace DeusClientCore
             else if (e.Packet is PacketHandleMovementInput)
             {
                 ManageHandleMovementRequest((PacketHandleMovementInput)e.Packet);
+            }
+            else if (e.Packet is PacketHandleSkillInput)
+            {
+                ManageHandleSkillRequest((PacketHandleSkillInput)e.Packet);
             }
 
             /////////////////////// LOGIC
@@ -191,6 +198,16 @@ namespace DeusClientCore
             //EventManager.Get().EnqueuePacket(0, movUpdate);
             ///////////////////////////////////
         }
+
+        private void ManageHandleSkillRequest(PacketHandleSkillInput packet)
+        {
+            PacketUseSkillRequest skillPacket = new PacketUseSkillRequest(packet.SkillId, packet.SkillPosition);
+
+            // TODO : Check mana etc (it will be also check server side - never trust the client)
+
+            EventManager.Get().EnqueuePacket(0, skillPacket);
+        }
+
         #endregion
 
         #region Logic
@@ -219,12 +236,12 @@ namespace DeusClientCore
             {
                 (component as HealthTimeLineComponent).InsertData(packet.NewHealthAmount, packet.NewHealthTimestamp);
 
-                // Notify the view, that component value has just changed : use this only if your component isn't getting directly informations
-                PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();
-                feedBackPacket.ObjectId = packet.ObjectId;
-                feedBackPacket.ComponentId = packet.ComponentId;
-                feedBackPacket.NewValue = packet.NewHealthAmount;
-                EventManager.Get().EnqueuePacket(0, feedBackPacket);
+                //// Notify the view, that component value has just changed : use this only if your component isn't getting in realtime informations
+                //PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();
+                //feedBackPacket.ObjectId = packet.ObjectId;
+                //feedBackPacket.ComponentId = packet.ComponentId;
+                //feedBackPacket.NewValue = packet.NewHealthAmount;
+                //EventManager.Get().EnqueuePacket(0, feedBackPacket);
             }
         }
 
@@ -233,6 +250,11 @@ namespace DeusClientCore
             //Console.WriteLine($"Manage update movement | Origin ({packet.PositionOrigin.X},{packet.PositionOrigin.Y}) : {packet.OriginTimestampMs} | Destination ({packet.Destination.X},{packet.Destination.Y}) : {packet.DestinationTimestampMs}");
             //Console.WriteLine($"Current Ms : {TimeHelper.GetUnixMsTimeStamp()}. Time to execute : {packet.OriginTimestampMs - TimeHelper.GetUnixMsTimeStamp()}");
             UpdateTimelineComponent<PositionTimeLineComponent, DeusVector2>(packet.ObjectId, packet.ComponentId, packet.PositionOrigin, packet.OriginTimestampMs, packet.Destination, packet.DestinationTimestampMs);
+        }
+
+        private void ManagePacketSkillAnswer(PacketUseSkillAnswer packet)
+        {
+
         }
         #endregion
         #endregion

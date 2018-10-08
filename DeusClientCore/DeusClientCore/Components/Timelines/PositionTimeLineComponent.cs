@@ -9,7 +9,7 @@ namespace DeusClientCore.Components
 {
     public class PositionTimeLineComponent : TimeLineComponent<DeusVector2>
     {
-        public PositionTimeLineComponent(uint identifier, DataTimed<DeusVector2> origin, DataTimed<DeusVector2> destination) : base(true, identifier, EComponentType.PositionComponent, origin, destination)
+        public PositionTimeLineComponent(uint identifier, uint objectIdentifier, DataTimed<DeusVector2> origin, DataTimed<DeusVector2> destination) : base(true, identifier, objectIdentifier, EComponentType.PositionComponent, origin, destination)
         {
         }
 

@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace DeusClientCore.Resources
 {
+    public enum SkillState
+    {
+        NotLaunched = 0,
+        Casting = 1,
+        Launched = 2,
+        Finished = 3
+    }
+
     public class Skill
     {
         public uint Id { get; set; }
@@ -16,6 +24,8 @@ namespace DeusClientCore.Resources
         public ushort MaxScope { get; set; }
         public ushort Level { get; set; }
         public ushort ManaCost { get; set; }
+
+        public uint LaunchTime { get; set; }
 
         public override string ToString()
         {

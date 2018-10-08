@@ -55,6 +55,7 @@ namespace DeusClientCore.Packets
         UpdateViewObject            = 102,
         DeleteViewObject            = 103,
         HandleMovementInputs        = 104,
+        HandleSkillInputs           = 105,
     };
 
     public abstract class Packet

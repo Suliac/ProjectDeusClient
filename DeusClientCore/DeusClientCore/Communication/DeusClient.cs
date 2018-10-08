@@ -33,23 +33,27 @@ namespace DeusClientCore
             EventManager.Get().AddListener(EPacketType.Text, SendTcpMessage);
             EventManager.Get().AddListener(EPacketType.PlayerReady, SendTcpMessage);
 
-            EventManager.Get().AddListener(EPacketType.UpdateMovementRequest, SendUdpMessage);
+            EventManager.Get().AddListener(EPacketType.UpdateMovementRequest, SendTcpMessage);
+            EventManager.Get().AddListener(EPacketType.UseSkillRequest, SendTcpMessage);
 
             m_tcpConnection = new DeusTcpConnection(tcpClient); // launch the SendAndReceive() Task
         }
 
         public void Dispose()
         {
-            EventManager.Get().RemoveListener(EPacketType.Connected, InitUdp);
+            EventManager.Get().RemoveListener(EPacketType.Connected, InitUdp); // subscribe to event 'Connected'
+            EventManager.Get().RemoveListener(EPacketType.PingAnswer, ReceivePingAnswer);
+            EventManager.Get().RemoveListener(EPacketType.ClockSyncAnswer, ReceiveSyncClockAnswer);
 
-            EventManager.Get().RemoveListener(EPacketType.GetGameRequest, SendUdpMessage);
+            EventManager.Get().RemoveListener(EPacketType.GetGameRequest, SendTcpMessage);
             EventManager.Get().RemoveListener(EPacketType.CreateGameRequest, SendTcpMessage);
             EventManager.Get().RemoveListener(EPacketType.JoinGameRequest, SendTcpMessage);
             EventManager.Get().RemoveListener(EPacketType.LeaveGameRequest, SendTcpMessage);
             EventManager.Get().RemoveListener(EPacketType.Text, SendTcpMessage);
             EventManager.Get().RemoveListener(EPacketType.PlayerReady, SendTcpMessage);
 
-            EventManager.Get().RemoveListener(EPacketType.UpdateMovementRequest, SendUdpMessage);
+            EventManager.Get().RemoveListener(EPacketType.UpdateMovementRequest, SendTcpMessage);
+            EventManager.Get().RemoveListener(EPacketType.UseSkillRequest, SendTcpMessage);
 
             m_tcpConnection.Dispose();
             m_udpConnection.Dispose();

@@ -12,7 +12,7 @@ namespace DeusClientCore.Components
 
         protected bool m_realtimeUpdateView = false;
 
-        public DeusViewComponent(IViewableComponent linkedComponent, uint identifier, EComponentType type) : base(identifier, type)
+        public DeusViewComponent(IViewableComponent linkedComponent, uint identifier, uint objectIdentifier, EComponentType type) : base(identifier, objectIdentifier, type)
         {
             m_linkedComponent = linkedComponent;
             m_realtimeUpdateView = m_linkedComponent.RealtimeViewUpdate;

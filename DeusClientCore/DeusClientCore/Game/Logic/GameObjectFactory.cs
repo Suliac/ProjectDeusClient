@@ -44,7 +44,7 @@ namespace DeusClientCore
             // Create all the components
             List<DeusComponent> components = new List<DeusComponent>();
             foreach (var component in args.ComponentsInfos)
-                components.Add(GameComponentFactory.CreateComponent(component));
+                components.Add(GameComponentFactory.CreateComponent(component, args.GameObjectId));
 
             // Create the gameobject
             DeusGameObject gameObject = new DeusGameObject(args, components);

@@ -11,6 +11,7 @@ namespace DeusClientCore
     {
         public uint ObjectId { get; set; }
         public uint SkillId { get; set; }
+                public DeusVector2 SkillLaunchPosition { get; set; }
 
         public PacketUseSkillAnswer() : base(EPacketType.UseSkillAnswer)
         {
@@ -30,6 +31,10 @@ namespace DeusClientCore
             uint skillId = 0;
             Serializer.DeserializeData(buffer, ref index, out skillId);
             SkillId = skillId;
+
+            DeusVector2 pos = DeusVector2.Zero;
+            Serializer.DeserializeData(buffer, ref index, out pos);
+            SkillLaunchPosition = pos;
         }
 
         public override byte[] OnAnswerSerialize()
@@ -38,6 +43,7 @@ namespace DeusClientCore
 
             result.AddRange(Serializer.SerializeData(ObjectId));
             result.AddRange(Serializer.SerializeData(SkillId));
+            result.AddRange(Serializer.SerializeData<ISerializable>(SkillLaunchPosition));
 
             return result.ToArray();
         }
