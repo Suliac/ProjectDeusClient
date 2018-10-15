@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DeusClientCore.Events;
+using DeusClientCore.Packets;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -68,6 +70,16 @@ namespace DeusClientCore.Components
                 return Extrapolate(beforeTimeStamp, currentTimeStamp);
             else // no data found or only after the timestamp -> return null; 
                 return null;
+        }
+
+        protected void SendViewPacket(object currentValue)
+        {
+            // Notify the view, that component value has just changed : use this only if your component isn't getting in realtime informations
+            PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();
+            feedBackPacket.ObjectId = ObjectIdentifier;
+            feedBackPacket.ComponentId = UniqueIdentifier;
+            feedBackPacket.NewValue = currentValue;
+            EventManager.Get().EnqueuePacket(0, feedBackPacket);
         }
 
         protected DataTimed<T> GetValueAtTime(uint timeStampMs, bool wantDataBeforeTimestamp)

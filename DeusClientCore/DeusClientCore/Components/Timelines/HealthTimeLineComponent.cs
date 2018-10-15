@@ -40,12 +40,8 @@ namespace DeusClientCore.Components
             if(m_lastValue != currentValue)
             {
                 Console.WriteLine($"Health just changed from {m_lastValue} to {currentValue}");
-                // Notify the view, that component value has just changed : use this only if your component isn't getting in realtime informations
-                PacketUpdateViewObject feedBackPacket = new PacketUpdateViewObject();
-                feedBackPacket.ObjectId = ObjectIdentifier;
-                feedBackPacket.ComponentId = UniqueIdentifier;
-                feedBackPacket.NewValue = currentValue;
-                EventManager.Get().EnqueuePacket(0, feedBackPacket);
+
+                SendViewPacket(currentValue);
                 
                 m_lastValue = currentValue;
             }
