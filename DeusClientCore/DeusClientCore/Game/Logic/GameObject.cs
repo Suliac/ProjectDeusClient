@@ -43,5 +43,10 @@ namespace DeusClientCore
         {
             return m_holdedObjects.FirstOrDefault(compo => compo.UniqueIdentifier == id);
         }
+
+        public DeusComponent GetComponent(EComponentType type)
+        {
+            return m_holdedObjects.FirstOrDefault(compo => compo.ComponentType == type);
+        }
     }
 }

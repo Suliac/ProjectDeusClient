@@ -1,6 +1,7 @@
 ﻿using DeusClientCore.Components;
 using DeusClientCore.Events;
 using DeusClientCore.Packets;
+using DeusClientCore.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -203,7 +204,7 @@ namespace DeusClientCore
         {
             PacketUseSkillRequest skillPacket = new PacketUseSkillRequest(packet.SkillId, packet.SkillPosition);
 
-            // TODO : Check mana etc (it will be also check server side - never trust the client)
+            // TODO : Check mana etc (it will be also checked server side - never trust the client)
 
             EventManager.Get().EnqueuePacket(0, skillPacket);
         }
@@ -254,7 +255,7 @@ namespace DeusClientCore
 
         private void ManagePacketSkillAnswer(PacketUseSkillAnswer packet)
         {
-
+            UpdateTimelineComponent<SkillTimeLineComponent, SkillInfos>(packet.ObjectId, EComponentType.SkillComponent, new SkillInfos(packet), packet.SkillLaunchTimestampMs, null, 0);
         }
         #endregion
         #endregion
@@ -263,14 +264,36 @@ namespace DeusClientCore
         {
             return m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == objectId)?.GetComponent(componentId) ?? null;
         }
+        
+        private DeusComponent FindComponent(uint objectId, EComponentType componentType)
+        {
+            return m_holdedObjects.FirstOrDefault(go => go.UniqueIdentifier == objectId)?.GetComponent(componentType) ?? null;
+        }
 
         private void UpdateTimelineComponent<T, U>(uint objectId, uint componentId, U originValue, uint originTimestampMs, U destinationValue, uint destinationTimestampMs) where T : TimeLineComponent<U>
         {
             DeusComponent component = FindComponent(objectId, componentId);
             if (component != null && component is T)
             {
-                (component as T).InsertData(originValue, originTimestampMs);
-                (component as T).InsertData(destinationValue, destinationTimestampMs);
+                if (originValue != null)
+                    (component as T).InsertData(originValue, originTimestampMs);
+
+                if (destinationValue != null)
+                    (component as T).InsertData(destinationValue, destinationTimestampMs);
+                //Console.WriteLine($"nbr data in timeline : {(component as T).m_dataWithTime.Count}");
+            }
+        }
+
+        private void UpdateTimelineComponent<T, U>(uint objectId, EComponentType componentType, U originValue, uint originTimestampMs, U destinationValue, uint destinationTimestampMs) where T : TimeLineComponent<U>
+        {
+            DeusComponent component = FindComponent(objectId, componentType);
+            if (component != null && component is T)
+            {
+                if (originValue != null)
+                    (component as T).InsertData(originValue, originTimestampMs);
+
+                if (destinationValue != null)
+                    (component as T).InsertData(destinationValue, destinationTimestampMs);
                 //Console.WriteLine($"nbr data in timeline : {(component as T).m_dataWithTime.Count}");
             }
         }

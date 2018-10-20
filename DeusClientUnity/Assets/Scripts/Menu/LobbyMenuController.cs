@@ -115,8 +115,6 @@ public class LobbyMenuController : IMenuController
     {
         //PacketHealthUpdate packet = new PacketHealthUpdate(IdGameObj, IdCompo, Amount);
         //EventManager.Get().EnqueuePacket(0, packet);
-
-
     }
     #endregion
 }

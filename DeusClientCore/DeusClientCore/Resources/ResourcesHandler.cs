@@ -36,6 +36,11 @@ namespace DeusClientCore.Resources
             }
         }
 
-        public List<Skill> Skills { get; set; }
+        private List<SkillModel> Skills { get; set; }
+
+        public static SkillModel GetSkill(uint id)
+        {
+            return Get().Skills.FirstOrDefault(s => s.Id == id);
+        }
     }
 }

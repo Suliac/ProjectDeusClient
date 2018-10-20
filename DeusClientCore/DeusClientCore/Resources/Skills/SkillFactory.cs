@@ -11,9 +11,9 @@ namespace DeusClientCore.Resources.Skills
 {
     public class SkillFactory
     {
-        public List<Skill> LoadSkill(string filePath)
+        public List<SkillModel> LoadSkill(string filePath)
         {
-            List<Skill> skills = new List<Skill>();
+            List<SkillModel> skills = new List<SkillModel>();
 
             XDocument doc = XDocument.Load(filePath);
 
@@ -33,9 +33,9 @@ namespace DeusClientCore.Resources.Skills
             return skills;
         }
 
-        private Skill CreateSkillFromXML(XElement rootElement)
+        private SkillModel CreateSkillFromXML(XElement rootElement)
         {
-            Skill skill = new Skill();
+            SkillModel skill = new SkillModel();
 
             // Get ID
             uint id = 0;
@@ -60,6 +60,12 @@ namespace DeusClientCore.Resources.Skills
             if (!ushort.TryParse(rootElement.Element("scope").Value, out scope))
                 throw new DeusException("Cannot read the scope of the skill");
             skill.MaxScope = scope;
+
+            // Get Scope
+            ushort radius = 0;
+            if (!ushort.TryParse(rootElement.Element("radius").Value, out radius))
+                throw new DeusException("Cannot read the radius of the skill");
+            skill.Radius = radius;
 
             // Get Level
             ushort level = 0;
