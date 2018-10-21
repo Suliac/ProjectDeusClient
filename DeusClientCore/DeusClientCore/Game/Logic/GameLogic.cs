@@ -202,7 +202,7 @@ namespace DeusClientCore
 
         private void ManageHandleSkillRequest(PacketHandleSkillInput packet)
         {
-            PacketUseSkillRequest skillPacket = new PacketUseSkillRequest(packet.SkillId, packet.SkillPosition);
+            PacketUseSkillRequest skillPacket = new PacketUseSkillRequest(packet.ComponentId, packet.SkillId, packet.SkillPosition);
 
             // TODO : Check mana etc (it will be also checked server side - never trust the client)
 
