@@ -38,6 +38,7 @@ namespace DeusClientCore
             EventManager.Get().AddListener(Packets.EPacketType.ObjectLeave, ManagePacket);
             EventManager.Get().AddListener(Packets.EPacketType.UpdateHealth, ManagePacket);
             EventManager.Get().AddListener(Packets.EPacketType.UpdateMovementAnswer, ManagePacket);
+            EventManager.Get().AddListener(Packets.EPacketType.UseSkillAnswer, ManagePacket);
         }
 
         protected override void OnStop()
@@ -58,6 +59,7 @@ namespace DeusClientCore
             EventManager.Get().RemoveListener(Packets.EPacketType.ObjectLeave, ManagePacket);
             EventManager.Get().RemoveListener(Packets.EPacketType.UpdateHealth, ManagePacket);
             EventManager.Get().RemoveListener(Packets.EPacketType.UpdateMovementAnswer, ManagePacket);
+            EventManager.Get().RemoveListener(Packets.EPacketType.UseSkillAnswer, ManagePacket);
         }
 
         #region Events managements
@@ -280,7 +282,6 @@ namespace DeusClientCore
 
                 if (destinationValue != null)
                     (component as T).InsertData(destinationValue, destinationTimestampMs);
-                //Console.WriteLine($"nbr data in timeline : {(component as T).m_dataWithTime.Count}");
             }
         }
 
@@ -294,7 +295,6 @@ namespace DeusClientCore
 
                 if (destinationValue != null)
                     (component as T).InsertData(destinationValue, destinationTimestampMs);
-                //Console.WriteLine($"nbr data in timeline : {(component as T).m_dataWithTime.Count}");
             }
         }
     }
