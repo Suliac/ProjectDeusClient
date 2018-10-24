@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class MainMenuController : IMenuController
 {
+    public Text PseudoMenu;
     public GameObject GamesHolder;
     public GameObject GameLinePrefab;
 
@@ -28,6 +29,8 @@ public class MainMenuController : IMenuController
     {
         if (m_lines == null)
             m_lines = new Dictionary<uint, GameObject>();
+
+        PseudoMenu.text = GameManager.PlayerPseudo;
 
         PacketHandleClickUI packet = new PacketHandleClickUI();
         packet.UIClicked = PacketHandleClickUI.UIButton.GetGameButton;

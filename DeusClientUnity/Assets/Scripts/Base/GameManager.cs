@@ -39,6 +39,9 @@ public class GameManager : MonoBehaviour
     private uint m_gameId = 0;
     private Dictionary<uint, string> m_playerInfos = new Dictionary<uint, string>();
 
+    private string m_playerPseudo;
+    public static string PlayerPseudo { get { return Instance.m_playerPseudo; } set { Instance.m_playerPseudo = value; } }
+
     public static uint GameId { get { return Instance.m_gameId; } set { Instance.m_gameId = value; } }
     public static Dictionary<uint, string> PlayerInfos { get { return Instance.m_playerInfos; } set { Instance.m_playerInfos = value; } }
 
@@ -53,6 +56,7 @@ public class GameManager : MonoBehaviour
         int port = 0;
         if (!string.IsNullOrEmpty(Adress.text) && int.TryParse(Port.text, out port) && !string.IsNullOrEmpty(Pseudo.text))
         {
+            m_playerPseudo = Pseudo.text;
             m_game.Start(Adress.text, port, Pseudo.text);
             EventManager.Get().AddListener(EPacketType.Connected, OnConnected);
             m_stopped = false;
