@@ -19,7 +19,6 @@ namespace DeusClientConsole
         static void Main(string[] args)
         {
             ResourcesHandler.Get();
-            return;
 
             ConsoleGameView view = new ConsoleGameView();
             Game game = new Game();

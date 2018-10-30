@@ -1,4 +1,5 @@
 ﻿using DeusClientCore.Events;
+using DeusClientCore.Exceptions;
 using DeusClientCore.Packets;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,8 @@ namespace DeusClientCore.Components
 
             m_componentType = type;
 
-            InsertData(origin);
+            if (origin != null)
+                InsertData(origin);
             if (destination != null)
                 InsertData(destination);
         }
@@ -47,6 +49,9 @@ namespace DeusClientCore.Components
 
         public void InsertData(DataTimed<T> dataTimed)
         {
+            if (dataTimed == null || dataTimed.Data == null)
+                throw new DeusException("Try to insert null value");
+
             // We delete all the futur datas that arn't valid anymore
             m_dataWithTime.RemoveAll(dt => dt.TimeStampMs >= dataTimed.TimeStampMs);
 
@@ -87,6 +92,9 @@ namespace DeusClientCore.Components
             List<DataTimed<T>> ordered = null;
             if (wantDataBeforeTimestamp)
             {
+                if (m_dataWithTime.Count == 0)
+                    return null;
+
                 ordered = m_dataWithTime.OrderByDescending(dt => dt.TimeStampMs).ToList();
                 for (int i = 0; i < ordered.Count; i++)
                 {
@@ -96,6 +104,9 @@ namespace DeusClientCore.Components
             }
             else
             {
+                if (m_dataWithTime.Count == 0)
+                    return null;
+
                 ordered = m_dataWithTime.OrderBy(dt => dt.TimeStampMs).ToList();
                 for (int i = 0; i < ordered.Count; i++)
                 {

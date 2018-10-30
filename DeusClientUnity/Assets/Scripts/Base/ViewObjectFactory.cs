@@ -69,6 +69,10 @@ public class ViewObjectFactory : MonoBehaviour
                     linker.Init(component);
                     idComponentPosition = component.UniqueIdentifier;
                     break;
+                case EComponentType.SkillComponent:
+                    linker = viewObj.AddComponent<SkillComponentView>();
+                    linker.Init(component);
+                    break;
                 default:
                     throw new DeusException("Unknown component type. Did you forget to update your ViewObjectFactory ?");
             }

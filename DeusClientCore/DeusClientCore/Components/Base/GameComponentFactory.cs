@@ -1,4 +1,5 @@
 ﻿using DeusClientCore.Packets;
+using DeusClientCore.Resources;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,9 @@ namespace DeusClientCore.Components
                 case EComponentType.PositionComponent:
                     component = new DeusSerializableTimelineComponent<DeusVector2>();
                     break;
+                case EComponentType.SkillComponent:
+                    component = new DeusSerializableTimelineComponent<SkillInfos>();
+                    break;
                 default:
                     throw new Exception("Impossible to instantiate the serializable component");
             }
@@ -46,8 +50,8 @@ namespace DeusClientCore.Components
                     return new HealthTimeLineComponent(args.ComponentId, gameObjectId, (args as DeusSerializableTimelineComponent<int>).Origin, (args as DeusSerializableTimelineComponent<int>).Destination);
                 case EComponentType.PositionComponent:
                     return new PositionTimeLineComponent(args.ComponentId, gameObjectId, (args as DeusSerializableTimelineComponent<DeusVector2>).Origin, (args as DeusSerializableTimelineComponent<DeusVector2>).Destination);
-                //case EComponentType.SkillComponent:
-                    //return new SkillTimeLineComponent(args.ComponentId, gameObjectId, (args as DeusSerializableTimelineComponent<int>).Origin, (args as DeusSerializableTimelineComponent<int>).Destination);
+                case EComponentType.SkillComponent:
+                    return new SkillTimeLineComponent(args.ComponentId, gameObjectId, (args as DeusSerializableTimelineComponent<SkillInfos>).Origin, (args as DeusSerializableTimelineComponent<SkillInfos>).Destination);
 
                 default:
                     return null;

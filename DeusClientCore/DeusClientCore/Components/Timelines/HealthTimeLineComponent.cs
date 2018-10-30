@@ -21,7 +21,7 @@ namespace DeusClientCore.Components
         public HealthTimeLineComponent(uint identifier, uint objectIdentifier, DataTimed<int> origin, DataTimed<int> destination) : base(false, identifier, objectIdentifier, EComponentType.HealthComponent, origin, destination) // This component doesn't have its view updated in at each update loop
         {
         }
-        
+
         protected override int Extrapolate(DataTimed<int> dataBeforeTimestamp, uint currentMs)
         {
             return dataBeforeTimestamp.Data;
@@ -35,15 +35,19 @@ namespace DeusClientCore.Components
         protected override void OnUpdate(decimal deltatimeMs)
         {
             base.OnUpdate(deltatimeMs);
+            object result = GetViewValue();
 
-            int currentValue = (int)GetViewValue();
-            if(m_lastValue != currentValue)
+            if (result != null && result is int)
             {
-                Console.WriteLine($"Health just changed from {m_lastValue} to {currentValue}");
+                int currentValue = (int)result;
+                if (m_lastValue != currentValue)
+                {
+                    Console.WriteLine($"Health just changed from {m_lastValue} to {currentValue}");
 
-                SendViewPacket(currentValue);
-                
-                m_lastValue = currentValue;
+                    SendViewPacket(currentValue);
+
+                    m_lastValue = currentValue;
+                }
             }
         }
 

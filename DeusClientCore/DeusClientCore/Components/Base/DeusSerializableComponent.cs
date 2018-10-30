@@ -24,9 +24,19 @@ namespace DeusClientCore.Components
             ComponentType = (EComponentType)packetsBuffer[index];
             index++;
 
-            DataTimed<T> tmpOrigin = new DataTimed<T>();
-            Serializer.DeserializeData(packetsBuffer, ref index, out tmpOrigin);
-            Origin = tmpOrigin;
+            bool thereIsOrigin = false;
+            Serializer.DeserializeData(packetsBuffer, ref index, out thereIsOrigin);
+
+            if (thereIsOrigin)
+            {
+                DataTimed<T> tmpOrigin = new DataTimed<T>();
+                Serializer.DeserializeData(packetsBuffer, ref index, out tmpOrigin);
+                Origin = tmpOrigin;
+            }
+            else
+            {
+                Origin = null;
+            }
 
             bool thereIsDestination = false;
             Serializer.DeserializeData(packetsBuffer, ref index, out thereIsDestination);
@@ -50,20 +60,23 @@ namespace DeusClientCore.Components
             result.AddRange(Serializer.SerializeData(ComponentId));
             result.AddRange(Serializer.SerializeData((byte)ComponentType));
 
-            result.AddRange(Serializer.SerializeData(Origin));
+            bool thereIsOrigin = Origin != null;
+            result.AddRange(Serializer.SerializeData(thereIsOrigin));
+            if(thereIsOrigin)
+                result.AddRange(Serializer.SerializeData(Origin));
 
             bool thereIsDestination = Destination != null;
             result.AddRange(Serializer.SerializeData(thereIsDestination));
-            if(thereIsDestination)
-            result.AddRange(Serializer.SerializeData(Destination));
+            if (thereIsDestination)
+                result.AddRange(Serializer.SerializeData(Destination));
 
             return result.ToArray();
         }
 
         public ushort EstimateCurrentSerializedSize()
         {
-            // sizeof(bool) for isThereDestination
-            return (ushort)(sizeof(uint) + sizeof(byte) + Origin.EstimateCurrentSerializedSize() + sizeof(bool) + Destination.EstimateCurrentSerializedSize());
+            // sizeof(bool) for isThereDestination & isThereOrigin
+            return (ushort)(sizeof(uint) + sizeof(byte) + sizeof(bool) + Origin.EstimateCurrentSerializedSize() + sizeof(bool) + Destination.EstimateCurrentSerializedSize());
         }
 
     }

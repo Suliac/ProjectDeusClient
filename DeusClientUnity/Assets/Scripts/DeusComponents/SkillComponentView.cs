@@ -5,9 +5,7 @@ using UnityEngine;
 
 public class SkillComponentView : DeusComponentLinker
 {
-
     private SkillInfos m_currentSkillInfos;
-
     private GameObject m_casting = null;
     private GameObject m_currentSkillEffect = null;
 
